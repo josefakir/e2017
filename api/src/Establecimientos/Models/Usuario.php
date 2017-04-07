@@ -1,0 +1,13 @@
+<?php 
+
+namespace Establecimientos\Models;
+
+class Usuario extends \Illuminate\Database\Eloquent\Model{
+	public function authenticate($apikey){
+		$user = Usuario::where('apikey', '=', $apikey)->take(1)->get();
+        $this->details = $user[0];
+        return ($user[0]->exists) ? true : false;
+	}
+}
+
+?>
