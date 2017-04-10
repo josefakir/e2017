@@ -7,15 +7,20 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+	<link rel="stylesheet" href="js/jqueryui/jquery-ui.min.css">
+	<link rel="stylesheet" href="js/jqueryui/jquery-ui.theme.min.css">
+	<link rel="stylesheet" href="js/wickedpicker.css">
 	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
 	<script src="js/jquery.dataTables.min.js"></script>
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
-<script src="js/jquery.validate.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+	<script src="js/jquery.validate.min.js"></script>
 	<script src="js/jquery.validate.min.js"></script>
 	<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+	<script src="js/jqueryui/jquery-ui.min.js"></script>
+	<script src="js/wickedpicker.js"></script>
 	<script src="js/script.js"></script>
   	<script>tinymce.init({ selector:'textarea' });</script>
 </head>
@@ -56,6 +61,7 @@
 				<li class="submenu-item"><a href="sucursales.php" class="menu-subitem-link">Sucursales</a></li>
 				<li class="submenu-item"><a href="leads.php" class="menu-subitem-link">Leads y oportunidades</a></li>
 				<li class="submenu-item"><a href="seguimiento-leads.php" class="menu-subitem-link">Seguimiento de Leads</a></li>
+				<li class="submenu-item"><a href="asignar-promocion-proyecto.php" class="menu-subitem-link">Asignar promoción a proyecto</a></li>
 			</ul>
 		</li>
 		<li class="menu-item">

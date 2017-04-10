@@ -8,7 +8,7 @@
 				return 'Rechazado';
 			break;
 			case '3':
-				return 'Aprobado';
+				return 'Sin contacto';
 			break;
 		}
 	}

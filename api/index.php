@@ -3,9 +3,11 @@ session_start();
 require('vendor/autoload.php');
 include('bootstrap.php');
 
+use Establecimientos\Models\Actividad;
 use Establecimientos\Models\Autorizacion;
 use Establecimientos\Models\Categoria;
 use Establecimientos\Models\Categoriavive;
+use Establecimientos\Models\Detalledesclub;
 use Establecimientos\Models\Estado;
 use Establecimientos\Models\Lead;
 use Establecimientos\Models\Marca;
@@ -791,7 +793,63 @@ $app->get('/leads', function($request, $response, $args){
 			'marca' => $marca,
 			'no_sucursales' => $l->numero_sucursales,
 			'status' => $l->status,
-			'usuario' => $usuario
+			'usuario' => $usuario,
+			'tiene_contacto'=>$l->tiene_contacto,
+			'tiene_registro'=>$l->tiene_registro,
+			'created_at' => $l->created_at,
+			'updated_at' => $l->updated_at
+		);
+		array_push($payload, $array);
+	}
+	return $response->withStatus(200)->withJson($payload);
+});
+
+$app->get('/leadssinfinalizar', function($request, $response, $args){
+	$_lead = new Lead();
+	$leads = $_lead::where('status','<>', '9')->get();
+	$payload = [];
+	foreach($leads as $l){
+		$_marca = new Marca();
+		$marca = $_marca->find($l->id_marca);
+		$_usuario = new Usuario();
+		$usuario = $_usuario::select('id','email')->find($l->id_usuario);
+		$array = array(
+			'id'=>$l->id,
+			'nombre'=>$l->nombre,
+			'marca' => $marca,
+			'no_sucursales' => $l->numero_sucursales,
+			'status' => $l->status,
+			'usuario' => $usuario,
+			'tiene_contacto'=>$l->tiene_contacto,
+			'tiene_registro'=>$l->tiene_registro,
+			'created_at' => $l->created_at,
+			'updated_at' => $l->updated_at
+		);
+		array_push($payload, $array);
+	}
+	return $response->withStatus(200)->withJson($payload);
+});
+
+$app->get('/leadsfinalizados', function($request, $response, $args){
+	$_lead = new Lead();
+	$leads = $_lead::where('status', '9')->get();
+	$payload = [];
+	foreach($leads as $l){
+		$_marca = new Marca();
+		$marca = $_marca->find($l->id_marca);
+		$_usuario = new Usuario();
+		$usuario = $_usuario::select('id','email')->find($l->id_usuario);
+		$array = array(
+			'id'=>$l->id,
+			'nombre'=>$l->nombre,
+			'marca' => $marca,
+			'no_sucursales' => $l->numero_sucursales,
+			'status' => $l->status,
+			'usuario' => $usuario,
+			'tiene_contacto'=>$l->tiene_contacto,
+			'tiene_registro'=>$l->tiene_registro,
+			'created_at' => $l->created_at,
+			'updated_at' => $l->updated_at
 		);
 		array_push($payload, $array);
 	}
@@ -814,7 +872,11 @@ $app->post('/insert/leads', function($request, $response, $args){
 	} catch (Exception $e) {
 		return $response->withStatus(302)->withHeader('Location', '../../leads.php?m='.base64_encode('Ya fue registrada esa empresa'));
 	}
-    
+    /* insertar registro de datos de desclub */
+    $detalledesclub = new Detalledesclub();
+    $detalledesclub->id_marca = $_id_marca;
+    $detalledesclub->id_lead = $lead->id;
+    $detalledesclub->save();
     if ($lead->id) {
         return $response->withStatus(302)->withHeader('Location', '../../leads.php');
     } else {
@@ -837,6 +899,125 @@ $app->get('/rechazarlead/{id_lead}', function($request, $response, $args){
 	$lead->save();
 	return $response->withStatus(302)->withHeader('Location', '../../leads.php');
 });
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// Actividades sobre lead ////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+$app->get('/actividades/{id_lead}', function($request, $response, $args){
+	$_actividad = new Actividad();
+	$actividades = $_actividad::where('id_lead', $args['id_lead'])->get();
+	return $response->withStatus(200)->withJson($actividades);
+});
+
+
+$app->post('/insert/actividades', function($request, $response, $args){
+	$_id_lead = $request->getParsedBodyParam('id_lead', '');
+	$_que_hice = $request->getParsedBodyParam('que_hice', '');
+	$_comentarios = $request->getParsedBodyParam('comentarios', '');
+	$_que_hare = $request->getParsedBodyParam('que_hare', '');
+	$_fecha_futura = $request->getParsedBodyParam('fecha_futura', '');
+	$_hora_futura = $request->getParsedBodyParam('hora_futura', '');
+	$_comentarios_futura = $request->getParsedBodyParam('comentarios_futura', '');
+	$_status_lead= $request->getParsedBodyParam('status_lead', '');
+
+	$actividad = new Actividad();
+	$actividad->id_lead = $_id_lead;
+	$actividad->que_hice = $_que_hice;
+	$actividad->comentarios = $_comentarios;
+	$actividad->que_hare = $_que_hare;
+	$actividad->fecha_futura = $_fecha_futura.' '.str_replace(" ","",$_hora_futura);  //2017-04-05 00:00:00
+	$actividad->comentarios_futura = $_comentarios_futura;
+	$actividad->save();
+
+
+	$_lead = new Lead();
+	$lead = $_lead->find($_id_lead);
+	$lead->status = $_status_lead;
+	$lead->save();
+
+	if ($actividad->id) {
+        return $response->withStatus(302)->withHeader('Location', '../../seguimiento-leads.php');
+    } else {
+        return $response->withStatus(400);
+    }
+
+})->add(new EstablecimientosAuth());
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// DETALLES DESCLUB ////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+$app->get('/detallesdesclub/{id_marca}', function($request, $response, $args){
+	$_detallesdesclub = new Detalledesclub();
+	$detalles = $_detallesdesclub::where('id_marca', $args['id_marca'])->get();
+	return $response->withStatus(200)->withJson($detalles);
+});
+
+$app->post('/detallesdesclub', function($request, $response, $args){
+	$_id_lead = $request->getParsedBodyParam('id_lead', '');
+	$_id_marca = $request->getParsedBodyParam('id_marca', '');
+	$_razon_social = $request->getParsedBodyParam('razon_social', '');
+	$_rfc = $request->getParsedBodyParam('rfc', '');
+	$_contacto = $request->getParsedBodyParam('contacto', '');
+	$_puesto = $request->getParsedBodyParam('puesto', '');
+	$_tel1 = $request->getParsedBodyParam('tel1', '');
+	$_tel2 = $request->getParsedBodyParam('tel2', '');
+	$_email = $request->getParsedBodyParam('email', '');
+
+	// REGISTRO 
+	$_calle = $request->getParsedBodyParam('calle', '');
+	$_no_exterior = $request->getParsedBodyParam('no_exterior', '');
+	$_no_interior = $request->getParsedBodyParam('no_interior', '');
+	$_referencia = $request->getParsedBodyParam('referencia', '');
+	$_latitud = $request->getParsedBodyParam('latitud', '');
+	$_longitud = $request->getParsedBodyParam('longitud', '');
+	$_tiene_actividad_calidad = $request->getParsedBodyParam('tiene_actividad_calidad', '');
+	$_actividad_de_calidad = $request->getParsedBodyParam('actividad_de_calidad', '');
+	$_es_celular_1 = $request->getParsedBodyParam('es_celular_1', '');
+	$_es_celular_2 = $request->getParsedBodyParam('es_celular_2', '');
+	$_comentarios = $request->getParsedBodyParam('comentarios', '');
+	
+
+
+	$_detallesdesclub = new Detalledesclub();
+	$detalles = $_detallesdesclub::where('id_marca', $_id_marca )->where('id_lead', $_id_lead)->get();
+	$detalles[0]->razon_social = $_razon_social;
+	$detalles[0]->RFC = $_rfc;
+	$detalles[0]->contacto = $_contacto;
+	$detalles[0]->puesto = $_puesto;
+	$detalles[0]->telefono_1 = $_tel1;
+	$detalles[0]->telefono_2 = $_tel2;
+	$detalles[0]->email = $_email;
+
+	//REGISTROç
+
+	$detalles[0]->es_celular_1 = $_es_celular_1;
+	$detalles[0]->es_celular_2 = $_es_celular_2;
+	$detalles[0]->calle = $_calle;
+	$detalles[0]->no_exterior = $_no_exterior;
+	$detalles[0]->no_interior = $_no_interior;
+	$detalles[0]->referencia = $_referencia;
+	$detalles[0]->latitud = $_latitud;
+	$detalles[0]->longitud = $_longitud;
+	$detalles[0]->tiene_actividad_calidad = $_tiene_actividad_calidad;
+	$detalles[0]->actividad_de_calidad = $_actividad_de_calidad;
+	$detalles[0]->comentarios = $_comentarios;
+
+
+	$detalles[0]->save();
+	if(!empty($_razon_social) and !empty($_rfc) and !empty($_contacto) and !empty($_puesto) and !empty($_tel1) and !empty($_tel2) and !empty($_email)){
+		$_lead = new Lead();
+		$lead = $_lead->find($_id_lead);
+		$lead->tiene_contacto = true;
+		$lead->save();
+	}
+	return $response->withStatus(302)->withHeader('Location', '../seguimiento-leads.php');
+})->add(new EstablecimientosAuth());
+
+
 
 $app->run();
 

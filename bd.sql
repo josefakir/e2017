@@ -1,24 +1,52 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.5.1
--- https://www.phpmyadmin.net/
+-- version 4.4.10
+-- http://www.phpmyadmin.net
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 10-04-2017 a las 03:53:23
--- Versión del servidor: 5.6.34
--- Versión de PHP: 7.1.0
+-- Tiempo de generación: 11-04-2017 a las 01:08:00
+-- Versión del servidor: 5.5.42
+-- Versión de PHP: 5.6.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
 --
 -- Base de datos: `establecimientos2017`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `actividads`
+--
+
+CREATE TABLE `actividads` (
+  `id` int(11) NOT NULL,
+  `id_lead` int(11) NOT NULL,
+  `que_hice` varchar(255) COLLATE utf8_bin NOT NULL,
+  `comentarios` text COLLATE utf8_bin NOT NULL,
+  `que_hare` varchar(255) COLLATE utf8_bin NOT NULL,
+  `fecha_futura` datetime NOT NULL,
+  `comentarios_futura` text COLLATE utf8_bin NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+--
+-- Volcado de datos para la tabla `actividads`
+--
+
+INSERT INTO `actividads` (`id`, `id_lead`, `que_hice`, `comentarios`, `que_hare`, `fecha_futura`, `comentarios_futura`, `created_at`, `updated_at`) VALUES
+(14, 18, 'Llamada telefónica', 'contactado', 'Llamada telefónica', '2017-04-10 15:09:00', 'ejemplo de comentarios', '2017-04-10 22:09:25', '2017-04-10 22:09:25'),
+(16, 18, 'Llamada telefónica', 'asdf', 'Llamada telefónica', '2017-04-10 15:26:00', 'asdf', '2017-04-10 22:26:23', '2017-04-10 22:26:23'),
+(17, 19, 'Llamada telefónica', 'llame', 'Llamada telefónica', '2017-04-10 16:04:00', 'comentarios', '2017-04-10 23:04:43', '2017-04-10 23:04:43'),
+(18, 20, 'Llamada telefónica', 'contactado', 'Alta de establecimiento', '2017-04-12 16:09:00', 'asdf', '2017-04-10 23:09:48', '2017-04-10 23:09:48'),
+(19, 21, 'Llamada telefónica', 'contacté', 'Llamada telefónica', '2017-04-10 18:28:00', 'comentarios', '2017-04-11 00:28:03', '2017-04-11 00:28:03'),
+(20, 21, 'Alta de establecimiento', 'comentarios', 'Alta de establecimiento', '0000-00-00 00:00:00', 'comentarios_futura', '2017-04-11 00:31:46', '2017-04-11 00:31:46'),
+(21, 21, 'Alta de establecimiento', 'comentarios', 'Alta de establecimiento', '0000-00-00 00:00:00', 'comentarios_futura', '2017-04-11 00:51:36', '2017-04-11 00:51:36'),
+(22, 21, 'Alta de establecimiento', 'comentarios', 'Alta de establecimiento', '0000-00-00 00:00:00', 'comentarios_futura', '2017-04-11 00:52:03', '2017-04-11 00:52:03'),
+(23, 21, 'Alta de establecimiento', 'comentarios', 'Alta de establecimiento', '0000-00-00 00:00:00', 'comentarios_futura', '2017-04-11 00:58:32', '2017-04-11 00:58:32'),
+(24, 20, 'Alta de establecimiento', 'comentarios', 'Alta de establecimiento', '0000-00-00 00:00:00', 'comentarios_futura', '2017-04-11 01:06:46', '2017-04-11 01:06:46');
 
 -- --------------------------------------------------------
 
@@ -32,7 +60,7 @@ CREATE TABLE `autorizacions` (
   `id_usuario` int(11) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
 
@@ -45,7 +73,7 @@ CREATE TABLE `categorias` (
   `nombre` varchar(255) COLLATE utf8_bin NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Volcado de datos para la tabla `categorias`
@@ -73,6 +101,48 @@ CREATE TABLE `categoriavives` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `detalledesclubs`
+--
+
+CREATE TABLE `detalledesclubs` (
+  `id` int(11) NOT NULL,
+  `id_marca` int(11) NOT NULL,
+  `id_lead` int(11) NOT NULL,
+  `razon_social` varchar(255) COLLATE utf8_bin NOT NULL,
+  `RFC` varchar(255) COLLATE utf8_bin NOT NULL,
+  `contacto` varchar(255) COLLATE utf8_bin NOT NULL,
+  `puesto` varchar(255) COLLATE utf8_bin NOT NULL,
+  `telefono_1` varchar(255) COLLATE utf8_bin NOT NULL,
+  `es_celular_1` tinyint(1) NOT NULL,
+  `telefono_2` varchar(255) COLLATE utf8_bin NOT NULL,
+  `es_celular_2` tinyint(1) NOT NULL,
+  `email` varchar(255) COLLATE utf8_bin NOT NULL,
+  `calle` varchar(255) COLLATE utf8_bin NOT NULL,
+  `no_exterior` varchar(255) COLLATE utf8_bin NOT NULL,
+  `no_interior` varchar(255) COLLATE utf8_bin NOT NULL,
+  `referencia` varchar(255) COLLATE utf8_bin NOT NULL,
+  `latitud` varchar(255) COLLATE utf8_bin NOT NULL,
+  `longitud` varchar(255) COLLATE utf8_bin NOT NULL,
+  `tiene_actividad_calidad` tinyint(1) NOT NULL,
+  `actividad_de_calidad` varchar(255) COLLATE utf8_bin NOT NULL,
+  `comentarios` text COLLATE utf8_bin NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+--
+-- Volcado de datos para la tabla `detalledesclubs`
+--
+
+INSERT INTO `detalledesclubs` (`id`, `id_marca`, `id_lead`, `razon_social`, `RFC`, `contacto`, `puesto`, `telefono_1`, `es_celular_1`, `telefono_2`, `es_celular_2`, `email`, `calle`, `no_exterior`, `no_interior`, `referencia`, `latitud`, `longitud`, `tiene_actividad_calidad`, `actividad_de_calidad`, `comentarios`, `created_at`, `updated_at`) VALUES
+(1, 8, 18, 'Razón social', 'rfc', 'contacto', 'puesto', '1234567890123', 0, '1234567890', 0, 'example@example.com', '', '', '', '', '', '', 0, '0', '', '2017-04-10 21:58:17', '2017-04-10 22:38:18'),
+(2, 9, 19, 'razon', 'r4fc', 'conta', 'puest', 'tel', 0, 't', 0, 'a@a.com', '', '', '', '', '', '', 0, '0', '', '2017-04-10 23:03:53', '2017-04-10 23:05:02'),
+(3, 11, 20, 'razon_social', 'rfcabcddasdfasdfaasdfasdfasdfasdf', 'contacto', 'puesto', '1234567890', 0, '1234567890', 0, 'example@example.com', 'calle', 'no_exterior', 'no_interior', 'referencia', 'latitud', 'longitud', 0, '', 'comentarios', '2017-04-10 23:09:10', '2017-04-10 23:58:46'),
+(4, 12, 21, 'razon social', 'añsdkfjalñs dfkla', 'contacto', 'puesto', '5678765f678', 0, '456787654567', 0, 'asdf@asdf.com', 'asdf', 'asdf', 'asdf', 'asdf', 'asdf', 'asdf', 1, 'Llamada', 'comentarios', '2017-04-11 00:27:06', '2017-04-11 00:29:51');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `estados`
 --
 
@@ -80,7 +150,7 @@ CREATE TABLE `estados` (
   `id` int(11) NOT NULL,
   `nombre` varchar(255) NOT NULL,
   `acronym` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `estados`
@@ -133,18 +203,21 @@ CREATE TABLE `leads` (
   `nombre` varchar(255) COLLATE utf8_bin NOT NULL,
   `numero_sucursales` int(11) NOT NULL,
   `status` char(1) COLLATE utf8_bin NOT NULL,
+  `tiene_contacto` tinyint(1) NOT NULL,
+  `tiene_registro` tinyint(1) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Volcado de datos para la tabla `leads`
 --
 
-INSERT INTO `leads` (`id`, `id_marca`, `id_usuario`, `nombre`, `numero_sucursales`, `status`, `created_at`, `updated_at`) VALUES
-(1, 8, 1, 'Lead la parrilla', 6, '2', '2017-04-08 00:00:00', '2017-04-09 06:59:53'),
-(2, 9, 1, 'lead de ejemplo', 5, '2', '2017-04-09 07:28:06', '2017-04-09 07:28:21'),
-(6, 10, 1, 'asdf', 4, '3', '2017-04-09 07:32:27', '2017-04-09 07:33:07');
+INSERT INTO `leads` (`id`, `id_marca`, `id_usuario`, `nombre`, `numero_sucursales`, `status`, `tiene_contacto`, `tiene_registro`, `created_at`, `updated_at`) VALUES
+(18, 8, 1, 'test', 6, '4', 1, 0, '2017-04-10 21:58:17', '2017-04-10 22:45:49'),
+(19, 9, 1, 'lead de ejemplo', 9, '4', 1, 0, '2017-04-10 23:03:53', '2017-04-10 23:05:02'),
+(20, 11, 1, 'nombre de lead', 9, '9', 1, 0, '2017-04-10 23:09:10', '2017-04-11 01:06:46'),
+(21, 12, 1, 'lead cin', 19, '9', 1, 0, '2017-04-11 00:27:06', '2017-04-11 00:58:32');
 
 -- --------------------------------------------------------
 
@@ -171,7 +244,7 @@ CREATE TABLE `marcas` (
   `id_tipoDeComida` int(11) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Volcado de datos para la tabla `marcas`
@@ -180,7 +253,9 @@ CREATE TABLE `marcas` (
 INSERT INTO `marcas` (`id`, `nombre`, `web`, `resena`, `extracto`, `imagen`, `autor`, `friendlyUrl`, `especial`, `vimeo`, `logoDesclub`, `autorizadaLead`, `id_categoria`, `id_categoria_vive`, `id_proyecto`, `id_tipoDeComida`, `created_at`, `updated_at`) VALUES
 (8, 'La parrilla de becerra', 'asdf', '<p>asdf</p>', 'asdf', 'assets/images/Darth-Vader-Motorcycle-Helmet-e1444573588761.png', 'Pepe', 'la-parrilla-de-becerra', 'La carne', 'vimeo', 'assets/images/wooden-storm-trooper-helmet-mashup.png', 1, 1, 9, 2, 1, '2017-04-07 18:31:11', '2017-04-09 06:07:01'),
 (9, 'Ejemplo', 'web', '', 'extracto', 'assets/images/adolfCajas.jpg', 'autor', 'friendlyUrl', 'especial', 'vimeo', 'assets/images/adolfCajas.jpg', 1, 1, 0, 2, 1, '2017-04-09 07:03:42', '2017-04-09 07:11:55'),
-(10, 'Ejemplo 2', 'web', '', 'extracto', 'assets/images/adolfCajas.jpg', 'autor', 'friendlyUrl', 'especial', 'vimeo', 'assets/images/adolfCajas.jpg', 1, 1, 0, 2, 1, '2017-04-09 07:30:59', '2017-04-09 07:32:10');
+(10, 'Ejemplo 2', 'web', '', 'extracto', 'assets/images/adolfCajas.jpg', 'autor', 'friendlyUrl', 'especial', 'vimeo', 'assets/images/adolfCajas.jpg', 1, 1, 0, 2, 1, '2017-04-09 07:30:59', '2017-04-09 07:32:10'),
+(11, 'Ejemplo gus ', 'web', '<p>asdf</p>', 'extracto', 'assets/images/63cbab902b42aa6ecb3fae02db5ed606_memes-de-nino-chino-related-nio-japones-meme_360-240.jpeg', 'autor', 'friendlyUrl', 'especial', 'vimeo', 'assets/images/63cbab902b42aa6ecb3fae02db5ed606_memes-de-nino-chino-related-nio-japones-meme_360-240.jpeg', 1, 1, 0, 2, 1, '2017-04-10 23:08:23', '2017-04-10 23:08:56'),
+(12, 'Marca Cin', 'web', '<p>asdf asdf asdf</p>', 'extractoasdfasdf ', 'assets/images/705.jpg', 'autor', 'friendlyUrl', 'especial', 'vimeo', 'assets/images/705.jpg', 1, 2, 0, 2, 1, '2017-04-11 00:25:56', '2017-04-11 00:26:44');
 
 -- --------------------------------------------------------
 
@@ -193,7 +268,7 @@ CREATE TABLE `proyectos` (
   `nombre` varchar(255) COLLATE utf8_bin NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Volcado de datos para la tabla `proyectos`
@@ -226,7 +301,7 @@ CREATE TABLE `sucursals` (
   `restaurantes` varchar(255) COLLATE utf8_bin NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Volcado de datos para la tabla `sucursals`
@@ -246,7 +321,7 @@ CREATE TABLE `tipodecomidas` (
   `nombre` varchar(255) COLLATE utf8_bin NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Volcado de datos para la tabla `tipodecomidas`
@@ -269,7 +344,7 @@ CREATE TABLE `usuarios` (
   `rol` char(1) COLLATE utf8_bin NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Volcado de datos para la tabla `usuarios`
@@ -290,7 +365,7 @@ CREATE TABLE `zonas` (
   `nombre` varchar(255) COLLATE utf8_bin NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Volcado de datos para la tabla `zonas`
@@ -302,6 +377,12 @@ INSERT INTO `zonas` (`id`, `id_estado`, `nombre`, `created_at`, `updated_at`) VA
 --
 -- Índices para tablas volcadas
 --
+
+--
+-- Indices de la tabla `actividads`
+--
+ALTER TABLE `actividads`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `autorizacions`
@@ -320,6 +401,12 @@ ALTER TABLE `categorias`
 -- Indices de la tabla `categoriavives`
 --
 ALTER TABLE `categoriavives`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `detalledesclubs`
+--
+ALTER TABLE `detalledesclubs`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -376,60 +463,67 @@ ALTER TABLE `zonas`
 --
 
 --
+-- AUTO_INCREMENT de la tabla `actividads`
+--
+ALTER TABLE `actividads`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=25;
+--
 -- AUTO_INCREMENT de la tabla `autorizacions`
 --
 ALTER TABLE `autorizacions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT de la tabla `categorias`
 --
 ALTER TABLE `categorias`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT de la tabla `categoriavives`
 --
 ALTER TABLE `categoriavives`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
+-- AUTO_INCREMENT de la tabla `detalledesclubs`
+--
+ALTER TABLE `detalledesclubs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+--
 -- AUTO_INCREMENT de la tabla `estados`
 --
 ALTER TABLE `estados`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=33;
 --
 -- AUTO_INCREMENT de la tabla `leads`
 --
 ALTER TABLE `leads`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=22;
 --
 -- AUTO_INCREMENT de la tabla `marcas`
 --
 ALTER TABLE `marcas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT de la tabla `proyectos`
 --
 ALTER TABLE `proyectos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT de la tabla `sucursals`
 --
 ALTER TABLE `sucursals`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT de la tabla `tipodecomidas`
 --
 ALTER TABLE `tipodecomidas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `zonas`
 --
 ALTER TABLE `zonas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;

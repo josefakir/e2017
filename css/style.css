@@ -58,3 +58,54 @@ p.error{color: red; text-align: center;}
 .editar a{color: #27aae1 !important}.eliminar a{color: #27aae1 !important}
 .aprobar a{color: green;width: 50px !important}
 .rechazar a{color: red;width: 50px !important}
+.wickedpicker{    z-index: 9;}
+#overlay_actividades{
+	position: fixed;
+    width: 100%;
+    height: 100%;
+    background: url(../img/pixel.png);
+    z-index: 1;
+    top: 0;
+    left: 0;
+    display: none
+}
+#overlay_contacto{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: url(../img/pixel.png);
+    z-index: 1;
+    top: 0;
+    left: 0;
+    display: none
+}
+#overlay_registro{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: url(../img/pixel.png);
+    z-index: 1;
+    top: 0;
+    left: 0;
+    display: none
+}
+
+#overlay_detalle{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: url(../img/pixel.png);
+    z-index: 1;
+    top: 0;
+    left: 0;
+    display: none
+}
+#overlay_detalle table{width: 80% !important; margin: 0 auto; margin-top: 200px}
+a.cerraroverlay {
+    position: absolute;
+    right: 0;  
+    background: #fff;    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 34px;
+    height: 28px;
+}
