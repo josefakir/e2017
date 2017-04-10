@@ -51,7 +51,10 @@ table.dataTable tbody tr.odd {background-color: #f6f6f6;}
 .registros{float: left; display: block; min-height: 100%; width: 100%}
 .btn.btn-primary{width: 100%}
 label.error{color: red}
+p.error{color: red; text-align: center;}
 .mensaje{margin-top: 10px; color: red}
 .editar{width: 50px}
 .eliminar{width: 50px}
 .editar a{color: #27aae1 !important}.eliminar a{color: #27aae1 !important}
+.aprobar a{color: green;width: 50px !important}
+.rechazar a{color: red;width: 50px !important}

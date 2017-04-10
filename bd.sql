@@ -1,18 +1,38 @@
 -- phpMyAdmin SQL Dump
--- version 4.4.10
--- http://www.phpmyadmin.net
+-- version 4.6.5.1
+-- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 07-04-2017 a las 20:59:06
--- Versión del servidor: 5.5.42
--- Versión de PHP: 5.6.10
+-- Tiempo de generación: 10-04-2017 a las 03:53:23
+-- Versión del servidor: 5.6.34
+-- Versión de PHP: 7.1.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
 --
 -- Base de datos: `establecimientos2017`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `autorizacions`
+--
+
+CREATE TABLE `autorizacions` (
+  `id` int(11) NOT NULL,
+  `id_marca` int(11) NOT NULL,
+  `id_usuario` int(11) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
 
@@ -25,7 +45,7 @@ CREATE TABLE `categorias` (
   `nombre` varchar(255) COLLATE utf8_bin NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Volcado de datos para la tabla `categorias`
@@ -33,7 +53,9 @@ CREATE TABLE `categorias` (
 
 INSERT INTO `categorias` (`id`, `nombre`, `created_at`, `updated_at`) VALUES
 (1, 'Restaurantes', '0000-00-00 00:00:00', '2017-04-06 22:36:57'),
-(2, 'Antros y Bares', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+(2, 'Antros y Bares', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(3, 'asdf', '2017-04-09 07:02:07', '2017-04-09 07:02:07'),
+(4, 'Prueba', '2017-04-09 07:12:30', '2017-04-09 07:12:30');
 
 -- --------------------------------------------------------
 
@@ -46,7 +68,7 @@ CREATE TABLE `categoriavives` (
   `nombre` varchar(255) COLLATE utf8_bin NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
 
@@ -58,7 +80,7 @@ CREATE TABLE `estados` (
   `id` int(11) NOT NULL,
   `nombre` varchar(255) NOT NULL,
   `acronym` varchar(10) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `estados`
@@ -101,6 +123,32 @@ INSERT INTO `estados` (`id`, `nombre`, `acronym`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `leads`
+--
+
+CREATE TABLE `leads` (
+  `id` int(11) NOT NULL,
+  `id_marca` int(11) NOT NULL,
+  `id_usuario` int(11) NOT NULL,
+  `nombre` varchar(255) COLLATE utf8_bin NOT NULL,
+  `numero_sucursales` int(11) NOT NULL,
+  `status` char(1) COLLATE utf8_bin NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+--
+-- Volcado de datos para la tabla `leads`
+--
+
+INSERT INTO `leads` (`id`, `id_marca`, `id_usuario`, `nombre`, `numero_sucursales`, `status`, `created_at`, `updated_at`) VALUES
+(1, 8, 1, 'Lead la parrilla', 6, '2', '2017-04-08 00:00:00', '2017-04-09 06:59:53'),
+(2, 9, 1, 'lead de ejemplo', 5, '2', '2017-04-09 07:28:06', '2017-04-09 07:28:21'),
+(6, 10, 1, 'asdf', 4, '3', '2017-04-09 07:32:27', '2017-04-09 07:33:07');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `marcas`
 --
 
@@ -123,14 +171,16 @@ CREATE TABLE `marcas` (
   `id_tipoDeComida` int(11) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Volcado de datos para la tabla `marcas`
 --
 
 INSERT INTO `marcas` (`id`, `nombre`, `web`, `resena`, `extracto`, `imagen`, `autor`, `friendlyUrl`, `especial`, `vimeo`, `logoDesclub`, `autorizadaLead`, `id_categoria`, `id_categoria_vive`, `id_proyecto`, `id_tipoDeComida`, `created_at`, `updated_at`) VALUES
-(8, 'La parrilla de becerra', 'asdf', '<p>asdf</p>', 'asdf', 'assets/images/Darth-Vader-Motorcycle-Helmet-e1444573588761.png', 'Pepe', 'la-parrilla-de-becerra', 'La carne', 'vimeo', 'assets/images/wooden-storm-trooper-helmet-mashup.png', 0, 1, 9, 2, 1, '2017-04-07 18:31:11', '2017-04-07 18:31:11');
+(8, 'La parrilla de becerra', 'asdf', '<p>asdf</p>', 'asdf', 'assets/images/Darth-Vader-Motorcycle-Helmet-e1444573588761.png', 'Pepe', 'la-parrilla-de-becerra', 'La carne', 'vimeo', 'assets/images/wooden-storm-trooper-helmet-mashup.png', 1, 1, 9, 2, 1, '2017-04-07 18:31:11', '2017-04-09 06:07:01'),
+(9, 'Ejemplo', 'web', '', 'extracto', 'assets/images/adolfCajas.jpg', 'autor', 'friendlyUrl', 'especial', 'vimeo', 'assets/images/adolfCajas.jpg', 1, 1, 0, 2, 1, '2017-04-09 07:03:42', '2017-04-09 07:11:55'),
+(10, 'Ejemplo 2', 'web', '', 'extracto', 'assets/images/adolfCajas.jpg', 'autor', 'friendlyUrl', 'especial', 'vimeo', 'assets/images/adolfCajas.jpg', 1, 1, 0, 2, 1, '2017-04-09 07:30:59', '2017-04-09 07:32:10');
 
 -- --------------------------------------------------------
 
@@ -143,7 +193,7 @@ CREATE TABLE `proyectos` (
   `nombre` varchar(255) COLLATE utf8_bin NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Volcado de datos para la tabla `proyectos`
@@ -176,7 +226,7 @@ CREATE TABLE `sucursals` (
   `restaurantes` varchar(255) COLLATE utf8_bin NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Volcado de datos para la tabla `sucursals`
@@ -196,7 +246,7 @@ CREATE TABLE `tipodecomidas` (
   `nombre` varchar(255) COLLATE utf8_bin NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Volcado de datos para la tabla `tipodecomidas`
@@ -219,7 +269,7 @@ CREATE TABLE `usuarios` (
   `rol` char(1) COLLATE utf8_bin NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Volcado de datos para la tabla `usuarios`
@@ -240,7 +290,7 @@ CREATE TABLE `zonas` (
   `nombre` varchar(255) COLLATE utf8_bin NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Volcado de datos para la tabla `zonas`
@@ -252,6 +302,13 @@ INSERT INTO `zonas` (`id`, `id_estado`, `nombre`, `created_at`, `updated_at`) VA
 --
 -- Índices para tablas volcadas
 --
+
+--
+-- Indices de la tabla `autorizacions`
+--
+ALTER TABLE `autorizacions`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `id_marca` (`id_marca`);
 
 --
 -- Indices de la tabla `categorias`
@@ -270,6 +327,13 @@ ALTER TABLE `categoriavives`
 --
 ALTER TABLE `estados`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `leads`
+--
+ALTER TABLE `leads`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `id_marca` (`id_marca`);
 
 --
 -- Indices de la tabla `marcas`
@@ -312,47 +376,60 @@ ALTER TABLE `zonas`
 --
 
 --
+-- AUTO_INCREMENT de la tabla `autorizacions`
+--
+ALTER TABLE `autorizacions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+--
 -- AUTO_INCREMENT de la tabla `categorias`
 --
 ALTER TABLE `categorias`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT de la tabla `categoriavives`
 --
 ALTER TABLE `categoriavives`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `estados`
 --
 ALTER TABLE `estados`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=33;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+--
+-- AUTO_INCREMENT de la tabla `leads`
+--
+ALTER TABLE `leads`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT de la tabla `marcas`
 --
 ALTER TABLE `marcas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT de la tabla `proyectos`
 --
 ALTER TABLE `proyectos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT de la tabla `sucursals`
 --
 ALTER TABLE `sucursals`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT de la tabla `tipodecomidas`
 --
 ALTER TABLE `tipodecomidas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `zonas`
 --
 ALTER TABLE `zonas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

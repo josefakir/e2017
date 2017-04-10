@@ -54,6 +54,8 @@
 			<ul class="submenu">
 				<li class="submenu-item"><a href="marcas.php" class="menu-subitem-link">Marcas</a></li>
 				<li class="submenu-item"><a href="sucursales.php" class="menu-subitem-link">Sucursales</a></li>
+				<li class="submenu-item"><a href="leads.php" class="menu-subitem-link">Leads y oportunidades</a></li>
+				<li class="submenu-item"><a href="seguimiento-leads.php" class="menu-subitem-link">Seguimiento de Leads</a></li>
 			</ul>
 		</li>
 		<li class="menu-item">

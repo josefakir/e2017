@@ -3,9 +3,11 @@ session_start();
 require('vendor/autoload.php');
 include('bootstrap.php');
 
+use Establecimientos\Models\Autorizacion;
 use Establecimientos\Models\Categoria;
 use Establecimientos\Models\Categoriavive;
 use Establecimientos\Models\Estado;
+use Establecimientos\Models\Lead;
 use Establecimientos\Models\Marca;
 use Establecimientos\Models\Proyecto;
 use Establecimientos\Models\Sucursal;
@@ -382,6 +384,40 @@ $app->get('/marcas', function($request, $response, $args){
 	return $response->withStatus(200)->withJson($payload);
 });
 
+$app->get('/marcasaprobadas', function($request, $response, $args){
+	$_marca = new Marca();
+	$marcas = $_marca::where('autorizadaLead', true)->get();
+	$payload = [];
+	foreach($marcas as $m){
+		array_push($payload, $m);
+	}
+	return $response->withStatus(200)->withJson($payload);
+});
+
+$app->get('/marcassinaprobar', function($request, $response, $args){
+	$_marca = new Marca();
+	$marcas = $_marca::where('autorizadaLead', false)->get();
+	$payload = [];
+	foreach($marcas as $m){
+		array_push($payload, $m);
+	}
+	return $response->withStatus(200)->withJson($payload);
+});
+
+
+$app->get('/aprobarmarca/{id_autorizacion}', function($request, $response, $args){
+	$_autorizacion = new Autorizacion();
+	$_id_autorizacion = $args['id_autorizacion'];
+	$autorizacion = $_autorizacion->find($_id_autorizacion);
+	$_id_marca = $autorizacion->id_marca;
+	$autorizacion->delete();
+	$_marca = new Marca();
+	$marcas = $_marca->find($_id_marca);
+	$marcas->autorizadaLead = true;
+	$marcas->save();
+	return $response->withStatus(302)->withHeader('Location', '../../leads.php');
+});
+
 $app->get('/marcas/{id}', function($request, $response, $args){
 	$_id = $args['id'];
 	$_marca = new Marca();
@@ -672,7 +708,135 @@ $app->post('/update/sucursales', function($request, $response, $args){
 
 })->add(new EstablecimientosAuth());
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// Autorizaciones ////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+$app->get('/autorizaciones/{id_usuario}', function($request, $response, $args){
+	$_id_usuario = $args['id_usuario'];
+	$_autorizacion = new Autorizacion();
+	$autorizaciones = $_autorizacion::where('id_usuario',$_id_usuario)->get();
+	
+	$payload = [];
+	foreach($autorizaciones as $a){
+		$_marca = new Marca();
+		$marca = $_marca->find($a->id_marca);
+
+		$_usuario = new Usuario();
+		$usuario = $_usuario::select('id','email')->find($a->id_usuario);
+		$array = array(
+			'id'=>$a->id,
+			'marca' => $marca,
+			'id_usuario' => $a->id_usuario,
+			'usuario' => $usuario
+		);
+		//print_r($marca->nombre);
+		array_push($payload, $array);
+	}
+	return $response->withStatus(200)->withJson($payload);
+});
+
+$app->get('/autorizaciones', function($request, $response, $args){
+	$_autorizacion = new Autorizacion();
+	$autorizaciones = $_autorizacion->all();
+	$payload = [];
+	foreach($autorizaciones as $a){
+		$_marca = new Marca();
+		$marca = $_marca->find($a->id_marca);
+
+		$_usuario = new Usuario();
+		$usuario = $_usuario::select('id','email')->find($a->id_usuario);
+		$array = array(
+			'id'=>$a->id,
+			'marca' => $marca,
+			'id_usuario' => $a->id_usuario,
+			'usuario' => $usuario
+		);
+		//print_r($marca->nombre);
+		array_push($payload, $array);
+	}
+	return $response->withStatus(200)->withJson($payload);
+});
+
+$app->post('/insert/autorizacion', function($request, $response, $args){
+	$_id_marca = $request->getParsedBodyParam('id_marca', '');
+	$_id_usuario = $request->getParsedBodyParam('id_usuario', '');
+	$autorizacion = new Autorizacion();
+	$autorizacion->id_marca = $_id_marca;
+	$autorizacion->id_usuario = $_id_usuario;
+    $autorizacion->save();
+    if ($autorizacion->id) {
+        return $response->withStatus(302)->withHeader('Location', '../../autorizaciones.php');
+    } else {
+        return $response->withStatus(400);
+    }
+})->add(new EstablecimientosAuth());
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// Leads ////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+$app->get('/leads', function($request, $response, $args){
+	$_lead = new Lead();
+	$leads = $_lead->all();
+	$payload = [];
+	foreach($leads as $l){
+		$_marca = new Marca();
+		$marca = $_marca->find($l->id_marca);
+		$_usuario = new Usuario();
+		$usuario = $_usuario::select('id','email')->find($l->id_usuario);
+		$array = array(
+			'id'=>$l->id,
+			'nombre'=>$l->nombre,
+			'marca' => $marca,
+			'no_sucursales' => $l->numero_sucursales,
+			'status' => $l->status,
+			'usuario' => $usuario
+		);
+		array_push($payload, $array);
+	}
+	return $response->withStatus(200)->withJson($payload);
+});
+$app->post('/insert/leads', function($request, $response, $args){
+	$_id_marca = $request->getParsedBodyParam('id_marca', '');
+	$_id_usuario = $request->getParsedBodyParam('id_usuario', '');
+	$_nombre = $request->getParsedBodyParam('nombre', '');
+	$_numero_de_sucursales = $request->getParsedBodyParam('numero_de_sucursales', '');
+
+	$lead = new Lead();
+	$lead->id_marca = $_id_marca;
+	$lead->id_usuario = $_id_usuario;
+	$lead->nombre = $_nombre;
+	$lead->numero_sucursales = $_numero_de_sucursales;
+	$lead->status = '1';
+	try {
+		$lead->save();
+	} catch (Exception $e) {
+		return $response->withStatus(302)->withHeader('Location', '../../leads.php?m='.base64_encode('Ya fue registrada esa empresa'));
+	}
+    
+    if ($lead->id) {
+        return $response->withStatus(302)->withHeader('Location', '../../leads.php');
+    } else {
+        return $response->withStatus(400);
+    }
+})->add(new EstablecimientosAuth());
+$app->get('/aprobarlead/{id_lead}', function($request, $response, $args){
+	$_lead = new Lead();
+	$_id_lead = $args['id_lead'];
+	$lead = $_lead->find($_id_lead);
+	$lead->status = '3';
+	$lead->save();
+	return $response->withStatus(302)->withHeader('Location', '../../leads.php');
+});
+$app->get('/rechazarlead/{id_lead}', function($request, $response, $args){
+	$_lead = new Lead();
+	$_id_lead = $args['id_lead'];
+	$lead = $_lead->find($_id_lead);
+	$lead->status = '2';
+	$lead->save();
+	return $response->withStatus(302)->withHeader('Location', '../../leads.php');
+});
 
 $app->run();
 
