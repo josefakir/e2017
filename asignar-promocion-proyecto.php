@@ -2,7 +2,7 @@
 include("auth.php");
 include('header.php'); ?>
 	<div id="contenido">
-		<h1 class="title-general" id="marca"><i class="fa fa-building fa-fw"></i> Seguimiento de Leads</h1>
+		<h1 class="title-general" id="marca"><i class="fa fa-building fa-fw"></i> Asignar promoción a proyecto</h1>
 		<div class="add-new-record">Insertar nuevo registro<i class="fa fa-plus fa-fw"></i></div>
 		<div class="formulario">
 			<form class='validation-form'  action="api/insert/leads" method="post" enctype="multipart/form-data">
@@ -46,7 +46,7 @@ include('header.php'); ?>
 						<th>NOMBRE</th>
 						<th>EMPRESA</th>
 						<th>ÚLTIMA ACTUALIZACION</th>
-						<th>DETALLES</th>
+						<th style="width: 50px">ASIGNAR PROMOCIÓN</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -63,6 +63,7 @@ include('header.php'); ?>
 						<td><?php echo $o->nombre ?></td>
 						<td><?php echo $o->marca->nombre ?></td>
 						<td><?php echo $o->updated_at->date ?></td>
+						<td style="text-align: center;"><a href="editar-promocion.php?id=<?php echo $o->marca->id ?>" style="color: green"><i class="fa fa-money fa-2x" aria-hidden="true"></i></a></td>
 					</tr>
 					<?php
 					}
