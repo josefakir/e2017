@@ -55,7 +55,11 @@ include('header.php');
 						<td><?php echo $o->marca->nombre ?></td>
 						<td><?php echo $o->usuario->email ?></td>
 						<td>Sin aprobar</td>
+						<?php  if($_SESSION['rol']=='1' or $_SESSION['rol']=='2' ){ ?>
 						<td class="aprobar"><a href="api/aprobarmarca/<?php echo $o->id ?>"  onclick="return confirm('¿Seguro de aprobar?');"><i class="fa fa-check fa-2x aprobar" aria-hidden="true"></i></a></td>
+						<?php }else{ ?>
+						<td class="aprobar"></td>
+						<?php } ?>
 					</tr>
 					<?php
 					}

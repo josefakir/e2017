@@ -42,6 +42,7 @@ $app->post('/login', function ($request, $response, $args) {
     	$_SESSION['aut'] = true;
     	$_SESSION['email'] = $users[0]->email;
     	$_SESSION['id'] = $users[0]->id;
+    	$_SESSION['rol'] = $users[0]->rol;
         return $response->withStatus(200)->withHeader('Location', '../inicio.php');
     }else{
     	return $response->withStatus(401)->withHeader('Location', '../index.php?m='.base64_encode('No autorizado'));
@@ -407,6 +408,16 @@ $app->get('/marcassinaprobar', function($request, $response, $args){
 	return $response->withStatus(200)->withJson($payload);
 });
 
+$app->get('/marcasiniciooperaciones', function($request, $response, $args){
+	$_marca = new Marca();
+	$marcas = $_marca::where('inicio_operaciones', true)->get();
+	$payload = [];
+	foreach($marcas as $m){
+		array_push($payload, $m);
+	}
+	return $response->withStatus(200)->withJson($payload);
+});
+
 
 $app->get('/aprobarmarca/{id_autorizacion}', function($request, $response, $args){
 	$_autorizacion = new Autorizacion();
@@ -584,6 +595,37 @@ $app->get('/sucursales', function($request, $response, $args){
 	return $response->withStatus(200)->withJson($payload);
 	
 });
+
+
+$app->get('/sucursales_inicio_operaciones', function($request, $response, $args){
+	$_marca = new Marca();
+	$marcas = $_marca::where('inicio_operaciones',true)->get();
+	$payload = [];
+	foreach($marcas as $m){
+		//print_r($m);
+		$_sucursal = new Sucursal();
+		$sucursales = $_sucursal::where('geolocalicacion_revisada',false)->get();
+		foreach($sucursales as $s){
+			$_estado = new Estado();
+			$_estado = $_estado::where('id',$s->id_estado)->get();
+			$objeto = array(
+				'id_marca' => $m->id,
+				'id_sucursal' => $s->id,
+				'marca' => $m->nombre,
+				'sucursal' => $s->nombre,
+				'telefono' => $s->telefono,
+				'id_estado' => $s->id_estado,
+				'estado' => $_estado[0]->nombre,
+				'tuvo_llamada_bienvenida' => $s->tuvo_llamada_bienvenida
+			);
+			array_push($payload, $objeto);
+		}
+	}
+	return $response->withStatus(200)->withJson($payload);
+	
+});
+
+
 $app->get('/sucursales/{id}', function($request, $response, $args){
 	$_id = $args['id'];
 	$_marca = new Sucursal();
@@ -622,6 +664,7 @@ $app->post('/insert/sucursales', function($request, $response, $args){
 	$_telefono = $request->getParsedBodyParam('telefono', '');
 	$_latitud = $request->getParsedBodyParam('latitud', '');
 	$_longitud = $request->getParsedBodyParam('longitud', '');
+	$_referencia = $request->getParsedBodyParam('referencia', '');
 	$_calle = $request->getParsedBodyParam('calle', '');
 	$_no_ext = $request->getParsedBodyParam('no_ext', '');
 	$_no_int = $request->getParsedBodyParam('no_int', '');
@@ -638,6 +681,7 @@ $app->post('/insert/sucursales', function($request, $response, $args){
 	$sucursal->telefono = $_telefono;
 	$sucursal->latitud = $_latitud;
 	$sucursal->longitud = $_longitud;
+	$sucursal->referencia = $_referencia;
 	$sucursal->calle = $_calle;
 	$sucursal->no_ext = $_no_ext;
 	$sucursal->no_int = $_no_int;
@@ -792,7 +836,7 @@ $app->post('/insert/autorizacion', function($request, $response, $args){
 
 $app->get('/leads', function($request, $response, $args){
 	$_lead = new Lead();
-	$leads = $_lead->all();
+	$leads = $_lead::where('status','=', '1')->get();
 	$payload = [];
 	foreach($leads as $l){
 		$_marca = new Marca();
@@ -807,7 +851,7 @@ $app->get('/leads', function($request, $response, $args){
 			'status' => $l->status,
 			'usuario' => $usuario,
 			'tiene_contacto'=>$l->tiene_contacto,
-			'tiene_registro'=>$l->tiene_registro,
+			'inicio_operaciones'=>$l->inicio_operaciones,
 			'created_at' => $l->created_at,
 			'updated_at' => $l->updated_at
 		);
@@ -833,7 +877,7 @@ $app->get('/leadssinfinalizar', function($request, $response, $args){
 			'status' => $l->status,
 			'usuario' => $usuario,
 			'tiene_contacto'=>$l->tiene_contacto,
-			'tiene_registro'=>$l->tiene_registro,
+			'inicio_operaciones'=>$l->inicio_operaciones,
 			'created_at' => $l->created_at,
 			'updated_at' => $l->updated_at
 		);
@@ -844,7 +888,7 @@ $app->get('/leadssinfinalizar', function($request, $response, $args){
 
 $app->get('/leadsfinalizados', function($request, $response, $args){
 	$_lead = new Lead();
-	$leads = $_lead::where('status', '9')->get();
+	$leads = $_lead::where('status', '9')->where('inicio_operaciones',0)->get();
 	$payload = [];
 	foreach($leads as $l){
 		$_marca = new Marca();
@@ -859,7 +903,7 @@ $app->get('/leadsfinalizados', function($request, $response, $args){
 			'status' => $l->status,
 			'usuario' => $usuario,
 			'tiene_contacto'=>$l->tiene_contacto,
-			'tiene_registro'=>$l->tiene_registro,
+			'inicio_operaciones'=>$l->inicio_operaciones,
 			'created_at' => $l->created_at,
 			'updated_at' => $l->updated_at
 		);
@@ -1035,6 +1079,7 @@ $app->post('/detallesdesclub', function($request, $response, $args){
 
 $app->post('/insert/promocion', function($request, $response, $args){
 	$_id_marca = $request->getParsedBodyParam('id_marca', '');
+	$_id_lead = $request->getParsedBodyParam('id_lead', '');
 	$_id_proyecto = $request->getParsedBodyParam('id_proyecto', '');
 	$_efectivo = $request->getParsedBodyParam('efectivo', '');
 	$_tarjeta = $request->getParsedBodyParam('tarjeta', '');
@@ -1056,16 +1101,67 @@ $app->post('/insert/promocion', function($request, $response, $args){
 	try {
 		$promocion->save();
 		if ($promocion->id) {
-	        return $response->withStatus(302)->withHeader('Location', '../../editar-promocion.php?id='.$_id_marca);
+	        return $response->withStatus(302)->withHeader('Location', '../../editar-promociones.php?id='.$_id_marca."&id_lead=".$_id_lead);
 	    } else {
 	        return $response->withStatus(400);
 	    }
 	} catch (Exception $e) {
-		return $response->withStatus(302)->withHeader('Location', '../../editar-promocion.php?id='.$_id_marca.'m='.base64_encode('Error: Ya fue registrada esa promoción con ese proyecto'));
+		return $response->withStatus(302)->withHeader('Location', '../../editar-promociones.php?id='.$_id_marca."&id_lead=".$_id_lead.'&m='.base64_encode('Error: Ya fue registrada esa promoción con ese proyecto'));
 	}
     $promocion->save();
     
 })->add(new EstablecimientosAuth());
+
+
+$app->post('/update/promocion', function($request, $response, $args){
+	$_id_promocion = $request->getParsedBodyParam('id_promocion', '');
+	$_id_marca = $request->getParsedBodyParam('id_marca', '');
+	$_id_lead = $request->getParsedBodyParam('id_lead', '');
+	$_id_proyecto = $request->getParsedBodyParam('id_proyecto', '');
+	$_efectivo = $request->getParsedBodyParam('efectivo', '');
+	$_tarjeta = $request->getParsedBodyParam('tarjeta', '');
+	$_promo = $request->getParsedBodyParam('promo', '');
+	$_detalle_promo = $request->getParsedBodyParam('detalle_promo', '');
+	$_restricciones = $request->getParsedBodyParam('restricciones', '');
+	$_fecha_inicio = $request->getParsedBodyParam('fecha_inicio', '');
+	$_fecha_fin = $request->getParsedBodyParam('fecha_fin', '');
+	$promocion = new Promocion();
+	$promocion = $promocion->find($_id_promocion);
+	$promocion->id_proyecto = $_id_proyecto;
+	$promocion->efectivo = $_efectivo;
+	$promocion->tarjeta = $_tarjeta;
+	$promocion->promo = $_promo;;
+	$promocion->detalle_promocion = $_detalle_promo;
+	$promocion->restricciones = $_restricciones;
+	$promocion->inicio_actividades = $_fecha_inicio;
+	$promocion->fin_actividades = $_fecha_fin;
+	try {
+		$promocion->save();
+		if ($promocion->id) {
+	        return $response->withStatus(302)->withHeader('Location', '../../editar-promociones.php?id='.$_id_marca.'&id_lead='.$_id_lead);
+	    } else {
+	        return $response->withStatus(400);
+	    }
+	} catch (Exception $e) {
+		return $response->withStatus(302)->withHeader('Location', '../../editar-promocion.php?id='.$_id_marca.'&id_lead='.$_id_lead.'&m='.base64_encode('Error: Ya fue registrada esa promoción con ese proyecto'));
+	}
+    $promocion->save();
+    
+})->add(new EstablecimientosAuth());
+
+$app->get('/delete/promocion/{id}', function($request, $response, $args){
+	$_id = $args['id'];
+	$promocion = Promocion::find($_id);
+	$id_marca = $promocion->id_marca;
+	$id_lead = $promocion->id_lead;
+	$promocion->delete();
+     if ($promocion->id) {
+        return $response->withStatus(302)->withHeader('Location', '../../../editar-promociones.php?id='.$id_marca.'&id_lead='.$id_lead);
+    } else {
+        return $response->withStatus(400);
+    }
+})->add(new EstablecimientosAuth());
+
 
 $app->get('/promociones/{id_marca}', function($request, $response, $args){
 	$_promociones = new Promocion();
@@ -1093,6 +1189,79 @@ $app->get('/promociones/{id_marca}', function($request, $response, $args){
 	}
 	return $response->withStatus(200)->withJson($payload);
 });
+
+$app->get('/promocion/{id}', function($request, $response, $args){
+	$_promociones = new Promocion();
+	$promociones = $_promociones::where('id', $args['id'])->get();
+	
+	return $response->withStatus(200)->withJson($promociones);
+});
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// INICIAR OPERACIONES //////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+$app->get('/iniciar_operaciones/{id_marca}/{id_lead}', function($request, $response, $args){
+	$_id_marca = $args['id_marca'];
+	$_id_lead = $args['id_lead'];
+	$marca = new Marca();
+	$marca = $marca->find($_id_marca);
+	$marca->inicio_operaciones=1;
+	$marca->save();
+	$lead = new Lead();
+	$lead = $lead->find($_id_lead);
+	$lead->inicio_operaciones=1;
+	$lead->save();
+	return $response->withStatus(302)->withHeader('Location', '../../../editar-promociones.php?id='.$_id_marca."&id_lead=".$_id_lead);
+});
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// LLAMADA BIENVENIDA //////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+$app->post('/llamada_bienvenida', function($request, $response, $args){
+	$_id_sucursal = $request->getParsedBodyParam('id_sucursal', '');
+	$_detalle_llamada = $request->getParsedBodyParam('detalle_llamada', '');
+	$sucursal = new Sucursal();
+	$sucursal = $sucursal->find($_id_sucursal);
+	$sucursal->detalle_llamada = $_detalle_llamada;
+	$sucursal->tuvo_llamada_bienvenida = true;
+	$sucursal->save();
+
+    if ($sucursal->id) {
+        return $response->withStatus(302)->withHeader('Location', '../llamada-de-bienvenida.php');
+    } else {
+        return $response->withStatus(400);
+    }
+})->add(new EstablecimientosAuth());
+
+
+$app->post('/revisar_geolocalizacion', function($request, $response, $args){
+	$_id_sucursal = $request->getParsedBodyParam('id_sucursal', '');
+	$_id_zona = $request->getParsedBodyParam('id_zona', '');
+	$_latitud = $request->getParsedBodyParam('latitud', '');
+	$_longitud = $request->getParsedBodyParam('longitud', '');
+	$_referencia = $request->getParsedBodyParam('referencia', '');
+	$sucursal = new Sucursal();
+	$sucursal = $sucursal->find($_id_sucursal);
+	$sucursal->id_zona = $_id_zona;
+	$sucursal->latitud = $_latitud;
+	$sucursal->longitud = $_longitud;
+	$sucursal->referencia = $_referencia;
+	$sucursal->geolocalicacion_revisada = true;
+	$sucursal->save();
+
+    if ($sucursal->id) {
+        return $response->withStatus(302)->withHeader('Location', '../llamada-de-bienvenida.php');
+    } else {
+        return $response->withStatus(400);
+    }
+})->add(new EstablecimientosAuth());
+
+
+
 
 $app->run();
 

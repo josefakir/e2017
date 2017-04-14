@@ -41,6 +41,10 @@ include('header.php'); ?>
 					<input type="text" class="form-control" placeholder="longitud" name="longitud" minlength="2" type="text" required>
 				</div>
 				<div class="form-group">
+					<label for="exampleInputEmail1">Referencia</label>
+					<input type="text" class="form-control" placeholder="referencia" name="referencia" minlength="2" type="text" required>
+				</div>
+				<div class="form-group">
 					<label for="exampleInputEmail1">Calle</label>
 					<input type="text" class="form-control" placeholder="calle" name="calle" minlength="2" type="text" required>
 				</div>

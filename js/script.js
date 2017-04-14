@@ -54,6 +54,8 @@ $(document).ready(function(){
 	 	$('#overlay_detalle').fadeOut('fast');
 	 	$('#overlay_contacto').fadeOut('fast');
 	 	$('#overlay_registro').fadeOut('fast');
+	 	$('#overlay_bienvenida').fadeOut('fast');
+	 	$('#overlay_geolocalizacion').fadeOut('fast');
 
 	 });
 	 $( ".datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
@@ -132,6 +134,39 @@ $(document).ready(function(){
 	 	$('#id_lead_registro').val($(this).attr('rel'));
 	 	$('#id_marca_registro').val($(this).attr('rel-id-marca'));
 	 });
+	 $('.btn_llamada_bienvenida').click(function(e){
+	 	e.preventDefault();
+	 	$('#id_sucursal').val($(this).attr('rel'));
+	 	$('#overlay_bienvenida').fadeIn('fast');
+	 });
+	 $('.btn_revisar_geolocalizacion').click(function(e){
+	 	$('#id_sucursal_geo').val($(this).attr('rel'));
+	 	e.preventDefault();
+	 	$.ajax({
+	 		url : URL_API+'/marcas/'+$(this).attr('rel-marca'),
+	 		success : function(data){
+	 			$('#nombre_marca').html(data.nombre);
+	 		}
+	 	});
+	 	$.ajax({
+	 		url : URL_API+'/sucursales/'+$(this).attr('rel'),
+	 		success : function(data){
+	 			$('#nombre_sucursal').html(data.nombre);
+	 			$('#c_latitud').val(data.latitud);
+	 			$('#c_longitud').val(data.longitud);
+	 			$('#c_referencia').val(data.referencia);
+	 			$('#c_id_zona option').each(function(index,element){
+	 				if(element.value==data.id_zona){
+	 					//$(this).attr('selected',true);
+	 					$("#c_id_zona").val(data.id_zona).trigger("change");
+	 				}
+				 });
+	 			
+	 			//$('#c_id_zona').val(data.id_zona).trigger('change.select2');
+	 		}
+	 	});
+	 	$('#overlay_geolocalizacion').fadeIn('fast');
+	 	//obtener marca:
 
-
+	 });
 });

@@ -67,6 +67,7 @@ include('header.php'); ?>
 						<th><?php echo $o->nombre ?></th>
 						<th><?php echo $o->marca->nombre ?></th>
 						<th><?php echo traducirStatusLead($o->status) ?></th>
+						<?php  if($_SESSION['rol']=='1' or $_SESSION['rol']=='2' ){ ?>
 						<?php if($o->status=='1'){ ?>
 						<td class="aprobar"><a href="api/aprobarlead/<?php echo $o->id ?>"  onclick="return confirm('¿Seguro de aprobar?');"><i class="fa fa-check fa-2x aprobar" aria-hidden="true"></i></a></td>
 						<td class="rechazar"><a href="api/rechazarlead/<?php echo $o->id ?>"  onclick="return confirm('¿Seguro de rechazar?');"><i class="fa fa-close fa-fw fa-2x"></i></a></td>
@@ -74,6 +75,10 @@ include('header.php'); ?>
 						<td class="aprobar"><i class="fa fa-check fa-2x aprobar" aria-hidden="true"></i></td>
 						<td class="rechazar"><i class="fa fa-close fa-fw fa-2x"></i></td>
 
+						<?php } ?>
+						<?php }else{ ?>
+						<td class="aprobar"><i class="fa fa-check fa-2x aprobar" aria-hidden="true"></i></td>
+						<td class="rechazar"><i class="fa fa-close fa-fw fa-2x"></i></td>
 						<?php } ?>
 
 					</tr>

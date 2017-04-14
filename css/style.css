@@ -13,7 +13,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 #loginpleca{background: #27AAE1; height: 10px; width: 100%; position: fixed; top: 0}
 header{background: #13171b none repeat scroll 0 0;border-top: 5px solid #009edf;height: 69px;left: 0;position: fixed;top: 0;width: 100%;z-index: 99999;}
 header img {height: 49px;left: 0;margin-left: 2.5%;position: absolute;top: 7px;}
-#main-menu {margin-right: 2.5%;position: absolute;right: 0;top: 9px;width: auto;z-index: 5;}
+#main-menu {margin-right: 2.5%;position: absolute;right: 0;top: 9px;width: auto;z-index: 99999;}
 #main-menu .menu-item {float: right;padding: 0 2px;width: 156px;}
 .menu-item .input-group {border-bottom: 1px solid #293340;}
 .menu-item .input-group-addon {background: transparent none repeat scroll 0 0;border: 0 solid;border-radius: 0;color: #293340;}
@@ -101,6 +101,26 @@ p.error{color: red; text-align: center;}
     display: none
 }
 #overlay_detalle table{width: 80% !important; margin: 0 auto; margin-top: 200px}
+#overlay_bienvenida{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: url(../img/pixel.png);
+    z-index: 1;
+    top: 0;
+    left: 0;
+    display: none
+}
+#overlay_geolocalizacion{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: url(../img/pixel.png);
+    z-index: 1;
+    top: 0;
+    left: 0;
+    display: none
+}
 a.cerraroverlay {
     position: absolute;
     right: 0;  

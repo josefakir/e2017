@@ -63,7 +63,7 @@ include('header.php'); ?>
 						<td><?php echo $o->nombre ?></td>
 						<td><?php echo $o->marca->nombre ?></td>
 						<td><?php echo $o->updated_at->date ?></td>
-						<td style="text-align: center;"><a href="editar-promocion.php?id=<?php echo $o->marca->id ?>" style="color: green"><i class="fa fa-money fa-2x" aria-hidden="true"></i></a></td>
+						<td style="text-align: center;"><a href="editar-promociones.php?id=<?php echo $o->marca->id ?>&id_lead=<?php echo $o->id ?>" style="color: green"><i class="fa fa-money fa-2x" aria-hidden="true"></i></a></td>
 					</tr>
 					<?php
 					}
