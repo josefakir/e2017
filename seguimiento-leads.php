@@ -319,7 +319,8 @@ include('header.php'); ?>
 					</div>
 					<div class="form-group">
 						<label for="exampleInputEmail1">Actividad de claidad</label>
-						<select name="actividad_de_calidad" id="" style="width: 100%" required id="r_actividad">
+						<select name="actividad_de_calidad" id="" style="width: 100%" required id="r_actividad" multiple="multiple">
+						<!--
 							<option value="">Seleccione</option>
 							<option value="Acrílico">Acrílico</option>
 							<option value="Comunicado">Comunicado</option>
@@ -328,6 +329,17 @@ include('header.php'); ?>
 							<option value="Reloj">Reloj</option>
 							<option value="Sticker">Sticker</option>
 							<option value="Visita">Visita</option>
+							-->
+							<option value="">Seleccione</option>
+							<option value="Llamada">Llamada</option>
+							<optgroup label="Visita con Material">
+								<option value="Ministicker">Ministicker</option>
+								<option value="Reloj">Reloj</option>
+								<option value="Sticker">Sticker</option>
+								<option value="Acrílico">Acrílico</option>
+								<option value="Comunicado">Comunicado</option>
+							</optgroup>
+							<option value="Visita Sin Material">Visita sin material</option>
 						</select>
 					</div>
 					<div class="form-group">

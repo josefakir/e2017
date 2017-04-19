@@ -39,6 +39,7 @@ include('header.php');
 						<th>USUARIO</th>
 						<th>STATUS</th>
 						<th class="editar">APROBAR</th>
+						<th class="editar">RECHAZAR</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -57,6 +58,7 @@ include('header.php');
 						<td>Sin aprobar</td>
 						<?php  if($_SESSION['rol']=='1' or $_SESSION['rol']=='2' ){ ?>
 						<td class="aprobar"><a href="api/aprobarmarca/<?php echo $o->id ?>"  onclick="return confirm('¿Seguro de aprobar?');"><i class="fa fa-check fa-2x aprobar" aria-hidden="true"></i></a></td>
+						<td class="rechazar"><a href="api/rechazarmarca/<?php echo $o->id ?>"  onclick="return confirm('¿Seguro de rechazar?');"><i class="fa fa-times fa-2x aprobar" aria-hidden="true"></i></a></td>
 						<?php }else{ ?>
 						<td class="aprobar"></td>
 						<?php } ?>

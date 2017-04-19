@@ -25,7 +25,7 @@ header img {height: 49px;left: 0;margin-left: 2.5%;position: absolute;top: 7px;}
 .profile .submenu-item a {margin-left: 0 !important;width: 106px !important;}
 #menu-control-lateral {background: rgba(0, 158, 223, 0.5) none repeat scroll 0 0;cursor: pointer;height: 100%;left: 0;margin-top: -5px;position: fixed;text-align: center;width: 20px;z-index: 4;}
 .menu-control-arrow {color: white;left: 2px;margin-top: -20px;position: absolute;top: 50%;}
-.site-footer {background: #13171b none repeat scroll 0 0;position: fixed;z-index: 4;bottom: 0;width: 100%;}
+.site-footer {background: #13171b none repeat scroll 0 0;position: fixed;z-index: 0;bottom: 0;width: 100%;}
 .site-footer, .page-wrap::after {height: 50px;}
 #disclaimer {color: #668393;font-size: 10px;line-height: 40px;margin: 0 auto;text-align: center;width: 90%;}
 #main-menu-lateral {background: rgba(19, 23, 27, 0.95) none repeat scroll 0 0;height: 100%;left:-260px;margin-top: -5px;overflow-y: auto;padding-top: 86px;position: fixed;text-align: center;width: 0;z-index: 4;}
@@ -109,7 +109,7 @@ p.error{color: red; text-align: center;}
     z-index: 1;
     top: 0;
     left: 0;
-    display: none
+    display: none;
 }
 #overlay_geolocalizacion{
     position: fixed;
@@ -129,3 +129,25 @@ a.cerraroverlay {
     border-radius: 34px;
     height: 28px;
 }
+.pop{float: left;width: 13%; margin-right: 5px}
+.pop label {
+    height: 48px;
+        font-size: 15px;
+}
+#conoce_vb{display: none}
+#escala_info{display: none}
+#motivo_desconoce{display: none}
+#reforzo_informacion{display: none}
+#material_pop{display: none}
+#cantidades_pop{display: none}
+#nombre_atendio{display: none}
+#cargo_atendio{display: none}
+
+
+
+
+
+
+
+
+

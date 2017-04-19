@@ -10,6 +10,7 @@ use Establecimientos\Models\Categoriavive;
 use Establecimientos\Models\Detalledesclub;
 use Establecimientos\Models\Estado;
 use Establecimientos\Models\Lead;
+use Establecimientos\Models\Llamada;
 use Establecimientos\Models\Marca;
 use Establecimientos\Models\Promocion;
 use Establecimientos\Models\Proyecto;
@@ -430,6 +431,14 @@ $app->get('/aprobarmarca/{id_autorizacion}', function($request, $response, $args
 	$marcas->autorizadaLead = true;
 	$marcas->save();
 	return $response->withStatus(302)->withHeader('Location', '../../leads.php');
+});
+
+$app->get('/rechazarmarca/{id_autorizacion}', function($request, $response, $args){
+	$_autorizacion = new Autorizacion();
+	$_id_autorizacion = $args['id_autorizacion'];
+	$autorizacion = $_autorizacion->find($_id_autorizacion);
+	$autorizacion->delete();
+	return $response->withStatus(302)->withHeader('Location', '../../autorizaciones.php');
 });
 
 $app->get('/marcas/{id}', function($request, $response, $args){
@@ -1198,7 +1207,7 @@ $app->get('/promocion/{id}', function($request, $response, $args){
 });
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// INICIAR OPERACIONES //////////////////////////////////////////////////////////////////////////////////////////////////////
+/// INICIAR OPERACIONES ////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 $app->get('/iniciar_operaciones/{id_marca}/{id_lead}', function($request, $response, $args){
@@ -1212,21 +1221,72 @@ $app->get('/iniciar_operaciones/{id_marca}/{id_lead}', function($request, $respo
 	$lead = $lead->find($_id_lead);
 	$lead->inicio_operaciones=1;
 	$lead->save();
-	return $response->withStatus(302)->withHeader('Location', '../../../editar-promociones.php?id='.$_id_marca."&id_lead=".$_id_lead);
+	return $response->withStatus(302)->withHeader('Location', '../../../marcas-operativas.php');
 });
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// LLAMADA BIENVENIDA //////////////////////////////////////////////////////////////////////////////////////////////////////
+/// LLAMADA BIENVENIDA /////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 $app->post('/llamada_bienvenida', function($request, $response, $args){
 	$_id_sucursal = $request->getParsedBodyParam('id_sucursal', '');
 	$_detalle_llamada = $request->getParsedBodyParam('detalle_llamada', '');
+	$_conoce_vb = $request->getParsedBodyParam('conoce_vb', '');
+	if($_conoce_vb=="Sí"){
+		$_conoce_vb = true;
+	}else{
+		$_conoce_vb = true;
+	}
+	$_escala_info = $request->getParsedBodyParam('escala_info', '');
+	if($_escala_info=="Sí"){
+		$_escala_info = true;
+	}else{
+		$_escala_info = true;
+	}
+	$_motivo_desconoce = $request->getParsedBodyParam('motivo_desconoce', '');
+	$_reforzo_informacion = $request->getParsedBodyParam('reforzo_informacion', '');
+	if($_reforzo_informacion=="Sí"){
+		$_reforzo_informacion = true;
+	}else{
+		$_reforzo_informacion = true;
+	}
+	$_material_pop = $request->getParsedBodyParam('material_pop', '');
+	if($_material_pop=="Sí"){
+		$_material_pop = true;
+	}else{
+		$_material_pop = true;
+	}
+
+	$_calcomanias = $request->getParsedBodyParam('calcomanias', '');
+	$_acrilicos = $request->getParsedBodyParam('acrilicos', '');
+	$_comunicados_desclub = $request->getParsedBodyParam('comunicados_desclub', '');
+	$_comunicados_bbva = $request->getParsedBodyParam('comunicados_bbva', '');
+	$_reloj_colgante = $request->getParsedBodyParam('reloj_colgante', '');
+	$_calcomanias_desclub = $request->getParsedBodyParam('calcomanias_desclub', '');
+	$_tarjetas_desclub = $request->getParsedBodyParam('tarjetas_desclub', '');
+	$_nombre_atendio = $request->getParsedBodyParam('nombre_atendio', '');
+	$_cargo_atendio = $request->getParsedBodyParam('cargo_atendio', '');
+
+
 	$sucursal = new Sucursal();
 	$sucursal = $sucursal->find($_id_sucursal);
 	$sucursal->detalle_llamada = $_detalle_llamada;
+	$sucursal->conoce_vb = $_conoce_vb;
+	$sucursal->escala_info = $_escala_info;
+	$sucursal->motivo_desconoce = $_motivo_desconoce;
+	$sucursal->reforzo_info = $_reforzo_informacion;
+	$sucursal->material_pop = $_material_pop;
+	$sucursal->calcomanias = $_calcomanias;
+	$sucursal->acrilicos = $_acrilicos;
+	$sucursal->comunicados_desclub = $_comunicados_desclub;
+	$sucursal->comunicados_bbva = $_comunicados_bbva;
+	$sucursal->reloj_colgante = $_reloj_colgante;
+	$sucursal->calcomanias_desclub = $_calcomanias_desclub;
+	$sucursal->tarjetas_desclub = $_tarjetas_desclub;
+	$sucursal->nombre_atendio = $_nombre_atendio;
+	$sucursal->cargo_atendio = $_cargo_atendio;
 	$sucursal->tuvo_llamada_bienvenida = true;
 	$sucursal->save();
 
@@ -1260,6 +1320,71 @@ $app->post('/revisar_geolocalizacion', function($request, $response, $args){
     }
 })->add(new EstablecimientosAuth());
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// LLAMADAS ///////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+$app->get('/llamadas', function($request, $response, $args){
+	$_llamada = new Llamada();
+	$llamadas = $_llamada->all();
+	if(!empty($llamadas)){
+       	return $response->withStatus(200)->withJson($llamadas);
+	}else{
+		return $response->withStatus(404);
+	}
+});
+
+$app->post('/insert/llamadas', function($request, $response, $args){
+	$_id_proyecto = $request->getParsedBodyParam('id_proyecto', '');
+	$_tipo = $request->getParsedBodyParam('tipo', '');
+	$_nombre = $request->getParsedBodyParam('nombre', '');
+	$_paterno = $request->getParsedBodyParam('paterno', '');
+	$_materno = $request->getParsedBodyParam('materno', '');
+	$_tipo_tarjeta_seguro = $request->getParsedBodyParam('tipo_tarjeta_seguro', '');
+	$_calle = $request->getParsedBodyParam('calle', '');
+	$_no_ext = $request->getParsedBodyParam('no_ext', '');
+	$_no_int = $request->getParsedBodyParam('no_int', '');
+	$_cp = $request->getParsedBodyParam('cp', '');
+	$_referencia = $request->getParsedBodyParam('referencia', '');
+	$_tipo_tel_1 = $request->getParsedBodyParam('tipo_tel_1', '');
+	$_tel_1 = $request->getParsedBodyParam('tel_1', '');
+	$_tipo_tel_2 = $request->getParsedBodyParam('tipo_tel_2', '');
+	$_tel_2 = $request->getParsedBodyParam('tel_2', '');
+	$_email = $request->getParsedBodyParam('email', '');
+	$_marca = $request->getParsedBodyParam('marca	', '');
+	$_sucursal = $request->getParsedBodyParam('sucursal', '');
+	$_id_marca = $request->getParsedBodyParam('id_marca', '');
+	$_id_categoria = $request->getParsedBodyParam('id_categoria', '');
+	$_comentarios = $request->getParsedBodyParam('comentarios', '');
+	$_donde_viste = $request->getParsedBodyParam('donde_viste', '');
+	$llamada = new Llamada();
+	$llamada->id_proyecto = $_id_proyecto;
+	$llamada->tipo = $_tipo;
+	$llamada->nombre = $_nombre;
+	$llamada->paterno = $_paterno;
+	$llamada->materno = $_materno;
+	$llamada->tipo_tarjeta_seguro = $_tipo_tarjeta_seguro;
+	$llamada->calle = $_calle;
+	$llamada->no_ext = $_no_ext;
+	$llamada->no_int = $_no_int;
+	$llamada->cp = $_cp;
+	$llamada->referencia = $_referencia;
+	$llamada->tipo_tel_1 = $_tipo_tel_1;
+	$llamada->tel_1 = $_tel_1;
+	$llamada->tipo_tel_2 = $_tipo_tel_2;
+	$llamada->tel_2 = $_tel_2;
+	$llamada->email = $_email;
+	$llamada->marca = $_marca;
+	$llamada->sucursal = $_sucursal;
+	$llamada->id_marca = $_id_marca;
+	$llamada->id_categoria = $_id_categoria;
+	$llamada->comentarios = $_comentarios;
+	$llamada->donde_viste = $_donde_viste;
+	$llamada->save();
+	return $response->withStatus(302)->withHeader('Location', '../../call-center.php');
+	//print_R($_POST);
+})->add(new EstablecimientosAuth());
 
 
 

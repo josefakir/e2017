@@ -56,23 +56,265 @@ include('header.php'); ?>
 <div id="overlay_bienvenida">
 	<div class="container">
 		<div class="row">
-			<div class="col-md-12" style="background: #fff; margin-top: 100px; height: 300px; overflow-y: scroll;">
+			<div class="col-md-12" style="background: #fff; margin-top: 100px; height: 700px; overflow-y: scroll;">
 				<a href="#" class="cerraroverlay"><i class="fa fa-times-circle fa-2x" aria-hidden="true"></i></a>
 				<form class='validation-form2'  action="api/llamada_bienvenida" method="post">
 					<h2 style="margin-top: 5px">Detalles de llamada de bienvenida:</h2>
 					<div class="form-group">
-					<label for="">Llamada efectiva / No efectiva</label>
-					<select name="detalle_llamada" id="" style="width: 100%">
-						<option value="">Seleccione</option>
-						<option value="Conocen convenio y aplican descuento">Conocen convenio y aplican descuento</option>
-						<option value="Desconocen convenio">Desconocen convenio</option>
-						<option value="No existe número telefónico">No existe número telefónico</option>
-						<option value="No contestan">No contestan</option>
-						<option value="Número incorrecto">Número incorrecto</option>
-						<option value="Descompuesto / Sin servicio">Descompuesto / Sin servicio</option>
-						<option value="No tiene teléfono">No tiene teléfono</option>
-					</select>
-				</div>
+						<label for="">Llamada efectiva / No efectiva</label>
+						<select name="detalle_llamada" id="detalle_llamada" style="width: 100%">
+							<option value="">Seleccione</option>
+							<option value="Conocen convenio y aplican descuento">Conocen convenio y aplican descuento</option>
+							<option value="Desconocen convenio">Desconocen convenio</option>
+							<option value="No existe número telefónico">No existe número telefónico</option>
+							<option value="No contestan">No contestan</option>
+							<option value="Número incorrecto">Número incorrecto</option>
+							<option value="Descompuesto / Sin servicio">Descompuesto / Sin servicio</option>
+							<option value="No tiene teléfono">No tiene teléfono</option>
+						</select>
+					</div>
+					<div class="form-group" id="conoce_vb">
+						<label for="">¿Conoce el programa Vida Bancomer?</label>
+						<select name="conoce_vb" style="width: 100%">
+							<option value="">Seleccione</option>
+							<option value="Sí">Sí</option>
+							<option value="No">No</option>
+						</select>
+					</div>
+					<div class="form-group" id="escala_info">
+						<label for="">¿Escala la información a un supervisor?</label>
+						<select name="escala_info"  style="width: 100%">
+							<option value="">Seleccione</option>
+							<option value="Sí">Sí</option>
+							<option value="No">No</option>
+						</select>
+					</div>
+					<div class="form-group" id="motivo_desconoce">
+						<label for="">¿Cuál es el motivo porque desconoce el descuento?</label>
+						<select name="motivo_desconoce"  style="width: 100%">
+							<option value="">Seleccione</option>
+							<option value="La empresa / corporativo no ha enviado la información">La empresa / corporativo no ha enviado la información</option>
+							<option value="Empleado de nuevo ingreso">Empleado de nuevo ingreso</option>
+							<option value="Cambiaron de administración">Cambiaron de administración</option>
+						</select>
+					</div>
+					<div class="form-group" id="reforzo_informacion">
+						<label for="">¿Se reforzó la información?</label>
+						<select name="reforzo_informacion"  style="width: 100%">
+							<option value="">Seleccione</option>
+							<option value="Sí">Sí</option>
+							<option value="No">No</option>
+						</select>
+					</div>
+					<div class="form-group" id="material_pop">
+						<label for="">¿Cuenta con material POP?</label>
+						<select name="material_pop"  style="width: 100%">
+							<option value="">Seleccione</option>
+							<option value="Sí">Sí</option>
+							<option value="No">No</option>
+						</select>
+					</div>
+					<div class="form-group" id="cantidades_pop">
+						<div class="pop">
+							<label for="">Calcomanías</label>
+							<select name="calcomanias" id="" style="width: 100%">
+								<option value="">Seleccione</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+								<option value="10">10</option>
+								<option value="11">11</option>
+								<option value="12">12</option>
+								<option value="13">13</option>
+								<option value="14">14</option>
+								<option value="15">15</option>
+								<option value="16">16</option>
+								<option value="17">17</option>
+								<option value="18">18</option>
+								<option value="19">19</option>
+								<option value="20">20</option>
+							</select>
+						</div>
+						<div class="pop">
+							<label for="">Acrílicos</label>
+							<select name="acrilicos" id="" style="width: 100%">
+								<option value="">Seleccione</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+								<option value="10">10</option>
+								<option value="11">11</option>
+								<option value="12">12</option>
+								<option value="13">13</option>
+								<option value="14">14</option>
+								<option value="15">15</option>
+								<option value="16">16</option>
+								<option value="17">17</option>
+								<option value="18">18</option>
+								<option value="19">19</option>
+								<option value="20">20</option>
+							</select>
+						</div>
+						<div class="pop">
+							<label for="">Comunicados Desclub</label>
+							<select name="comunicados_desclub" id="" style="width: 100%">
+								<option value="">Seleccione</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+								<option value="10">10</option>
+								<option value="11">11</option>
+								<option value="12">12</option>
+								<option value="13">13</option>
+								<option value="14">14</option>
+								<option value="15">15</option>
+								<option value="16">16</option>
+								<option value="17">17</option>
+								<option value="18">18</option>
+								<option value="19">19</option>
+								<option value="20">20</option>
+							</select>
+						</div>
+						<div class="pop">
+							<label for="">Comunicados empleado BBVA</label>
+							<select name="comunicados_bbva" id="" style="width: 100%">
+								<option value="">Seleccione</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+								<option value="10">10</option>
+								<option value="11">11</option>
+								<option value="12">12</option>
+								<option value="13">13</option>
+								<option value="14">14</option>
+								<option value="15">15</option>
+								<option value="16">16</option>
+								<option value="17">17</option>
+								<option value="18">18</option>
+								<option value="19">19</option>
+								<option value="20">20</option>
+							</select>
+						</div>
+						<div class="pop">
+							<label for="">Reloj colgante</label>
+							<select name="reloj_colgante" id="" style="width: 100%">
+								<option value="">Seleccione</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+								<option value="10">10</option>
+								<option value="11">11</option>
+								<option value="12">12</option>
+								<option value="13">13</option>
+								<option value="14">14</option>
+								<option value="15">15</option>
+								<option value="16">16</option>
+								<option value="17">17</option>
+								<option value="18">18</option>
+								<option value="19">19</option>
+								<option value="20">20</option>
+							</select>
+						</div>
+						<div class="pop">
+							<label for="">Calcomanías Desclub</label>
+							<select name="calcomanias_desclub" id="" style="width: 100%">
+								<option value="">Seleccione</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+								<option value="10">10</option>
+								<option value="11">11</option>
+								<option value="12">12</option>
+								<option value="13">13</option>
+								<option value="14">14</option>
+								<option value="15">15</option>
+								<option value="16">16</option>
+								<option value="17">17</option>
+								<option value="18">18</option>
+								<option value="19">19</option>
+								<option value="20">20</option>
+							</select>
+						</div>
+						<div class="pop">
+							<label for="">Tarjetas Desclub</label>
+							<select name="tarjetas_desclub" id="" style="width: 100%">
+								<option value="">Seleccione</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+								<option value="10">10</option>
+								<option value="11">11</option>
+								<option value="12">12</option>
+								<option value="13">13</option>
+								<option value="14">14</option>
+								<option value="15">15</option>
+								<option value="16">16</option>
+								<option value="17">17</option>
+								<option value="18">18</option>
+								<option value="19">19</option>
+								<option value="20">20</option>
+							</select>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+
+					<div class="form-group" id="nombre_atendio">
+						<label for="">Nombre de la persona que atendió</label>
+						<input type="text" class="form-control" placeholder="Nombre" name="nombre_atendio" minlength="2" type="text" required>
+					</div>
+					<div class="form-group" id="cargo_atendio">
+						<label for="">Cargo de persona que atendió</label>
+						<select name="cargo_atendio" id="" style="width: 100%">
+							<option value="">Seleccione</option>
+							<option value="Gerente sucursal">Gerente sucursal</option>
+							<option value="Encargado">Encargado</option>
+							<option value="Cajero">Cajero</option>
+							<option value="Administración">Administración</option>
+							<option value="Otro">Otro</option>
+						</select>
+					</div>
 				<input type="hidden" name="id_sucursal" id="id_sucursal">
 				<button type="submit" class="btn btn-primary">Actualizar</button>
 					<p>&nbsp;</p>

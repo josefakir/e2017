@@ -169,4 +169,45 @@ $(document).ready(function(){
 	 	//obtener marca:
 
 	 });
+	 $('#detalle_llamada').change(function(){
+	 	if($(this).val()=="Conocen convenio y aplican descuento" || $(this).val()=="Desconocen convenio"){
+	 		$('#conoce_vb').show();
+	 	}else{
+	 		$('#conoce_vb').hide();
+	 		$('#escala_info').hide();
+	 		$('#motivo_desconoce').hide();
+	 		$('#reforzo_informacion').hide();
+	 		$('#material_pop').hide();
+	 		$('#cantidades_pop').hide();
+	 		$('#nombre_atendio').hide();
+	 		$('#cargo_atendio').hide();
+	 	}
+	 });
+	 $('#conoce_vb select').change(function(){
+	 	if($(this).val()=='Sí'){
+	 		$('#material_pop').show();
+	 		$('#escala_info').hide();
+	 		$('#motivo_desconoce').hide();
+	 		$('#reforzo_informacion').hide();
+	 	}else{
+	 		$('#material_pop').hide();
+	 		$('#escala_info').show();
+	 		$('#motivo_desconoce').show();
+	 		$('#reforzo_informacion').show();
+	 	}
+	 });
+	 $('#reforzo_informacion select').change(function(){
+	 	$('#material_pop').show();
+	 });
+	 $('#material_pop select').change(function(){
+	 	if($(this).val()=='Sí'){
+	 		$('#cargo_atendio').show();
+	 		$('#nombre_atendio').show();
+	 		$('#cantidades_pop').hide();
+	 	}else{
+	 		$('#cargo_atendio').show();
+	 		$('#nombre_atendio').show();
+	 		$('#cantidades_pop').show();
+	 	}
+	 })
 });

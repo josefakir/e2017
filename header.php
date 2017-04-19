@@ -77,6 +77,7 @@
 			</div>
 			<ul class="submenu">
 				<li class="submenu-item"><a href="llamada-de-bienvenida.php" class="menu-subitem-link">Llamada de bienvenida</a></li>
+				<li class="submenu-item"><a href="call-center.php" class="menu-subitem-link">Call Center</a></li>
 			</ul>
 		</li>
 		<?php if($_SESSION['rol'] == '1' or $_SESSION['rol']=='2' or $_SESSION['rol']=='4'){ ?>
