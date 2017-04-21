@@ -121,6 +121,16 @@ p.error{color: red; text-align: center;}
     left: 0;
     display: none
 }
+#overlay_detalles_llamada_nueva{
+     position: fixed;
+    width: 100%;
+    height: 100%;
+    background: url(../img/pixel.png);
+    z-index: 1;
+    top: 0;
+    left: 0;
+    display: none
+}
 a.cerraroverlay {
     position: absolute;
     right: 0;  
@@ -142,9 +152,12 @@ a.cerraroverlay {
 #cantidades_pop{display: none}
 #nombre_atendio{display: none}
 #cargo_atendio{display: none}
-
-
-
+.mitad{width: 50%; float: left;}
+/*
+.afiliar_est{display: none}
+.info_plataforma {display: none}
+.queja_est{display: none}
+*/
 
 
 

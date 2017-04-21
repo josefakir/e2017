@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 20-04-2017 a las 01:17:26
+-- Tiempo de generación: 21-04-2017 a las 18:39:00
 -- Versión del servidor: 5.5.42
 -- Versión de PHP: 5.6.10
 
@@ -30,19 +30,14 @@ CREATE TABLE `actividads` (
   `comentarios_futura` text COLLATE utf8_bin NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Volcado de datos para la tabla `actividads`
 --
 
 INSERT INTO `actividads` (`id`, `id_lead`, `que_hice`, `comentarios`, `que_hare`, `fecha_futura`, `comentarios_futura`, `created_at`, `updated_at`) VALUES
-(47, 30, 'Llamada telefónica', 'comentarios', 'Alta de establecimiento', '0000-00-00 00:00:00', 'comentarios_futura', '2017-04-18 18:11:39', '2017-04-18 18:11:39'),
-(48, 30, 'Alta de establecimiento', 'comentarios', 'Alta de establecimiento', '0000-00-00 00:00:00', 'comentarios_futura', '2017-04-18 18:11:58', '2017-04-18 18:11:58'),
-(49, 30, 'Alta de establecimiento', 'comentarios', 'Alta de establecimiento', '0000-00-00 00:00:00', 'comentarios_futura', '2017-04-18 18:12:23', '2017-04-18 18:12:23'),
-(50, 31, 'Llamada telefónica', 'comentarios', 'Alta de establecimiento', '0000-00-00 00:00:00', 'comentarios_futura', '2017-04-18 18:15:44', '2017-04-18 18:15:44'),
-(51, 31, 'Llamada telefónica', 'asdf', 'Llamada telefónica', '2017-04-18 11:37:00', 'asdf', '2017-04-18 18:37:32', '2017-04-18 18:37:32'),
-(52, 32, 'Alta de establecimiento', 'comentarios', 'Alta de establecimiento', '0000-00-00 00:00:00', 'comentarios_futura', '2017-04-18 18:42:33', '2017-04-18 18:42:33');
+(53, 33, 'Alta de establecimiento', 'comentarios', 'Alta de establecimiento', '0000-00-00 00:00:00', 'comentarios_futura', '2017-04-21 01:04:35', '2017-04-21 01:04:35');
 
 -- --------------------------------------------------------
 
@@ -124,16 +119,14 @@ CREATE TABLE `detalledesclubs` (
   `comentarios` text COLLATE utf8_bin NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Volcado de datos para la tabla `detalledesclubs`
 --
 
 INSERT INTO `detalledesclubs` (`id`, `id_marca`, `id_lead`, `razon_social`, `RFC`, `contacto`, `puesto`, `telefono_1`, `es_celular_1`, `telefono_2`, `es_celular_2`, `email`, `calle`, `no_exterior`, `no_interior`, `referencia`, `latitud`, `longitud`, `tiene_actividad_calidad`, `actividad_de_calidad`, `comentarios`, `created_at`, `updated_at`) VALUES
-(12, 19, 30, 'razon_social', 'rfc', 'contacto', 'puesto', '1234567890', 0, '1234567890', 0, 'example@example.com', 'calle', 'no_exterior', 'no_interior', 'referencia', 'latitud', 'longitud', 0, 'Acrílico', 'comentarios', '2017-04-18 18:11:00', '2017-04-18 18:12:09'),
-(13, 20, 31, '', '', '', '', '', 0, '', 0, '', '', '', '', '', '', '', 0, '', '', '2017-04-18 18:15:20', '2017-04-18 18:15:20'),
-(14, 22, 32, '', '', '', '', '', 0, '', 0, '', '', '', '', '', '', '', 0, 'Sticker', 'asdf', '2017-04-18 18:41:55', '2017-04-18 18:43:59');
+(15, 23, 33, '', '', '', '', '', 0, '', 0, '', '', '', '', '', '', '', 0, '', '', '2017-04-21 01:04:05', '2017-04-21 01:04:05');
 
 -- --------------------------------------------------------
 
@@ -202,16 +195,14 @@ CREATE TABLE `leads` (
   `inicio_operaciones` tinyint(1) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Volcado de datos para la tabla `leads`
 --
 
 INSERT INTO `leads` (`id`, `id_marca`, `id_usuario`, `nombre`, `numero_sucursales`, `status`, `tiene_contacto`, `inicio_operaciones`, `created_at`, `updated_at`) VALUES
-(30, 19, 3, 'lead', 1, '9', 1, 1, '2017-04-18 18:11:00', '2017-04-18 18:13:45'),
-(31, 20, 3, 'Azdf', 1, '9', 0, 0, '2017-04-18 18:15:20', '2017-04-18 18:37:32'),
-(32, 22, 3, 'nombre', 1234567, '8', 0, 0, '2017-04-18 18:41:55', '2017-04-18 18:42:33');
+(33, 23, 1, 'La miscelanea lead', 2, '9', 0, 1, '2017-04-21 01:04:05', '2017-04-21 01:05:23');
 
 -- --------------------------------------------------------
 
@@ -241,19 +232,24 @@ CREATE TABLE `llamadas` (
   `sucursal` varchar(255) COLLATE utf8_bin NOT NULL,
   `id_marca` int(11) NOT NULL,
   `id_categoria` int(11) NOT NULL,
+  `fecha_visita` date NOT NULL,
   `comentarios` text COLLATE utf8_bin NOT NULL,
   `donde_viste` varchar(255) COLLATE utf8_bin NOT NULL,
+  `status` char(1) COLLATE utf8_bin NOT NULL,
+  `acuerdo` char(1) COLLATE utf8_bin NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Volcado de datos para la tabla `llamadas`
 --
 
-INSERT INTO `llamadas` (`id`, `id_proyecto`, `tipo`, `nombre`, `paterno`, `materno`, `tipo_tarjeta_seguro`, `calle`, `no_ext`, `no_int`, `cp`, `referencia`, `tipo_tel_1`, `tel_1`, `tipo_tel_2`, `tel_2`, `email`, `marca`, `sucursal`, `id_marca`, `id_categoria`, `comentarios`, `donde_viste`, `created_at`, `updated_at`) VALUES
-(1, 0, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, 0, '', '', '2017-04-19 19:27:51', '2017-04-19 19:27:51'),
-(2, 2, 'Normal', 'nombre', 'paterno', 'materno', '', 'calle', 'no_ext', 'no_int', 'cp', 'referencia', '', '1234567890', '', '1234567890', 'example@example.com', '', 'sucursal', 19, 1, '<p>ASDF</p>', 'App', '2017-04-19 19:32:06', '2017-04-19 19:32:06');
+INSERT INTO `llamadas` (`id`, `id_proyecto`, `tipo`, `nombre`, `paterno`, `materno`, `tipo_tarjeta_seguro`, `calle`, `no_ext`, `no_int`, `cp`, `referencia`, `tipo_tel_1`, `tel_1`, `tipo_tel_2`, `tel_2`, `email`, `marca`, `sucursal`, `id_marca`, `id_categoria`, `fecha_visita`, `comentarios`, `donde_viste`, `status`, `acuerdo`, `created_at`, `updated_at`) VALUES
+(21, 3, 'Queja Establecimiento', 'nombre', 'paterno', 'materno', 'Auto - Seguro', 'calle', 'no_ext', 'no_int', 'cp', 'referencia', 'Normal', '1234567890', 'Normal', '1234567890', 'example@example.com', 'marca', 'sucursal', 23, 1, '0000-00-00', '<p>asdfasdf</p>', 'App', '3', '4', '2017-04-21 01:20:19', '2017-04-21 01:21:53'),
+(22, 3, 'Información Plataforma', 'nombre', 'paterno', 'materno', 'Auto - Seguro', 'calle', 'no_ext', 'no_int', 'cp', 'referencia', 'Normal', '1234567890', 'Normal', '1234567890', 'example@example.com', 'marca', 'sucursal', 23, 1, '0000-00-00', '', 'App', '0', '', '2017-04-21 01:20:30', '2017-04-21 01:20:30'),
+(23, 4, 'Afiliar establecimiento', 'nombre', 'paterno', 'materno', 'Auto - Seguro', 'calle', 'no_ext', 'no_int', 'cp', 'referencia', 'Normal', '1234567890', 'Normal', '1234567890', 'example@example.com', 'marca', 'sucursal', 23, 1, '0000-00-00', '', 'App', '0', '', '2017-04-21 01:20:44', '2017-04-21 01:20:44'),
+(24, 3, 'Queja Establecimiento', 'José Antonio', 'Becerra', 'Romero', 'Cheques', '', '', '', '', '', '044', '5512952409', '', '', 'jbecerraromero@gmail.com', '', 'sucursal', 23, 0, '2017-04-21', '<p>asdf</p>', 'Guía Impresa', '1', '', '2017-04-21 17:29:33', '2017-04-21 17:29:33');
 
 -- --------------------------------------------------------
 
@@ -277,21 +273,17 @@ CREATE TABLE `marcas` (
   `inicio_operaciones` tinyint(1) NOT NULL,
   `id_categoria` int(11) NOT NULL,
   `id_categoria_vive` int(11) NOT NULL,
-  `id_proyecto` int(11) NOT NULL,
   `id_tipoDeComida` int(11) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Volcado de datos para la tabla `marcas`
 --
 
-INSERT INTO `marcas` (`id`, `nombre`, `web`, `resena`, `extracto`, `imagen`, `autor`, `friendlyUrl`, `especial`, `vimeo`, `logoDesclub`, `autorizadaLead`, `inicio_operaciones`, `id_categoria`, `id_categoria_vive`, `id_proyecto`, `id_tipoDeComida`, `created_at`, `updated_at`) VALUES
-(19, 'Marca Cin', 'web', '', 'extracto', 'assets/images/705.jpg', 'autor', 'friendlyUrl', 'especial', 'vimeo', '', 1, 1, 1, 0, 2, 1, '2017-04-18 18:09:24', '2017-04-18 18:13:45'),
-(20, 'nombre', 'web', '', 'extracto', 'assets/images/705.jpg', 'autor', 'friendlyUrl', 'especial', 'vimeo', '', 1, 0, 1, 0, 2, 1, '2017-04-18 18:14:53', '2017-04-18 18:15:11'),
-(21, 'nombrerechazar', 'web', '', 'extracto', 'assets/images/705.jpg', 'autor', 'friendlyUrl', 'especial', 'vimeo', '', 0, 0, 1, 0, 2, 1, '2017-04-18 18:33:10', '2017-04-18 18:33:10'),
-(22, 'nombre', 'web', '', 'extracto', 'assets/images/705.jpg', 'autor', 'friendlyUrl', 'especial', 'vimeo', '', 1, 0, 1, 0, 2, 1, '2017-04-18 18:41:02', '2017-04-18 18:41:42');
+INSERT INTO `marcas` (`id`, `nombre`, `web`, `resena`, `extracto`, `imagen`, `autor`, `friendlyUrl`, `especial`, `vimeo`, `logoDesclub`, `autorizadaLead`, `inicio_operaciones`, `id_categoria`, `id_categoria_vive`, `id_tipoDeComida`, `created_at`, `updated_at`) VALUES
+(23, 'La miscelanea', 'http://www.google.com', '<p>Rese&ntilde;a</p>', 'extracto', 'assets/images/084.png', 'autor', 'friendlyUrl', 'especial', 'vimeo', 'assets/images/705.jpg', 1, 1, 1, 0, 1, '2017-04-21 01:02:06', '2017-04-21 01:05:23');
 
 -- --------------------------------------------------------
 
@@ -312,15 +304,14 @@ CREATE TABLE `promocions` (
   `fin_actividades` date NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Volcado de datos para la tabla `promocions`
 --
 
 INSERT INTO `promocions` (`id`, `id_marca`, `id_proyecto`, `efectivo`, `tarjeta`, `promo`, `detalle_promocion`, `restricciones`, `inicio_actividades`, `fin_actividades`, `created_at`, `updated_at`) VALUES
-(25, 19, 2, '12', '12', '12', '12', '12', '2017-04-18', '2017-04-18', '2017-04-18 18:12:58', '2017-04-18 18:12:58'),
-(27, 19, 3, '12', '12', '12', '12', '12', '2017-04-18', '2017-04-29', '2017-04-18 18:13:32', '2017-04-18 18:13:32');
+(28, 23, 0, '15', '10', '2x1 en chelas', 'detalle_promo', 'restricciones', '2017-04-20', '2018-05-30', '2017-04-21 01:05:17', '2017-04-21 01:05:17');
 
 -- --------------------------------------------------------
 
@@ -343,6 +334,33 @@ INSERT INTO `proyectos` (`id`, `nombre`, `created_at`, `updated_at`) VALUES
 (2, 'Grupo Medios', '2017-04-06 23:00:56', '2017-04-06 23:00:56'),
 (3, 'Bancomer', '2017-04-11 23:07:37', '2017-04-11 23:07:37'),
 (4, 'Edenred', '2017-04-11 23:07:43', '2017-04-11 23:07:43');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `seguimientos`
+--
+
+CREATE TABLE `seguimientos` (
+  `id` int(11) NOT NULL,
+  `id_llamada` int(11) NOT NULL,
+  `id_usuario` int(11) NOT NULL,
+  `comentarios` text COLLATE utf8_bin NOT NULL,
+  `status` char(1) COLLATE utf8_bin NOT NULL,
+  `acuerdo` char(1) COLLATE utf8_bin NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+--
+-- Volcado de datos para la tabla `seguimientos`
+--
+
+INSERT INTO `seguimientos` (`id`, `id_llamada`, `id_usuario`, `comentarios`, `status`, `acuerdo`, `created_at`, `updated_at`) VALUES
+(41, 21, 1, 'me tiene que mandar ticket', '1', '5', '2017-04-21 01:21:08', '2017-04-21 01:21:08'),
+(42, 21, 1, 'Ya me mandó ticket', '1', '5', '2017-04-21 01:21:26', '2017-04-21 01:21:26'),
+(43, 21, 1, 'tengo ticket', '2', '5', '2017-04-21 01:21:39', '2017-04-21 01:21:39'),
+(44, 21, 1, 'aceptó reembolso', '3', '4', '2017-04-21 01:21:53', '2017-04-21 01:21:53');
 
 -- --------------------------------------------------------
 
@@ -386,15 +404,16 @@ CREATE TABLE `sucursals` (
   `geolocalicacion_revisada` tinyint(1) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Volcado de datos para la tabla `sucursals`
 --
 
 INSERT INTO `sucursals` (`id`, `id_marca`, `nombre`, `telefono`, `latitud`, `longitud`, `referencia`, `calle`, `no_ext`, `no_int`, `horarios`, `fachada`, `id_estado`, `id_zona`, `restorando`, `restaurantes`, `tuvo_llamada_bienvenida`, `detalle_llamada`, `conoce_vb`, `escala_info`, `motivo_desconoce`, `reforzo_info`, `material_pop`, `calcomanias`, `acrilicos`, `comunicados_desclub`, `comunicados_bbva`, `reloj_colgante`, `calcomanias_desclub`, `tarjetas_desclub`, `nombre_atendio`, `cargo_atendio`, `geolocalicacion_revisada`, `created_at`, `updated_at`) VALUES
-(17, 19, 'nombre', '1234567890', 'latitud', 'longitud', 'referencia', 'calle', 'no_ext', 'no_int', 'horarios', '', 1, 1, 'restorando', 'restaurantes', 1, 'Conocen convenio y aplican descuento', 0, 0, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, '', '', 1, '2017-04-18 18:09:39', '2017-04-19 17:15:07'),
-(18, 19, 'nombre 2', '1234567890', 'latitud', 'longitud', 'referencia', 'calle', 'no_ext', 'no_int', 'horarios', '', 1, 1, 'restorando', 'restaurantes', 1, 'Conocen convenio y aplican descuento', 1, 1, 'Sí', 1, 1, 1, 1, 1, 1, 1, 1, 2, 'pepe', 'Encargado', 1, '2017-04-18 18:09:51', '2017-04-19 17:15:02');
+(19, 23, 'Palmas', '1234567890', 'fdfasd', 'asfdasdf', 'referenciaasdfasdf', 'calle', 'no_ext', 'no_int', 'horarios', 'assets/images/084.png', 1, 1, 'restorando', 'restaurantes', 1, 'Conocen convenio y aplican descuento', 1, 1, 'Cambiaron de administración', 1, 1, 1, 1, 1, 2, 2, 3, 2, 'asdf', 'Gerente sucursal', 1, '2017-04-21 01:02:38', '2017-04-21 01:19:41'),
+(20, 23, 'nombre', '1234567890', 'latitud', 'longitud', 'referencia', 'calle', 'no_ext', 'no_int', 'horarios', 'assets/images/705.jpg', 1, 1, 'restorando', 'restaurantes', 0, '', 0, 0, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, '2017-04-21 01:02:51', '2017-04-21 01:02:51'),
+(21, 23, 'nombre', '1234567890', 'latitud', 'longitud', 'referencia', 'calle', 'no_ext', 'no_int', 'horarios', '', 1, 1, 'restorando', 'restaurantes', 1, 'Descompuesto / Sin servicio', 1, 1, '', 1, 1, 0, 0, 0, 0, 0, 0, 0, '', '', 1, '2017-04-21 17:53:54', '2017-04-21 17:56:06');
 
 -- --------------------------------------------------------
 
@@ -538,6 +557,12 @@ ALTER TABLE `proyectos`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `seguimientos`
+--
+ALTER TABLE `seguimientos`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `sucursals`
 --
 ALTER TABLE `sucursals`
@@ -569,7 +594,7 @@ ALTER TABLE `zonas`
 -- AUTO_INCREMENT de la tabla `actividads`
 --
 ALTER TABLE `actividads`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=53;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=54;
 --
 -- AUTO_INCREMENT de la tabla `autorizacions`
 --
@@ -589,7 +614,7 @@ ALTER TABLE `categoriavives`
 -- AUTO_INCREMENT de la tabla `detalledesclubs`
 --
 ALTER TABLE `detalledesclubs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=16;
 --
 -- AUTO_INCREMENT de la tabla `estados`
 --
@@ -599,32 +624,37 @@ ALTER TABLE `estados`
 -- AUTO_INCREMENT de la tabla `leads`
 --
 ALTER TABLE `leads`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=33;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=34;
 --
 -- AUTO_INCREMENT de la tabla `llamadas`
 --
 ALTER TABLE `llamadas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=25;
 --
 -- AUTO_INCREMENT de la tabla `marcas`
 --
 ALTER TABLE `marcas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=23;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=24;
 --
 -- AUTO_INCREMENT de la tabla `promocions`
 --
 ALTER TABLE `promocions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=28;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=29;
 --
 -- AUTO_INCREMENT de la tabla `proyectos`
 --
 ALTER TABLE `proyectos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 --
+-- AUTO_INCREMENT de la tabla `seguimientos`
+--
+ALTER TABLE `seguimientos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=45;
+--
 -- AUTO_INCREMENT de la tabla `sucursals`
 --
 ALTER TABLE `sucursals`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=22;
 --
 -- AUTO_INCREMENT de la tabla `tipodecomidas`
 --

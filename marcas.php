@@ -44,7 +44,7 @@ include('header.php'); ?>
 						?>
 				</select>
 				</div>
-				<div class="form-group">
+				<!--<div class="form-group">
 				<select name="id_proyecto" id="" style="width: 100%" >
 						<option value="">Proyecto</option>
 						<?php 
@@ -60,7 +60,7 @@ include('header.php'); ?>
 							}
 						?>
 				</select>
-				</div>
+				</div>-->
 				<div class="form-group">
 				<select name="id_tipoDeComida" id="" style="width: 100%" >
 						<option value="">Tipo de comida</option>

@@ -24,6 +24,9 @@ $(document).ready(function(){
 		}
 	});
 	$('.tabla').DataTable();
+	$('.tabla2').DataTable({
+		'ordering' : false
+	});
 	$('.add-new-record').click(function(){
 		if(abierto2==0){
 			$('.registros').css({
@@ -56,6 +59,7 @@ $(document).ready(function(){
 	 	$('#overlay_registro').fadeOut('fast');
 	 	$('#overlay_bienvenida').fadeOut('fast');
 	 	$('#overlay_geolocalizacion').fadeOut('fast');
+	 	$('#overlay_detalles_llamada_nueva').fadeOut('fast');
 
 	 });
 	 $( ".datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
@@ -209,5 +213,70 @@ $(document).ready(function(){
 	 		$('#nombre_atendio').show();
 	 		$('#cantidades_pop').show();
 	 	}
+	 });
+
+	 $('#tipo_llamada').change(function(){
+	 	tipo = $(this).val();
+	 	switch(tipo){
+	 		case 'Afiliar establecimiento':
+	 		$('.afiliar_est').hide();
+	 		$('.info_plataforma').hide();
+	 		$('.queja_est').hide();
+	 		$('.afiliar_est').show();
+	 		break;
+	 		case 'Información Plataforma':
+	 		$('.afiliar_est').hide();
+	 		$('.info_plataforma').hide();
+	 		$('.queja_est').hide();
+	 		$('.info_plataforma').show();
+	 		break;
+	 		case 'Queja Establecimiento':
+	 		$('.afiliar_est').hide();
+	 		$('.info_plataforma').hide();
+	 		$('.queja_est').hide();
+	 		$('.queja_est').show();
+	 		break;	 		
+	 	}
+	 	campos = $(':input:visible');
+	 });
+	 $('.actividad_llamada').click(function(e){
+	 	e.preventDefault();
+	 	$('#a_id_llamada').val($(this).attr('rel'));
+	 	$('#overlay_detalles_llamada_nueva').fadeIn('fast');
+	 	$.ajax({
+	 		url : URL_API + 'seguimientos/'+$(this).attr('rel'),
+	 		success : function(data){
+	 			output = '';
+	 			$.each( data, function( key, value ) {
+	 				output+= '<tr><td>'+value.created_at.date+'</td><td>'+value.usuario[0].email+'</td><td>'+value.status+'</td><td>'+value.acuerdo+'</td><td>'+value.comentarios+'</td></tr>'
+				});
+				console.log(data);
+				$('#body_seguimiento_quejas').html(output);
+	 		}
+	 	});
+	 	$.ajax({
+	 		url : URL_API + 'llamadas/'+$(this).attr('rel'),
+	 		success : function(data){
+	 			data = data[0];
+	 			$('#det_llam_folio').html(data.id);
+	 			$('#det_llam_nombre').html(data.nombre+' '+data.paterno+' '+data.materno);
+	 			$('#det_llam_telefono').html(data.tipo_tel_1+' '+data.tel_1);
+	 			$('#det_llam_telefono2').html(data.tipo_tel_2+' '+data.tel_2);
+	 			$('#det_llam_email').html(data.email);
+	 			$('#det_llam_marca').html(data.marca);
+	 			$('#det_llam_sucursal').html(data.sucursal);
+	 			$('#det_llam_fecha').html(data.fecha_visita);
+	 			$('#det_llam_motivo').html(data.comentarios);
+	 			console.log(data);
+	 		}
+	 	});
+	 });
+	 $('#btn_nueva_llamada').click(function(){
+	 	$.ajax({
+	 		url : URL_API + 'siguienteFolio',
+	 		success : function(data){
+	 			$('#folio').html(data);
+	 		}
+	 	});
 	 })
 });

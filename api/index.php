@@ -2,6 +2,7 @@
 session_start();
 require('vendor/autoload.php');
 include('bootstrap.php');
+include('../funciones.php');
 
 use Establecimientos\Models\Actividad;
 use Establecimientos\Models\Autorizacion;
@@ -14,6 +15,7 @@ use Establecimientos\Models\Llamada;
 use Establecimientos\Models\Marca;
 use Establecimientos\Models\Promocion;
 use Establecimientos\Models\Proyecto;
+use Establecimientos\Models\Seguimiento;
 use Establecimientos\Models\Sucursal;
 use Establecimientos\Models\Tipodecomida;
 use Establecimientos\Models\Usuario;
@@ -486,7 +488,7 @@ $app->post('/insert/marcas', function($request, $response, $args){
 	$_autorizadaLead = $request->getParsedBodyParam('autorizadaLead', '');
 	$_id_categoria = $request->getParsedBodyParam('id_categoria', '');
 	$_id_categoria_vive = $request->getParsedBodyParam('id_categoria_vive', '');
-	$_id_proyecto = $request->getParsedBodyParam('id_proyecto', '');
+	//$_id_proyecto = $request->getParsedBodyParam('id_proyecto', '');
 	$_id_tipoDeComida = $request->getParsedBodyParam('id_tipoDeComida', '');
 	$marca = new Marca();
 	$marca->nombre = $_nombre;
@@ -502,7 +504,7 @@ $app->post('/insert/marcas', function($request, $response, $args){
 	$marca->autorizadaLead=$_autorizadaLead;
 	$marca->id_categoria=$_id_categoria;
 	$marca->id_categoria_vive=$_id_categoria_vive;
-	$marca->id_proyecto=$_id_proyecto;
+	//$marca->id_proyecto=$_id_proyecto;
 	$marca->id_tipoDeComida=$_id_tipoDeComida;
 	$marca->save();
     if ($marca->id) {
@@ -1327,7 +1329,28 @@ $app->post('/revisar_geolocalizacion', function($request, $response, $args){
 
 $app->get('/llamadas', function($request, $response, $args){
 	$_llamada = new Llamada();
-	$llamadas = $_llamada->all();
+	$llamadas = $_llamada::where('status','<>', '3')->get();
+	if(!empty($llamadas)){
+       	return $response->withStatus(200)->withJson($llamadas);
+	}else{
+		return $response->withStatus(404);
+	}
+});
+
+$app->get('/llamadas/{id}', function($request, $response, $args){
+	$_id = $args['id'];
+	$_llamada = new Llamada();
+	$llamadas = $_llamada::where('id', $_id)->get();
+	if(!empty($llamadas)){
+       	return $response->withStatus(200)->withJson($llamadas);
+	}else{
+		return $response->withStatus(404);
+	}
+});
+
+$app->get('/siguienteFolio', function($request, $response, $args){
+	$_llamada = new Llamada();
+	$llamadas = $_llamada->max('id')+1;
 	if(!empty($llamadas)){
        	return $response->withStatus(200)->withJson($llamadas);
 	}else{
@@ -1352,12 +1375,18 @@ $app->post('/insert/llamadas', function($request, $response, $args){
 	$_tipo_tel_2 = $request->getParsedBodyParam('tipo_tel_2', '');
 	$_tel_2 = $request->getParsedBodyParam('tel_2', '');
 	$_email = $request->getParsedBodyParam('email', '');
-	$_marca = $request->getParsedBodyParam('marca	', '');
+	$_marca = $request->getParsedBodyParam('marca', '');
 	$_sucursal = $request->getParsedBodyParam('sucursal', '');
 	$_id_marca = $request->getParsedBodyParam('id_marca', '');
 	$_id_categoria = $request->getParsedBodyParam('id_categoria', '');
 	$_comentarios = $request->getParsedBodyParam('comentarios', '');
+	$_fecha_visita = $request->getParsedBodyParam('fecha_visita', '');
 	$_donde_viste = $request->getParsedBodyParam('donde_viste', '');
+	if($_tipo=='Queja Establecimiento'){
+		$_status = '1';
+	}else{
+		$_status = '0';
+	}
 	$llamada = new Llamada();
 	$llamada->id_proyecto = $_id_proyecto;
 	$llamada->tipo = $_tipo;
@@ -1380,11 +1409,64 @@ $app->post('/insert/llamadas', function($request, $response, $args){
 	$llamada->id_marca = $_id_marca;
 	$llamada->id_categoria = $_id_categoria;
 	$llamada->comentarios = $_comentarios;
+	$llamada->fecha_visita = $_fecha_visita;
 	$llamada->donde_viste = $_donde_viste;
+	$llamada->status = $_status;
 	$llamada->save();
 	return $response->withStatus(302)->withHeader('Location', '../../call-center.php');
-	//print_R($_POST);
 })->add(new EstablecimientosAuth());
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// SEGUIMIENTO LLAMADAS ///////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+$app->post('/insert/seguimiento', function($request, $response, $args){
+
+	$_id_llamada = $request->getParsedBodyParam('a_id_llamada', '');
+	$_id_usuario = $request->getParsedBodyParam('a_id_usuario', '');
+	$_comentarios = $request->getParsedBodyParam('a_comentarios', '');
+	$_status = $request->getParsedBodyParam('a_status', '');
+	$_acuerdo = $request->getParsedBodyParam('a_acuerdo', '');
+	$seguimiento = new Seguimiento();
+	$seguimiento->id_llamada = $_id_llamada;
+	$seguimiento->id_usuario = $_id_usuario;
+	$seguimiento->comentarios = $_comentarios;
+	$seguimiento->status = $_status;
+	$seguimiento->acuerdo = $_acuerdo;
+	$seguimiento->save();
+
+	$llamada = new Llamada();
+	$llamada = $llamada->find($_id_llamada);
+	$llamada->status = $_status;
+	$llamada->acuerdo = $_acuerdo;
+	$llamada->save();
+
+	return $response->withStatus(302)->withHeader('Location', '../../call-center.php');
+})->add(new EstablecimientosAuth());
+
+
+$app->get('/seguimientos/{id_llamada}', function($request, $response, $args){
+	$_id = $args['id_llamada'];
+	$seguimiento = new Seguimiento();
+	$seguimiento = $seguimiento::where('id_llamada', $_id)->get();
+	$payload = [];
+	foreach($seguimiento as $m){
+		$usuario = new Usuario();
+		$usuario = $usuario->where('id',$m->id_usuario)->get(array('id','email'));
+		$arreglo = array(
+			'created_at' => $m->created_at,
+			'usuario' => $usuario,
+			'status' => traducirStatusLlamada($m->status),
+			'acuerdo' => traducirAcuerdo($m->acuerdo),
+			'comentarios' => ($m->comentarios)
+		);
+		array_push($payload, $arreglo);
+	}
+	return $response->withStatus(200)->withJson($payload);
+});
+
 
 
 
