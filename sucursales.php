@@ -66,8 +66,8 @@ include('header.php'); ?>
 				</div>
 				<div class="form-group">
 					<label for="exampleInputEmail1">Estado</label>
-					<select name="id_estado" id="" style="width: 100%" >
-						<option value="">Estado</option>
+					<select name="id_estado" id="select_estado" style="width: 100%" >
+						<option value="">Seleccione</option>
 						<?php 
 							$ch = curl_init(); 
 							curl_setopt($ch, CURLOPT_URL, URL_API."estados"); 
@@ -84,20 +84,8 @@ include('header.php'); ?>
 				</div>
 				<div class="form-group">
 					<label for="exampleInputEmail1">Zona</label>
-					<select name="id_zona" id="" style="width: 100%" >
-						<option value="">Zona</option>
-						<?php 
-							$ch = curl_init(); 
-							curl_setopt($ch, CURLOPT_URL, URL_API."zonas"); 
-							curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
-							$output = json_decode(curl_exec($ch)); 
-							curl_close($ch); 
-							foreach($output as $o){
-								?>
-						<option value="<?php echo $o->id ?>"><?php echo $o->nombre ?></option>
-								<?php
-							}
-						?>
+					<select name="id_zona" id="select_zona" style="width: 100%" >			
+						<option value="">Seleccione</option>			
 					</select>
 				</div>
 				<div class="form-group">

@@ -15,6 +15,7 @@ use Establecimientos\Models\Llamada;
 use Establecimientos\Models\Marca;
 use Establecimientos\Models\Promocion;
 use Establecimientos\Models\Proyecto;
+use Establecimientos\Models\Ruta;
 use Establecimientos\Models\Seguimiento;
 use Establecimientos\Models\Sucursal;
 use Establecimientos\Models\Tipodecomida;
@@ -315,6 +316,16 @@ $app->get('/zonas/{id}', function($request, $response, $args){
 	$_id = $args['id'];
 	$_categoria = new Zona();
 	$categorias = $_categoria->find($_id);
+	if(!empty($categorias)){
+       	return $response->withStatus(200)->withJson($categorias);
+	}else{
+		return $response->withStatus(404);
+	}
+});
+$app->get('/zonas_estado/{id_estado}', function($request, $response, $args){
+	$_id_estado = $args['id_estado'];
+	$_categoria = new Zona();
+	$categorias = $_categoria->where('id_estado',$_id_estado)->get();
 	if(!empty($categorias)){
        	return $response->withStatus(200)->withJson($categorias);
 	}else{
@@ -634,6 +645,15 @@ $app->get('/sucursales_inicio_operaciones', function($request, $response, $args)
 	}
 	return $response->withStatus(200)->withJson($payload);
 	
+});
+
+/* LAS SUCURSALES PARA CALIDAD SON LAS QUE YA TIENEN LAS BANDERAS GEOLOCALIZACION_REVISADA Y TUVO_LLAMADA_BIENVENIDA EN TRUE */
+$app->get('/sucursales_para_calidad/{id_estado}/{id_zona}', function($request, $response, $args){
+	$_id_estado = $args['id_estado'];
+	$_id_zona = $args['id_zona'];
+	$_sucursal = new Sucursal();
+	$sucursales = $_sucursal::where('geolocalicacion_revisada',true)->where('geolocalicacion_revisada',true)->where('id_estado',$_id_estado)->where('id_zona',$_id_zona)->get();
+	return $response->withStatus(200)->withJson($sucursales);
 });
 
 
@@ -1467,6 +1487,60 @@ $app->get('/seguimientos/{id_llamada}', function($request, $response, $args){
 	return $response->withStatus(200)->withJson($payload);
 });
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// CALIDAD ////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+$app->get('/usuarios_calidad', function($request, $response, $args){
+	$usuario = new Usuario();
+	$usuario = $usuario::where('rol', '6')->orderBy('email', 'ASC')->get();
+	$payload = [];
+	foreach ($usuario as $u) {
+		$objeto = array(
+			'id' =>  $u->id,
+			'email' =>  $u->email
+		);
+		array_push($payload, $objeto);
+	}
+	return $response->withStatus(200)->withJson($payload);
+});
+
+
+$app->get('/rutas_calidad', function($request, $response, $args){
+	$_rutas = new Ruta();
+	$rutas = $_rutas::where('actividad', 'calidad')->where('status', false)->get();
+	return $response->withStatus(200)->withJson($rutas);
+});
+
+
+$app->get('/rutas_mistery', function($request, $response, $args){
+	$_rutas = new Ruta();
+	$rutas = $_rutas::where('actividad', 'mistery')->where('status', false)->get();
+	return $response->withStatus(200)->withJson($rutas);
+});
+
+$app->post('/insert/ruta', function($request, $response, $args){
+	$_id_usuario = $request->getParsedBodyParam('id_usuario', '');
+	$_id_proyecto = $request->getParsedBodyParam('id_proyecto', '');
+	$_tipo_ruta = $request->getParsedBodyParam('tipo_ruta', '');
+	$_actividad = $request->getParsedBodyParam('actividad', '');
+	$_fecha_inicio = $request->getParsedBodyParam('fecha_inicio', '');
+	$_fecha_fin = $request->getParsedBodyParam('fecha_fin', '');
+	$sucursales = $request->getParsedBodyParam('sucursales', '');
+	foreach($sucursales as $s){
+		$ruta = new Ruta();
+		$ruta->id_usuario = $_id_usuario;
+		$ruta->id_proyecto = $_id_proyecto;
+		$ruta->id_sucursal = $s;
+		$ruta->tipo_ruta = $_tipo_ruta;
+		$ruta->actividad = $_actividad;
+		$ruta->fecha_inicio = $_fecha_inicio;
+		$ruta->fecha_fin = $_fecha_fin;
+		$ruta->save();
+	}
+	return $response->withStatus(302)->withHeader('Location', '../../asignacion-de-rutas.php');
+})->add(new EstablecimientosAuth());
 
 
 

@@ -11,6 +11,7 @@
 	<link rel="stylesheet" href="js/jqueryui/jquery-ui.min.css">
 	<link rel="stylesheet" href="js/jqueryui/jquery-ui.theme.min.css">
 	<link rel="stylesheet" href="js/wickedpicker.css">
+	<link rel="stylesheet" href="css/multi-select.css">
 	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
@@ -21,6 +22,7 @@
 	<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
 	<script src="js/jqueryui/jquery-ui.min.js"></script>
 	<script src="js/wickedpicker.js"></script>
+	<script src="js/jquery.multi-select.js"></script>
 	<script src="js/script.js"></script>
   	<script>tinymce.init({ selector:'textarea' });</script>
 </head>
@@ -80,6 +82,15 @@
 				<li class="submenu-item"><a href="call-center.php" class="menu-subitem-link">Call Center</a></li>
 			</ul>
 		</li>
+		<li class="menu-item">
+			<div class="input-group margin-bottom-sm">
+				<span class="input-group-addon"><i class="fa fa-gear fa-fw"></i></span>
+				<a href="#" class="menu-item-link">Calidad<i class="menu-item-arrow fa fa-chevron-right" style="    margin-left: 5px;"></i></a>
+			</div>
+			<ul class="submenu">
+				<li class="submenu-item"><a href="asignacion-de-rutas.php" class="menu-subitem-link">Asignación de Rutas</a></li>
+			</ul>
+		</li>
 		<?php if($_SESSION['rol'] == '1' or $_SESSION['rol']=='2' or $_SESSION['rol']=='4'){ ?>
 		<li class="menu-item">
 			<div class="input-group margin-bottom-sm">
@@ -95,4 +106,5 @@
 			</ul>
 		</li>
 		<?php } ?>
+
 	</ul>

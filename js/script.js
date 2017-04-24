@@ -112,7 +112,6 @@ $(document).ready(function(){
 	 	$.ajax({
 	 		url : URL_API + 'detallesdesclub/'+$(this).attr('rel-id-marca'),
 	 		success : function(data){
-	 			console.log(data);
 	 			$('#r_razonsocial').val(data[0].razon_social);
 	 			$('#r_rfc').val(data[0].RFC);
 	 			$('#r_contacto').val(data[0].contacto);
@@ -250,7 +249,6 @@ $(document).ready(function(){
 	 			$.each( data, function( key, value ) {
 	 				output+= '<tr><td>'+value.created_at.date+'</td><td>'+value.usuario[0].email+'</td><td>'+value.status+'</td><td>'+value.acuerdo+'</td><td>'+value.comentarios+'</td></tr>'
 				});
-				console.log(data);
 				$('#body_seguimiento_quejas').html(output);
 	 		}
 	 	});
@@ -267,7 +265,6 @@ $(document).ready(function(){
 	 			$('#det_llam_sucursal').html(data.sucursal);
 	 			$('#det_llam_fecha').html(data.fecha_visita);
 	 			$('#det_llam_motivo').html(data.comentarios);
-	 			console.log(data);
 	 		}
 	 	});
 	 });
@@ -278,5 +275,34 @@ $(document).ready(function(){
 	 			$('#folio').html(data);
 	 		}
 	 	});
+	 });
+	 $('.multiselect').multiSelect();
+	 $('.multiselect').select2('destroy'); 
+
+	 $('#select_estado').change(function(){
+	 	$.ajax({
+	 		url : URL_API + 'zonas_estado/'+$(this).val(),
+	 		success : function(data){
+	 			output = '<option value="">Seleccione</option>';
+	 			$.each( data, function( key, value ) {
+	 				output += '<option value="'+value.id+'">'+value.nombre+'</option>';
+	 			});
+	 			$('#select_zona').html(output);
+	 			$('#select_zona').trigger('change.select2');
+	 		}
+	 	})
+	 });
+	 $('#select_zona').change(function(){
+	 	$.ajax({
+	 		url : URL_API+'sucursales_para_calidad/'+$('#select_estado').val()+'/'+$(this).val(),
+	 		success : function(data){
+	 			output = '';
+	 			$.each( data, function( key, value ) {
+	 				output += '<option value="'+value.id+'">'+value.nombre+'</option>';
+	 			});
+	 			$('#my-select').html(output);
+	 			$('#my-select').multiSelect('refresh');
+	 		}
+	 	})
 	 })
 });
