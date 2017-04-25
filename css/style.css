@@ -153,6 +153,7 @@ a.cerraroverlay {
 #nombre_atendio{display: none}
 #cargo_atendio{display: none}
 .mitad{width: 50%; float: left;}
+.verde{color: green !important}
 /*
 .afiliar_est{display: none}
 .info_plataforma {display: none}

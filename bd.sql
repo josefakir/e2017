@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 25-04-2017 a las 18:53:44
+-- Tiempo de generación: 26-04-2017 a las 00:50:18
 -- Versión del servidor: 5.5.42
 -- Versión de PHP: 5.6.10
 
@@ -181,6 +181,35 @@ INSERT INTO `estados` (`id`, `nombre`, `acronym`) VALUES
 (30, 'Veracruz de Ignacio de la Llave', 'VER'),
 (31, 'Yucatán', 'YUC'),
 (32, 'Zacatecas', 'ZAC');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `etapaunos`
+--
+
+CREATE TABLE `etapaunos` (
+  `id` int(11) NOT NULL,
+  `id_ruta` int(11) NOT NULL,
+  `pasaje` float(11,2) NOT NULL,
+  `transportes` text CHARACTER SET latin1 NOT NULL,
+  `status_establecimiento` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `calc_desclub` tinyint(1) NOT NULL,
+  `cual_calc_desc` text CHARACTER SET latin1 NOT NULL,
+  `calc_otras` tinyint(1) NOT NULL,
+  `cual_calc_otras` text CHARACTER SET latin1 NOT NULL,
+  `conoce_programa` tinyint(1) NOT NULL,
+  `cual_programa` text CHARACTER SET latin1 NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+--
+-- Volcado de datos para la tabla `etapaunos`
+--
+
+INSERT INTO `etapaunos` (`id`, `id_ruta`, `pasaje`, `transportes`, `status_establecimiento`, `calc_desclub`, `cual_calc_desc`, `calc_otras`, `cual_calc_otras`, `conoce_programa`, `cual_programa`, `created_at`, `updated_at`) VALUES
+(6, 1, 10.50, 'a:3:{i:0;s:7:"Camión";i:1;s:5:"Metro";i:2;s:4:"Otro";}', 'Abierto', 1, 'a:4:{i:0;s:5:"honda";i:1;s:5:"lexus";i:2;s:5:"mazda";i:3;s:6:"nissan";}', 1, 'tdu', 1, 'a:4:{i:0;s:5:"honda";i:1;s:5:"lexus";i:2;s:5:"mazda";i:3;s:6:"nissan";}', '2017-04-25 22:53:10', '2017-04-25 22:53:10');
 
 -- --------------------------------------------------------
 
@@ -371,7 +400,7 @@ CREATE TABLE `rutas` (
 --
 
 INSERT INTO `rutas` (`id`, `id_usuario`, `id_proyecto`, `id_sucursal`, `tipo_ruta`, `actividad`, `fecha_inicio`, `fecha_fin`, `mistery`, `etapa1`, `etapa2`, `etapa3`, `status`, `created_at`, `updated_at`) VALUES
-(1, 7, 2, 19, 'Sucursales nuevas', 'calidad', '2017-04-24', '2017-04-29', 0, 0, 0, 0, 0, '2017-04-25 01:08:26', '2017-04-25 01:08:26'),
+(1, 7, 2, 19, 'Sucursales nuevas', 'calidad', '2017-04-24', '2017-04-29', 0, 1, 0, 0, 0, '2017-04-25 01:08:26', '2017-04-25 22:53:10'),
 (2, 7, 2, 21, 'Sucursales nuevas', 'mistery', '2017-04-24', '2017-04-29', 0, 0, 0, 0, 0, '2017-04-25 01:08:26', '2017-04-25 01:08:26'),
 (3, 7, 2, 19, 'Sucursales nuevas', 'calidad', '2017-04-25', '2017-04-30', 0, 0, 0, 0, 0, '2017-04-25 17:22:17', '2017-04-25 17:22:17'),
 (4, 7, 2, 21, 'Sucursales nuevas', 'calidad', '2017-04-25', '2017-04-30', 0, 0, 0, 0, 0, '2017-04-25 17:22:17', '2017-04-25 17:22:17');
@@ -578,6 +607,12 @@ ALTER TABLE `estados`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `etapaunos`
+--
+ALTER TABLE `etapaunos`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `leads`
 --
 ALTER TABLE `leads`
@@ -679,6 +714,11 @@ ALTER TABLE `detalledesclubs`
 --
 ALTER TABLE `estados`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=33;
+--
+-- AUTO_INCREMENT de la tabla `etapaunos`
+--
+ALTER TABLE `etapaunos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT de la tabla `leads`
 --

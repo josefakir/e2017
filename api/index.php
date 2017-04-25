@@ -10,6 +10,7 @@ use Establecimientos\Models\Categoria;
 use Establecimientos\Models\Categoriavive;
 use Establecimientos\Models\Detalledesclub;
 use Establecimientos\Models\Estado;
+use Establecimientos\Models\Etapauno;
 use Establecimientos\Models\Lead;
 use Establecimientos\Models\Llamada;
 use Establecimientos\Models\Marca;
@@ -1600,6 +1601,57 @@ $app->post('/insert/ruta', function($request, $response, $args){
 	return $response->withStatus(302)->withHeader('Location', '../../asignacion-de-rutas.php');
 })->add(new EstablecimientosAuth());
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// ETAPA 1 ////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+$app->post('/insert/etapa1', function($request, $response, $args){
+	$_id_ruta = $request->getParsedBodyParam('id_ruta', '');
+	$_pasaje = $request->getParsedBodyParam('pasaje', '');
+	$_transportes = $request->getParsedBodyParam('transportes', '');
+	$_status_establecimiento = $request->getParsedBodyParam('status_establecimiento', '');
+	$_calc_desclub = $request->getParsedBodyParam('calc_desclub', '');
+	if($_calc_desclub=="Sí"){
+		$_calc_desclub = true;
+	}else{
+		$_calc_desclub = false;
+	}
+	$_cual_calc_desc = $request->getParsedBodyParam('cual_calc_desc', '');
+	$_calc_otras = $request->getParsedBodyParam('calc_otras', '');
+	if($_calc_otras=="Sí"){
+		$_calc_otras = true;
+	}else{
+		$_calc_otras = false;
+	}
+	$_cual_calc_otras = $request->getParsedBodyParam('cual_calc_otras', '');
+	$_conoce_programa = $request->getParsedBodyParam('conoce_programa', '');
+	if($_conoce_programa=="Sí"){
+		$_conoce_programa = true;
+	}else{
+		$_conoce_programa = false;
+	}
+	$_cual_programa = $request->getParsedBodyParam('cual_programa', '');
+	$etapa1 = new Etapauno();
+	$etapa1->id_ruta = $_id_ruta;
+	$etapa1->pasaje = $_pasaje;
+	$etapa1->transportes = serialize($_transportes);
+	$etapa1->status_establecimiento = $_status_establecimiento;
+	$etapa1->calc_desclub = $_calc_desclub;
+	$etapa1->cual_calc_desc = serialize($_cual_calc_desc);
+	$etapa1->calc_otras = $_calc_otras;
+	$etapa1->cual_calc_otras = $_cual_calc_otras;
+	$etapa1->conoce_programa = $_conoce_programa;
+	$etapa1->cual_programa = serialize($_cual_programa);
+	$etapa1->save();
+
+	$ruta = new Ruta();
+	$ruta = $ruta->find($_id_ruta);
+	$ruta->etapa1 = true;
+	$ruta->save();
+
+	return $response->withStatus(302)->withHeader('Location', '../../rutas-de-calidad.php');
+})->add(new EstablecimientosAuth());
 
 
 $app->run();

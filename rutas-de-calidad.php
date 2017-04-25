@@ -50,7 +50,11 @@ include('header.php'); ?>
 						<td><?php echo $o->sucursal->referencia ?></td>
 						<td><?php echo $o->sucursal->telefono ?></td>
 						<td><a href="#" class="btn_detalles_calidad"><i class="fa fa-search-plus fa-fw fa-2x"></i></a></td>
-						<td><a href="#"><i class="fa fa-plus-square fa-fw fa-2x"></i></a></td>
+						<?php if($o->etapa1 == true){ ?>
+						<td><i class="fa fa-check fa-2x verde" aria-hidden="true"></i></td>
+						<?php }else{ ?>
+						<td><a href="forms_movil/calidad1.php?id=<?php echo $o->id ?>"><i class="fa fa-plus-square fa-fw fa-2x"></i></a></td>
+						<?php } ?>
 						<td><a href="#"><i class="fa fa-plus-square fa-fw fa-2x"></i></a></td>
 						<td><a href="#"><i class="fa fa-plus-square fa-fw fa-2x"></i></a></td>
 						<td><a href="#"><i class="fa fa-plus-square fa-fw fa-2x"></i></a></td>
