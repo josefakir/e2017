@@ -49,6 +49,10 @@ include('header.php'); ?>
 					<input type="text" class="form-control" placeholder="calle" name="calle" minlength="2" type="text" required>
 				</div>
 				<div class="form-group">
+					<label for="exampleInputEmail1">Colonia</label>
+					<input type="text" class="form-control" placeholder="colonia" name="colonia" minlength="2" type="text" required>
+				</div>
+				<div class="form-group">
 					<label for="exampleInputEmail1">Número Exterior</label>
 					<input type="text" class="form-control" placeholder="Número Exterior" name="no_ext" minlength="2" type="text" required>
 				</div>

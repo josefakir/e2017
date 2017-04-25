@@ -697,6 +697,7 @@ $app->post('/insert/sucursales', function($request, $response, $args){
 	$_longitud = $request->getParsedBodyParam('longitud', '');
 	$_referencia = $request->getParsedBodyParam('referencia', '');
 	$_calle = $request->getParsedBodyParam('calle', '');
+	$_colonia = $request->getParsedBodyParam('colonia', '');
 	$_no_ext = $request->getParsedBodyParam('no_ext', '');
 	$_no_int = $request->getParsedBodyParam('no_int', '');
 	$_horarios = $request->getParsedBodyParam('horarios', '');
@@ -714,6 +715,7 @@ $app->post('/insert/sucursales', function($request, $response, $args){
 	$sucursal->longitud = $_longitud;
 	$sucursal->referencia = $_referencia;
 	$sucursal->calle = $_calle;
+	$sucursal->colonia = $_colonia;
 	$sucursal->no_ext = $_no_ext;
 	$sucursal->no_int = $_no_int;
 	$sucursal->horarios = $_horarios;
@@ -761,6 +763,7 @@ $app->post('/update/sucursales', function($request, $response, $args){
 	$_latitud = $request->getParsedBodyParam('latitud', '');
 	$_longitud = $request->getParsedBodyParam('longitud', '');
 	$_calle = $request->getParsedBodyParam('calle', '');
+	$_colonia = $request->getParsedBodyParam('colonia', '');
 	$_no_ext = $request->getParsedBodyParam('no_ext', '');
 	$_no_int = $request->getParsedBodyParam('no_int', '');
 	$_horarios = $request->getParsedBodyParam('horarios', '');
@@ -776,6 +779,7 @@ $app->post('/update/sucursales', function($request, $response, $args){
 	$sucursal->latitud = $_latitud;
 	$sucursal->longitud = $_longitud;
 	$sucursal->calle = $_calle;
+	$sucursal->colonia = $_colonia;
 	$sucursal->no_ext = $_no_ext;
 	$sucursal->no_int = $_no_int;
 	$sucursal->horarios = $_horarios;
@@ -1507,17 +1511,71 @@ $app->get('/usuarios_calidad', function($request, $response, $args){
 });
 
 
-$app->get('/rutas_calidad', function($request, $response, $args){
+$app->get('/rutas_calidad/{id_usuario}', function($request, $response, $args){
+	$_id_usuario = $args['id_usuario'];
 	$_rutas = new Ruta();
-	$rutas = $_rutas::where('actividad', 'calidad')->where('status', false)->get();
-	return $response->withStatus(200)->withJson($rutas);
+	$rutas = $_rutas::where('actividad', 'calidad')->where('status', false)->where('id_usuario', $_id_usuario)->get();
+	$payload = [];
+	foreach ($rutas as $r) {
+		$sucursal = new Sucursal();
+		$sucursal = $sucursal->find($r->id_sucursal);
+		$marca = new Marca();
+		$marca = $marca->find($sucursal->id_marca);
+		$objeto = array(
+			'id' => $r->id,
+			'id_usuario' => $r->id_usuario,
+			'id_proyecto' => $r->id_proyecto,
+			'marca' =>$marca,
+			'sucursal' => $sucursal,
+			'tipo_ruta' => $r->tipo_ruta,
+			'actividad' => $r->actividad,
+			'fecha_inicio' => $r->fecha_inicio,
+			'fecha_fin' => $r->fecha_fin,
+			'mistery' => $r->mistery,
+			'etapa1' => $r->etapa1,
+			'etapa2' => $r->etapa2,
+			'etapa3' => $r->etapa3,
+			'status' => $r->status,
+			'created_at' => $r->created_at,
+			'updated_at' => $r->updated_at
+		);
+		array_push($payload, $objeto);
+	}
+	return $response->withStatus(200)->withJson($payload);
 });
 
 
-$app->get('/rutas_mistery', function($request, $response, $args){
+$app->get('/rutas_mistery/{id_usuario}', function($request, $response, $args){
+	$_id_usuario = $args['id_usuario'];
 	$_rutas = new Ruta();
-	$rutas = $_rutas::where('actividad', 'mistery')->where('status', false)->get();
-	return $response->withStatus(200)->withJson($rutas);
+	$rutas = $_rutas::where('actividad', 'mistery')->where('status', false)->where('id_usuario', $_id_usuario)->get();
+	$payload = [];
+	foreach ($rutas as $r) {
+		$sucursal = new Sucursal();
+		$sucursal = $sucursal->find($r->id_sucursal);
+		$marca = new Marca();
+		$marca = $marca->find($sucursal->id_marca);
+		$objeto = array(
+			'id' => $r->id,
+			'id_usuario' => $r->id_usuario,
+			'id_proyecto' => $r->id_proyecto,
+			'marca' =>$marca,
+			'sucursal' => $sucursal,
+			'tipo_ruta' => $r->tipo_ruta,
+			'actividad' => $r->actividad,
+			'fecha_inicio' => $r->fecha_inicio,
+			'fecha_fin' => $r->fecha_fin,
+			'mistery' => $r->mistery,
+			'etapa1' => $r->etapa1,
+			'etapa2' => $r->etapa2,
+			'etapa3' => $r->etapa3,
+			'status' => $r->status,
+			'created_at' => $r->created_at,
+			'updated_at' => $r->updated_at
+		);
+		array_push($payload, $objeto);
+	}
+	return $response->withStatus(200)->withJson($payload);
 });
 
 $app->post('/insert/ruta', function($request, $response, $args){

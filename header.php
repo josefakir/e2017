@@ -89,6 +89,8 @@
 			</div>
 			<ul class="submenu">
 				<li class="submenu-item"><a href="asignacion-de-rutas.php" class="menu-subitem-link">Asignación de Rutas</a></li>
+				<li class="submenu-item"><a href="rutas-de-calidad.php" class="menu-subitem-link">Rutas de calidad</a></li>
+				<li class="submenu-item"><a href="rutas-de-mistery.php" class="menu-subitem-link">Rutas de mistery</a></li>
 			</ul>
 		</li>
 		<?php if($_SESSION['rol'] == '1' or $_SESSION['rol']=='2' or $_SESSION['rol']=='4'){ ?>

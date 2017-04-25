@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 25-04-2017 a las 01:22:26
+-- Tiempo de generación: 25-04-2017 a las 18:53:44
 -- Versión del servidor: 5.5.42
 -- Versión de PHP: 5.6.10
 
@@ -53,7 +53,7 @@ CREATE TABLE `autorizacions` (
   `id_usuario` int(11) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
 
@@ -364,7 +364,7 @@ CREATE TABLE `rutas` (
   `status` tinyint(1) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Volcado de datos para la tabla `rutas`
@@ -372,7 +372,9 @@ CREATE TABLE `rutas` (
 
 INSERT INTO `rutas` (`id`, `id_usuario`, `id_proyecto`, `id_sucursal`, `tipo_ruta`, `actividad`, `fecha_inicio`, `fecha_fin`, `mistery`, `etapa1`, `etapa2`, `etapa3`, `status`, `created_at`, `updated_at`) VALUES
 (1, 7, 2, 19, 'Sucursales nuevas', 'calidad', '2017-04-24', '2017-04-29', 0, 0, 0, 0, 0, '2017-04-25 01:08:26', '2017-04-25 01:08:26'),
-(2, 7, 2, 21, 'Sucursales nuevas', 'mistery', '2017-04-24', '2017-04-29', 0, 0, 0, 0, 0, '2017-04-25 01:08:26', '2017-04-25 01:08:26');
+(2, 7, 2, 21, 'Sucursales nuevas', 'mistery', '2017-04-24', '2017-04-29', 0, 0, 0, 0, 0, '2017-04-25 01:08:26', '2017-04-25 01:08:26'),
+(3, 7, 2, 19, 'Sucursales nuevas', 'calidad', '2017-04-25', '2017-04-30', 0, 0, 0, 0, 0, '2017-04-25 17:22:17', '2017-04-25 17:22:17'),
+(4, 7, 2, 21, 'Sucursales nuevas', 'calidad', '2017-04-25', '2017-04-30', 0, 0, 0, 0, 0, '2017-04-25 17:22:17', '2017-04-25 17:22:17');
 
 -- --------------------------------------------------------
 
@@ -417,6 +419,7 @@ CREATE TABLE `sucursals` (
   `longitud` varchar(255) COLLATE utf8_bin NOT NULL,
   `referencia` varchar(255) COLLATE utf8_bin NOT NULL,
   `calle` varchar(255) COLLATE utf8_bin NOT NULL,
+  `colonia` varchar(255) COLLATE utf8_bin NOT NULL,
   `no_ext` varchar(255) COLLATE utf8_bin NOT NULL,
   `no_int` varchar(255) COLLATE utf8_bin NOT NULL,
   `horarios` varchar(255) COLLATE utf8_bin NOT NULL,
@@ -444,18 +447,19 @@ CREATE TABLE `sucursals` (
   `geolocalicacion_revisada` tinyint(1) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Volcado de datos para la tabla `sucursals`
 --
 
-INSERT INTO `sucursals` (`id`, `id_marca`, `nombre`, `telefono`, `latitud`, `longitud`, `referencia`, `calle`, `no_ext`, `no_int`, `horarios`, `fachada`, `id_estado`, `id_zona`, `restorando`, `restaurantes`, `tuvo_llamada_bienvenida`, `detalle_llamada`, `conoce_vb`, `escala_info`, `motivo_desconoce`, `reforzo_info`, `material_pop`, `calcomanias`, `acrilicos`, `comunicados_desclub`, `comunicados_bbva`, `reloj_colgante`, `calcomanias_desclub`, `tarjetas_desclub`, `nombre_atendio`, `cargo_atendio`, `geolocalicacion_revisada`, `created_at`, `updated_at`) VALUES
-(19, 23, 'Palmas', '1234567890', 'fdfasd', 'asfdasdf', 'referenciaasdfasdf', 'calle', 'no_ext', 'no_int', 'horarios', 'assets/images/084.png', 9, 1, 'restorando', 'restaurantes', 1, 'Conocen convenio y aplican descuento', 1, 1, 'Cambiaron de administración', 1, 1, 1, 1, 1, 2, 2, 3, 2, 'asdf', 'Gerente sucursal', 1, '2017-04-21 01:02:38', '2017-04-21 01:19:41'),
-(20, 23, 'nombre', '1234567890', 'latitud', 'longitud', 'referencia', 'calle', 'no_ext', 'no_int', 'horarios', 'assets/images/705.jpg', 9, 1, 'restorando', 'restaurantes', 0, '', 0, 0, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, '2017-04-21 01:02:51', '2017-04-21 01:02:51'),
-(21, 23, 'nombre', '1234567890', 'latitud', 'longitud', 'referencia', 'calle', 'no_ext', 'no_int', 'horarios', '', 9, 1, 'restorando', 'restaurantes', 1, 'Descompuesto / Sin servicio', 1, 1, '', 1, 1, 0, 0, 0, 0, 0, 0, 0, '', '', 1, '2017-04-21 17:53:54', '2017-04-21 17:56:06'),
-(22, 24, 'nombre', '1234567890', 'latitud', 'longitud', 'referencia', 'calle', 'no_ext', 'no_int', 'horarios', '', 9, 1, 'restorando', 'restaurantes', 0, '', 0, 0, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, '2017-04-24 20:56:27', '2017-04-24 20:56:27'),
-(23, 24, 'nombre', '1234567890', 'latitud', 'longitud', 'referencia', 'calle', 'no_ext', 'no_int', 'horarios', '', 9, 1, 'restorando', 'restaurantes', 0, '', 0, 0, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, '2017-04-24 20:56:36', '2017-04-24 20:56:36');
+INSERT INTO `sucursals` (`id`, `id_marca`, `nombre`, `telefono`, `latitud`, `longitud`, `referencia`, `calle`, `colonia`, `no_ext`, `no_int`, `horarios`, `fachada`, `id_estado`, `id_zona`, `restorando`, `restaurantes`, `tuvo_llamada_bienvenida`, `detalle_llamada`, `conoce_vb`, `escala_info`, `motivo_desconoce`, `reforzo_info`, `material_pop`, `calcomanias`, `acrilicos`, `comunicados_desclub`, `comunicados_bbva`, `reloj_colgante`, `calcomanias_desclub`, `tarjetas_desclub`, `nombre_atendio`, `cargo_atendio`, `geolocalicacion_revisada`, `created_at`, `updated_at`) VALUES
+(19, 23, 'Palmas', '1234567890', 'fdfasd', 'asfdasdf', 'referenciaasdfasdf', 'calle', 'colonia', 'no_ext', 'no_int', 'horarios', 'assets/images/084.png', 9, 0, 'restorando', 'restaurantes', 1, 'Conocen convenio y aplican descuento', 1, 1, 'Cambiaron de administración', 1, 1, 1, 1, 1, 2, 2, 3, 2, 'asdf', 'Gerente sucursal', 1, '2017-04-21 01:02:38', '2017-04-25 18:13:08'),
+(20, 23, 'nombre', '1234567890', 'latitud', 'longitud', 'referencia', 'calle', 'colonia', 'no_ext', 'no_int', 'horarios', 'assets/images/705.jpg', 9, 0, 'restorando', 'restaurantes', 0, '', 0, 0, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, '2017-04-21 01:02:51', '2017-04-25 18:13:24'),
+(21, 23, 'nombre', '1234567890', 'latitud', 'longitud', 'referencia', 'calle', 'colonia', 'no_ext', 'no_int', 'horarios', '', 9, 0, 'restorando', 'restaurantes', 1, 'Descompuesto / Sin servicio', 1, 1, '', 1, 1, 0, 0, 0, 0, 0, 0, 0, '', '', 1, '2017-04-21 17:53:54', '2017-04-25 18:13:32'),
+(22, 24, 'nombre', '1234567890', 'latitud', 'longitud', 'referencia', 'calle', 'colonia', 'no_ext', 'no_int', 'horarios', '', 9, 0, 'restorando', 'restaurantes', 0, '', 0, 0, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, '2017-04-24 20:56:27', '2017-04-25 18:13:37'),
+(23, 24, 'nombre', '1234567890', 'latitud', 'longitud', 'referencia', 'calle', 'colonia', 'no_ext', 'no_int', 'horarios', '', 9, 0, 'restorando', 'restaurantes', 0, '', 0, 0, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, '2017-04-24 20:56:36', '2017-04-25 18:13:43'),
+(24, 23, 'nombre', '1234567890', 'latitud', 'longitud', 'referencia', 'calle', 'ejemplo colonia', 'no_ext', 'no_int', 'horarios', '', 1, 0, 'restorando', 'restaurantes', 0, '', 0, 0, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, '2017-04-25 18:10:08', '2017-04-25 18:13:53');
 
 -- --------------------------------------------------------
 
@@ -654,7 +658,7 @@ ALTER TABLE `actividads`
 -- AUTO_INCREMENT de la tabla `autorizacions`
 --
 ALTER TABLE `autorizacions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `categorias`
 --
@@ -704,7 +708,7 @@ ALTER TABLE `proyectos`
 -- AUTO_INCREMENT de la tabla `rutas`
 --
 ALTER TABLE `rutas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT de la tabla `seguimientos`
 --
@@ -714,7 +718,7 @@ ALTER TABLE `seguimientos`
 -- AUTO_INCREMENT de la tabla `sucursals`
 --
 ALTER TABLE `sucursals`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=25;
 --
 -- AUTO_INCREMENT de la tabla `tipodecomidas`
 --
