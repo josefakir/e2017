@@ -1,5 +1,13 @@
 $(document).ready(function(){
 	var URL_API = "http://localhost/est/api/";
+	var URL_API = "http://b0ld.net/b0ld.net/bluegeni_dondeir/api/";
+
+
+	$('.menu-item-link').click(function(e){
+		e.preventDefault();
+		$(this).parent().next('.submenu').slideToggle();
+	});
+
 	abierto = 0;
 	abierto2 = 0;
 	$('#menu-control-lateral').click(function(){

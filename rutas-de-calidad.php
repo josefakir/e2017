@@ -55,9 +55,17 @@ include('header.php'); ?>
 						<?php }else{ ?>
 						<td><a href="forms_movil/calidad1.php?id=<?php echo $o->id ?>"><i class="fa fa-plus-square fa-fw fa-2x"></i></a></td>
 						<?php } ?>
-						<td><a href="#"><i class="fa fa-plus-square fa-fw fa-2x"></i></a></td>
-						<td><a href="#"><i class="fa fa-plus-square fa-fw fa-2x"></i></a></td>
-						<td><a href="#"><i class="fa fa-plus-square fa-fw fa-2x"></i></a></td>
+						<?php if($o->etapa2 == true){ ?>
+						<td><i class="fa fa-check fa-2x verde" aria-hidden="true"></i></td>
+						<?php }else{ ?>
+						<td><a href="forms_movil/calidad2.php?id=<?php echo $o->id ?>"><i class="fa fa-plus-square fa-fw fa-2x"></i></a></td>
+						<?php } ?>
+						<?php if($o->etapa3 == true){ ?>
+						<td><i class="fa fa-check fa-2x verde" aria-hidden="true"></i></td>
+						<?php }else{ ?>
+						<td><a href="forms_movil/calidad3.php?id=<?php echo $o->id ?>"><i class="fa fa-plus-square fa-fw fa-2x"></i></a></td>
+						<?php } ?>
+						<td><a href="<?php echo URL_API."check_ruta/".$o->id ?>" onclick="return confirm('¿Seguro de completar?');"><i class="fa fa-plus-square fa-fw fa-2x"></i></a></td>
 					</tr>
 					<?php
 					}

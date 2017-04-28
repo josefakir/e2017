@@ -55,6 +55,7 @@
 			</ul>
 		</li>
 		<?php } ?>
+		<?php if($_SESSION['rol'] == '1' or $_SESSION['rol']=='2' or $_SESSION['rol']=='3'){ ?>
 		<li class="menu-item">
 			<div class="input-group margin-bottom-sm">
 				<span class="input-group-addon"><i class="fa fa-users fa-fw"></i></span>
@@ -72,6 +73,8 @@
 				<?php } ?>
 			</ul>
 		</li>
+		<?php } ?>
+		<?php if($_SESSION['rol'] == '1' or $_SESSION['rol']=='7'){ ?>
 		<li class="menu-item">
 			<div class="input-group margin-bottom-sm">
 				<span class="input-group-addon"><i class="fa fa-gear fa-fw"></i></span>
@@ -80,19 +83,25 @@
 			<ul class="submenu">
 				<li class="submenu-item"><a href="llamada-de-bienvenida.php" class="menu-subitem-link">Llamada de bienvenida</a></li>
 				<li class="submenu-item"><a href="call-center.php" class="menu-subitem-link">Call Center</a></li>
+				<li class="submenu-item"><a href="reservaciones.php" class="menu-subitem-link">Reservaciones</a></li>
 			</ul>
 		</li>
+		<?php } ?>
+		<?php if($_SESSION['rol'] == '1' or $_SESSION['rol']=='5' or $_SESSION['rol']=='6'){ ?>
 		<li class="menu-item">
 			<div class="input-group margin-bottom-sm">
 				<span class="input-group-addon"><i class="fa fa-gear fa-fw"></i></span>
 				<a href="#" class="menu-item-link">Calidad<i class="menu-item-arrow fa fa-chevron-right" style="    margin-left: 5px;"></i></a>
 			</div>
 			<ul class="submenu">
+				<?php if($_SESSION['rol'] == '1' or $_SESSION['rol']=='5'){ ?>
 				<li class="submenu-item"><a href="asignacion-de-rutas.php" class="menu-subitem-link">Asignación de Rutas</a></li>
+				<?php } ?>
 				<li class="submenu-item"><a href="rutas-de-calidad.php" class="menu-subitem-link">Rutas de calidad</a></li>
 				<li class="submenu-item"><a href="rutas-de-mistery.php" class="menu-subitem-link">Rutas de mistery</a></li>
 			</ul>
 		</li>
+		<?php } ?>
 		<?php if($_SESSION['rol'] == '1' or $_SESSION['rol']=='2' or $_SESSION['rol']=='4'){ ?>
 		<li class="menu-item">
 			<div class="input-group margin-bottom-sm">

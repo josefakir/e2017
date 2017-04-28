@@ -2,7 +2,7 @@
 include("auth.php");
 include('header.php'); ?>
 	<div id="contenido">
-		<h1 class="title-general" id="marca"><i class="fa fa-building fa-fw"></i> Rutas de Mistery</h1>
+		<h1 class="title-general" id="marca"><i class="fa fa-building fa-fw"></i> Rutas de calidad</h1>
 		<div class="formulario">
 			<form class='validation-form'  action="api/insert/categorias" method="post" enctype="multipart/form-data">
 				<div class="form-group">
@@ -25,9 +25,7 @@ include('header.php'); ?>
 						<th>REFERENCIA</th>
 						<th>TELEFONO</th>
 						<th class="editar">DETALLES</th>
-						<th class="editar tac">ETAPA 1</th>
-						<th class="editar tac">ETAPA 2</th>
-						<th class="editar tac">ETAPA 3</th>
+						<th class="editar">ETAPA 1</th>
 						<th class="editar">COMPLETAR</th>
 					</tr>
 				</thead>
@@ -49,11 +47,13 @@ include('header.php'); ?>
 						<td><?php echo $o->sucursal->colonia ?></td>
 						<td><?php echo $o->sucursal->referencia ?></td>
 						<td><?php echo $o->sucursal->telefono ?></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
+						<td><a href="#" class="btn_detalles_calidad"><i class="fa fa-search-plus fa-fw fa-2x"></i></a></td>
+						<?php if($o->mistery == true){ ?>
+						<td><i class="fa fa-check fa-2x verde" aria-hidden="true"></i></td>
+						<?php }else{ ?>
+						<td><a href="forms_movil/mistery1.php?id=<?php echo $o->id ?>"><i class="fa fa-plus-square fa-fw fa-2x"></i></a></td>
+						<?php } ?>
+						<td><a href="<?php echo URL_API."check_ruta_mistery/".$o->id ?>" onclick="return confirm('¿Seguro de completar?');"><i class="fa fa-plus-square fa-fw fa-2x"></i></a></td>
 					</tr>
 					<?php
 					}

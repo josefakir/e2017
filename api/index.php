@@ -11,11 +11,15 @@ use Establecimientos\Models\Categoriavive;
 use Establecimientos\Models\Detalledesclub;
 use Establecimientos\Models\Estado;
 use Establecimientos\Models\Etapauno;
+use Establecimientos\Models\Etapados;
+use Establecimientos\Models\Etapatres;
 use Establecimientos\Models\Lead;
 use Establecimientos\Models\Llamada;
 use Establecimientos\Models\Marca;
+use Establecimientos\Models\Mistery;
 use Establecimientos\Models\Promocion;
 use Establecimientos\Models\Proyecto;
+use Establecimientos\Models\Reservacion;
 use Establecimientos\Models\Ruta;
 use Establecimientos\Models\Seguimiento;
 use Establecimientos\Models\Sucursal;
@@ -653,7 +657,7 @@ $app->get('/sucursales_para_calidad/{id_estado}/{id_zona}', function($request, $
 	$_id_estado = $args['id_estado'];
 	$_id_zona = $args['id_zona'];
 	$_sucursal = new Sucursal();
-	$sucursales = $_sucursal::where('geolocalicacion_revisada',true)->where('geolocalicacion_revisada',true)->where('id_estado',$_id_estado)->where('id_zona',$_id_zona)->get();
+	$sucursales = $_sucursal::where('tuvo_llamada_bienvenida',true)->where('geolocalicacion_revisada',true)->where('id_estado',$_id_estado)->where('id_zona',$_id_zona)->get();
 	return $response->withStatus(200)->withJson($sucursales);
 });
 
@@ -1029,13 +1033,64 @@ $app->post('/insert/actividades', function($request, $response, $args){
 	$lead->status = $_status_lead;
 	$lead->save();
 
+
+	$_SESSION['que_hare'] = $_que_hare;
+	$_SESSION['comentarios_futura'] = $comentarios_futura;
+	$_SESSION['fecha_futura'] = $_fecha_futura." ".str_replace(" ","",$_hora_futura.":00");
+/*
 	if ($actividad->id) {
         return $response->withStatus(302)->withHeader('Location', '../../seguimiento-leads.php');
     } else {
         return $response->withStatus(400);
     }
+*/
+
+    /* GOOGLE API */
+    $client = new Google_Client();
+	$client->setAuthConfigFile('client_secret.json');  //file downloaded earlier
+ 	$client->addScope("https://www.googleapis.com/auth/calendar");
+ 	$auth_url = $client->createAuthUrl();
+ 	//return $response->withStatus(302)->withHeader('Location: ' . filter_var($auth_url, FILTER_SANITIZE_URL));
+ 	//echo '<a href="'.filter_var($auth_url, FILTER_SANITIZE_URL).'">Continuar</a>';
+ 	echo '<script>window.location.href = "'.filter_var($auth_url, FILTER_SANITIZE_URL).'";</script>';
+ 	//header('Location: ' . filter_var($auth_url, FILTER_SANITIZE_URL)); 
 
 })->add(new EstablecimientosAuth());
+
+
+
+$app->get('/agendar_google', function($request, $response, $args){
+	$client = new Google_Client();
+	$client->setAuthConfigFile('client_secret.json');  //file downloaded earlier
+	$client->addScope("https://www.googleapis.com/auth/calendar");
+	$client->authenticate($_GET['code']);
+	$service = new Google_Service_Calendar($client);
+	$access_token = $client->getAccessToken();
+	$fecha = $_SESSION['fecha_futura'];
+	$nuevafecha = strtotime ( '+1 hour' , strtotime ( $fecha ) ) ;
+	$nuevafecha = date("Y-m-d H:i:s",$nuevafecha);
+	$objDateTime = new DateTime($fecha);
+	$fecha = $objDateTime->format(DateTime::ISO8601);
+	$objDateTime = new DateTime($nuevafecha);
+	$fecha2 = $objDateTime->format(DateTime::ISO8601);
+	echo $fecha."<br>".$fecha2;
+	$event = new Google_Service_Calendar_Event(array(
+	  'summary' => $_SESSION['que_hare'],
+	  'description' => $_SESSION['comentarios_futura'],
+	  'start' => array(
+	    'dateTime' => $fecha,
+	    'timeZone' => 'America/Mexico_City',
+	  ),
+	  'end' => array(
+	    'dateTime' => $fecha2,
+	    'timeZone' => 'America/Mexico_City',
+	  ),
+	));
+	$calendarId = 'primary';
+	$event = $service->events->insert($calendarId, $event);
+	return $response->withStatus(302)->withHeader('Location', '../seguimiento-leads.php');
+});
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1609,7 +1664,7 @@ $app->post('/insert/ruta', function($request, $response, $args){
 $app->post('/insert/etapa1', function($request, $response, $args){
 	$_id_ruta = $request->getParsedBodyParam('id_ruta', '');
 	$_pasaje = $request->getParsedBodyParam('pasaje', '');
-	$_transportes = $request->getParsedBodyParam('transportes', '');
+	$_transportes = serialize($request->getParsedBodyParam('transportes', ''));
 	$_status_establecimiento = $request->getParsedBodyParam('status_establecimiento', '');
 	$_calc_desclub = $request->getParsedBodyParam('calc_desclub', '');
 	if($_calc_desclub=="Sí"){
@@ -1651,6 +1706,343 @@ $app->post('/insert/etapa1', function($request, $response, $args){
 	$ruta->save();
 
 	return $response->withStatus(302)->withHeader('Location', '../../rutas-de-calidad.php');
+})->add(new EstablecimientosAuth());
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// ETAPA 2 ////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+$app->post('/insert/etapa2', function($request, $response, $args){
+	$_id_ruta = $request->getParsedBodyParam('id_ruta', '');
+	$_encargado_conoce = $request->getParsedBodyParam('encargado_conoce','');
+	if($_encargado_conoce=="Sí"){
+		$_encargado_conoce = true;
+	}else{
+		$_encargado_conoce = false;
+	}
+	$_porque_no_conoce = $request->getParsedBodyParam('porque_no_conoce','');
+	$_cual_conoce = serialize($request->getParsedBodyParam('cual_conoce',''));
+	$_da_a_conocer = $request->getParsedBodyParam('da_a_conocer','');
+	if($_da_a_conocer=="Sí"){
+		$_da_a_conocer = true;
+	}else{
+		$_da_a_conocer = false;
+	}
+	$_porque_no_da_a_conocer = $request->getParsedBodyParam('porque_no_da_a_conocer','');
+	$_cuantas_tarjetas = $request->getParsedBodyParam('cuantas_tarjetas','');
+	$_proporciona_pop = $request->getParsedBodyParam('proporciona_pop','');
+	if($_proporciona_pop=="Sí"){
+		$_proporciona_pop = true;
+	}else{
+		$_proporciona_pop = false;
+	}
+	$_porque_no_proporciona_pop = $request->getParsedBodyParam('porque_no_proporciona_pop','');
+	$_no_acrilicos = $request->getParsedBodyParam('no_acrilicos','');
+	$_coloco_acrilicos = $request->getParsedBodyParam('coloco_acrilicos','');
+	$_no_calcomanias = $request->getParsedBodyParam('no_calcomanias','');
+	$_coloco_calcomanias = $request->getParsedBodyParam('coloco_calcomanias','');
+	$_no_com_desclub = $request->getParsedBodyParam('no_com_desclub','');
+	$_coloco_com_desclub = $request->getParsedBodyParam('coloco_com_desclub','');
+	$_no_com_bbva = $request->getParsedBodyParam('no_com_bbva','');
+	$_coloco_com_bbva = $request->getParsedBodyParam('coloco_com_bbva','');
+	$_no_reloj = $request->getParsedBodyParam('no_reloj','');
+	$_coloco_reloj = $request->getParsedBodyParam('coloco_reloj','');
+	$_capacitaste = $request->getParsedBodyParam('capacitaste','');
+	if($_capacitaste=="Sí"){
+		$_capacitaste = true;
+	}else{
+		$_capacitaste = false;
+	}
+	$_porque_no_capacitaste = $request->getParsedBodyParam('porque_no_capacitaste','');
+	$_proyectos_capacitaste = serialize($request->getParsedBodyParam('proyectos_capacitaste',''));
+	$_banco_adquiriente = $request->getParsedBodyParam('banco_adquiriente','');
+	$_proporciona_afiliacion = $request->getParsedBodyParam('proporciona_afiliacion','');
+	if($_proporciona_afiliacion=="Sí"){
+		$_proporciona_afiliacion = true;
+	}else{
+		$_proporciona_afiliacion = false;
+	}
+	$_no_afiliacion = $request->getParsedBodyParam('no_afiliacion','');
+	$_c1_nombre = $request->getParsedBodyParam('c1_nombre','');
+	$_c1_puesto = $request->getParsedBodyParam('c1_puesto','');
+	$_c1_tel = $request->getParsedBodyParam('c1_tel','');
+	$_c1_correo = $request->getParsedBodyParam('c1_correo','');
+	$_c1_forma_contacto = $request->getParsedBodyParam('c1_forma_contacto','');
+	$_c2_nombre = $request->getParsedBodyParam('c2_nombre','');
+	$_c2_puesto = $request->getParsedBodyParam('c2_puesto','');
+	$_c2_tel = $request->getParsedBodyParam('c2_tel','');
+	$_c2_correo = $request->getParsedBodyParam('c2_correo','');
+	$_c2_forma_contacto = $request->getParsedBodyParam('c2_forma_contacto','');
+	$_c3_nombre = $request->getParsedBodyParam('c3_nombre','');
+	$_c3_puesto = $request->getParsedBodyParam('c3_puesto','');
+	$_c3_tel = $request->getParsedBodyParam('c3_tel','');
+	$_c3_correo = $request->getParsedBodyParam('c3_correo','');
+	$_c3_forma_contacto = $request->getParsedBodyParam('c3_forma_contacto','');
+
+	$etapa2 = new Etapados();
+	$etapa2->id_ruta = $_id_ruta;
+	$etapa2->encargado_conoce = $_encargado_conoce;
+	$etapa2->porque_no_conoce = $_porque_no_conoce;
+	$etapa2->cual_conoce = $_cual_conoce;
+	$etapa2->da_a_conocer = $_da_a_conocer;
+	$etapa2->porque_no_da_a_conocer = $_porque_no_da_a_conocer;
+	$etapa2->cuantas_tarjetas = $_cuantas_tarjetas;
+	$etapa2->proporciona_pop = $_proporciona_pop;
+	$etapa2->porque_no_proporciona_pop = $_porque_no_proporciona_pop;
+	$etapa2->no_acrilicos = $_no_acrilicos;
+	$etapa2->coloco_acrilicos = $_coloco_acrilicos;
+	$etapa2->no_calcomanias = $_no_calcomanias;
+	$etapa2->coloco_calcomanias = $_coloco_calcomanias;
+	$etapa2->no_com_desclub = $_no_com_desclub;
+	$etapa2->coloco_com_desclub = $_coloco_com_desclub;
+	$etapa2->no_com_bbva = $_no_com_bbva;
+	$etapa2->coloco_com_bbva = $_coloco_com_bbva;
+	$etapa2->no_reloj = $_no_reloj;
+	$etapa2->coloco_reloj = $_coloco_reloj;
+	$etapa2->capacitaste = $_capacitaste;
+	$etapa2->porque_no_capacitaste = $_porque_no_capacitaste;
+	$etapa2->proyectos_capacitaste = $_proyectos_capacitaste;
+	$etapa2->banco_adquiriente = $_banco_adquiriente;
+	$etapa2->proporciona_afiliacion = $_proporciona_afiliacion;
+	$etapa2->no_afiliacion = $_no_afiliacion;
+	$etapa2->c1_nombre = $_c1_nombre;
+	$etapa2->c1_puesto = $_c1_puesto;
+	$etapa2->c1_tel = $_c1_tel;
+	$etapa2->c1_correo = $_c1_correo;
+	$etapa2->c1_forma_contacto = $_c1_forma_contacto;
+
+	$etapa2->c2_nombre = $_c2_nombre;
+	$etapa2->c2_puesto = $_c2_puesto;
+	$etapa2->c2_tel = $_c2_tel;
+	$etapa2->c2_correo = $_c2_correo;
+	$etapa2->c2_forma_contacto = $_c2_forma_contacto;
+
+	$etapa2->c3_nombre = $_c3_nombre;
+	$etapa2->c3_puesto = $_c3_puesto;
+	$etapa2->c3_tel = $_c3_tel;
+	$etapa2->c3_correo = $_c3_correo;
+	$etapa2->c3_forma_contacto = $_c3_forma_contacto;
+
+	$etapa2->save();
+
+	$ruta = new Ruta();
+	$ruta = $ruta->find($_id_ruta);
+	$ruta->etapa2 = true;
+	$ruta->save();
+
+	return $response->withStatus(302)->withHeader('Location', '../../rutas-de-calidad.php');
+})->add(new EstablecimientosAuth());
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// ETAPA 3 ////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+$app->post('/insert/etapa3', function($request, $response, $args){
+	$imagepath = '';
+	$files = $request->getUploadedFiles();
+	$newfile = $files['imagen'];
+	if($newfile->getError() === UPLOAD_ERR_OK){
+		$uploadFilename = $newfile->getClientFilename();
+		$newfile->moveTo("assets/images/testigos/".date('Ymdhis').$uploadFilename);
+		$imagepath = "assets/images/testigos/".date('Ymdhis').$uploadFilename;
+	}
+	$_id_ruta = $request->getParsedBodyParam('id_ruta','');
+	$_tipo_foto = $request->getParsedBodyParam('tipo_foto','');
+	$_descripcion = $request->getParsedBodyParam('descripcion','');
+	$_foto = $imagepath;
+
+	$etapa3 = new Etapatres();
+	$etapa3->id_ruta = $_id_ruta;
+	$etapa3->tipo_foto = $_tipo_foto;
+	$etapa3->descripcion = $_descripcion;
+	$etapa3->foto = $_foto;
+	
+	$etapa3->save();
+
+	$ruta = new Ruta();
+	$ruta = $ruta->find($_id_ruta);
+	$ruta->etapa3 = true;
+	$ruta->save();
+
+	return $response->withStatus(302)->withHeader('Location', '../../rutas-de-calidad.php');
+})->add(new EstablecimientosAuth());
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// Check //////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+$app->get('/check_ruta/{id_ruta}', function($request, $response, $args){
+	$_id_ruta = $args['id_ruta'];
+	$ruta = new Ruta();
+	$ruta = $ruta->find($_id_ruta);
+	$ruta->status = true;
+	$ruta->save();
+	return $response->withStatus(302)->withHeader('Location', '../../rutas-de-calidad.php');
+	
+})->add(new EstablecimientosAuth());
+
+$app->get('/check_ruta_mistery/{id_ruta}', function($request, $response, $args){
+	$_id_ruta = $args['id_ruta'];
+	$ruta = new Ruta();
+	$ruta = $ruta->find($_id_ruta);
+	$ruta->status = true;
+	$ruta->save();
+	return $response->withStatus(302)->withHeader('Location', '../../rutas-de-mistery.php');
+	
+})->add(new EstablecimientosAuth());
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// MISTERY  ///////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+$app->post('/insert/mistery1', function($request, $response, $args){
+	$imagepath = '';
+	$files = $request->getUploadedFiles();
+	$newfile = $files['foto1'];
+	if($newfile->getError() === UPLOAD_ERR_OK){
+		$uploadFilename = $newfile->getClientFilename();
+		$newfile->moveTo("assets/images/testigos/".date('Ymdhis').$uploadFilename);
+		$imagepath = "assets/images/testigos/".date('Ymdhis').$uploadFilename;
+	}
+	$_foto1 = $imagepath;
+	$imagepath = '';
+	$files = $request->getUploadedFiles();
+	$newfile = $files['foto2'];
+	if($newfile->getError() === UPLOAD_ERR_OK){
+		$uploadFilename = $newfile->getClientFilename();
+		$newfile->moveTo("assets/images/testigos/".date('Ymdhis').$uploadFilename);
+		$imagepath = "assets/images/testigos/".date('Ymdhis').$uploadFilename;
+	}
+	$_foto2 = $imagepath;
+	$imagepath = '';
+	$files = $request->getUploadedFiles();
+	$newfile = $files['foto3'];
+	if($newfile->getError() === UPLOAD_ERR_OK){
+		$uploadFilename = $newfile->getClientFilename();
+		$newfile->moveTo("assets/images/testigos/".date('Ymdhis').$uploadFilename);
+		$imagepath = "assets/images/testigos/".date('Ymdhis').$uploadFilename;
+	}
+	$_foto3 = $imagepath;
+	$imagepath = '';
+	$files = $request->getUploadedFiles();
+	$newfile = $files['foto4'];
+	if($newfile->getError() === UPLOAD_ERR_OK){
+		$uploadFilename = $newfile->getClientFilename();
+		$newfile->moveTo("assets/images/testigos/".date('Ymdhis').$uploadFilename);
+		$imagepath = "assets/images/testigos/".date('Ymdhis').$uploadFilename;
+	}
+	$_foto4 = $imagepath;
+
+	$_id_ruta = $request->getParsedBodyParam('id_ruta','');
+	$_pasaje = $request->getParsedBodyParam('pasaje', '');
+	$_transportes = serialize($request->getParsedBodyParam('transportes', ''));
+	$_tarjetas_presentadas = serialize($request->getParsedBodyParam('tarjetas_presentadas', ''));
+	$_calc_desclub = $request->getParsedBodyParam('calc_desclub', '');
+	$_cual_calc_desclub = serialize($request->getParsedBodyParam('cual_calc_desclub', ''));
+	$_material_pop = $request->getParsedBodyParam('material_pop', '');
+	$_cual_material_pop = serialize($request->getParsedBodyParam('cual_material_pop', ''));
+	$_calc_otras = $request->getParsedBodyParam('calc_otras', '');
+	$_cual_calc_otras = serialize($request->getParsedBodyParam('cual_calc_otras', ''));
+	$_calificacion = $request->getParsedBodyParam('calificacion', '');
+	$_conoce_programa = $request->getParsedBodyParam('conoce_programa', '');
+	$_razon_negado = $request->getParsedBodyParam('razon_negado', '');
+	$_pregunta_gerente = $request->getParsedBodyParam('pregunta_gerente', '');
+	$_otorgaron_descuento = $request->getParsedBodyParam('otorgaron_descuento', '');
+	$_efectivo = $request->getParsedBodyParam('efectivo', '');
+	$_tarjeta = $request->getParsedBodyParam('tarjeta', '');
+	$_tipo_foto = $request->getParsedBodyParam('tipo_foto', '');
+	$_descripcion = $request->getParsedBodyParam('descripcion', '');
+
+	$mistery = new Mistery();
+
+	$mistery->id_ruta = $_id_ruta;
+	$mistery->pasaje = $_pasaje;
+	$mistery->transportes = $_transportes;
+	$mistery->tarjetas_presentadas = $_tarjetas_presentadas;
+	$mistery->calc_desclub = $_calc_desclub;
+	$mistery->cual_calc_desclub = $_cual_calc_desclub;
+	$mistery->material_pop = $_material_pop;
+	$mistery->cual_material_pop = $_cual_material_pop;
+	$mistery->calc_otras = $_calc_otras;
+	$mistery->cual_calc_otras = $_cual_calc_otras;
+	$mistery->calificacion = $_calificacion;
+	$mistery->conoce_programa = $_conoce_programa;
+	$mistery->razon_negado = $_razon_negado;
+	$mistery->pregunta_gerente = $_pregunta_gerente;
+	$mistery->otorgaron_descuento = $_otorgaron_descuento;
+	$mistery->efectivo = $_efectivo;
+	$mistery->tarjeta = $_tarjeta;
+	$mistery->tipo_foto = $_tipo_foto;
+	$mistery->descripcion = $_descripcion;
+	$mistery->foto1 = $_foto1;
+	$mistery->foto2 = $_foto2;
+	$mistery->foto3 = $_foto3;
+	$mistery->foto4 = $_foto4;
+
+	$mistery->save();
+
+	$ruta = new Ruta();
+	$ruta = $ruta->find($_id_ruta);
+	$ruta->mistery = true;
+	$ruta->save();
+
+	return $response->withStatus(302)->withHeader('Location', '../../rutas-de-mistery.php');
+})->add(new EstablecimientosAuth());
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// RESERVACIONES  /////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+$app->get('/reservaciones', function($request, $response, $args){
+	$_reservacion = new Reservacion();
+	$reservaciones = $_reservacion->all();
+
+	$payload = [];
+	foreach($reservaciones as $cat){
+		array_push($payload, $cat);
+	}
+	return $response->withStatus(200)->withJson($payload);
+});
+
+$app->post('/insert/reservaciones', function($request, $response, $args){
+	$_restaurante = $request->getParsedBodyParam('restaurante','');
+	$_mesa_a_nombre_de = $request->getParsedBodyParam('mesa_a_nombre_de','');
+	$_fecha = $request->getParsedBodyParam('fecha','');
+	$_hora = $request->getParsedBodyParam('hora','');
+	$_personas = $request->getParsedBodyParam('personas','');
+	$_area = $request->getParsedBodyParam('area','');
+	$_clave = $request->getParsedBodyParam('clave','');
+	$_nombre = $request->getParsedBodyParam('nombre','');
+	$_tolerancia = $request->getParsedBodyParam('tolerancia','');
+	$_se_logro_reservacion = $request->getParsedBodyParam('se_logro_reservacion','');
+
+	$reservacion = new Reservacion();
+	$reservacion->restaurante = $_restaurante;
+	$reservacion->mesa_a_nombre_de = $_mesa_a_nombre_de;
+	$reservacion->fecha = $_fecha;
+	$reservacion->hora = $_hora;
+	$reservacion->personas = $_personas;
+	$reservacion->area = $_area;
+	$reservacion->clave = $_clave;
+	$reservacion->nombre = $_nombre;
+	$reservacion->tolerancia = $_tolerancia;
+	$reservacion->se_logro_reservacion = $_se_logro_reservacion;
+
+	$reservacion->save();
+	
+	return $response->withStatus(302)->withHeader('Location', '../../reservaciones.php');
 })->add(new EstablecimientosAuth());
 
 

@@ -31,7 +31,7 @@ header img {height: 49px;left: 0;margin-left: 2.5%;position: absolute;top: 7px;}
 #main-menu-lateral {background: rgba(19, 23, 27, 0.95) none repeat scroll 0 0;height: 100%;left:-260px;margin-top: -5px;overflow-y: auto;padding-top: 86px;position: fixed;text-align: center;width: 0;z-index: 4;}
 #main-menu-lateral li a{color: #668393;display: block;font-size: 12px;line-height: 43px;padding: 2px 2px 2px 15px;text-align: left;text-decoration: none;width: 100%}
 #main-menu-lateral li ul.submenu{display: none}
-#main-menu-lateral li:hover ul.submenu{display: block}
+/*#main-menu-lateral li:hover ul.submenu{display: block}*/
 .menu-subitem-link:hover{background: #009edf; color: #fff !important;}
 #contenido{padding-top: 79px;padding-bottom: 50px; padding-left: 40px; padding-right: 40px}
 table.dataTable tbody th, table.dataTable tbody td {padding: 8px 10px;}

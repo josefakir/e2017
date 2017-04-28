@@ -104,7 +104,7 @@ include('header.php'); ?>
 <div id="overlay_actividades">
 	<div class="container">
 		<div class="row">
-			<div class="col-md-12" style="background: #fff; margin-top: 100px; height: 700px; overflow-y: scroll;">
+			<div class="col-md-12" style="background: #fff; margin-top: 100px; height: 500px; overflow-y: scroll;">
 				<a href="#" class="cerraroverlay"><i class="fa fa-times-circle fa-2x" aria-hidden="true"></i></a>
 				<form class='validation-form2'  action="api/insert/actividades" method="post">
 					<h2 style="margin-top: 5px">Detalles de actividad:</h2>
@@ -167,7 +167,7 @@ include('header.php'); ?>
 <div id="overlay_detalle">
 	<div class="container">
 		<div class="row">
-			<div class="col-md-12" style="background: #fff; margin-top: 100px; height: 700px; overflow-y: scroll;">
+			<div class="col-md-12" style="background: #fff; margin-top: 100px; height: 500px; overflow-y: scroll;">
 				<a href="#" class="cerraroverlay"><i class="fa fa-times-circle fa-2x" aria-hidden="true"></i></a>
 				<h2 style="margin-top: 5px">Detalles de actividad:</h2>
 				<p>&nbsp;</p>
@@ -191,7 +191,7 @@ include('header.php'); ?>
 <div id="overlay_contacto">
 	<div class="container">
 		<div class="row">
-			<div class="col-md-12" style="background: #fff; margin-top: 100px; height: 700px; overflow-y: scroll;">
+			<div class="col-md-12" style="background: #fff; margin-top: 100px; height: 500px; overflow-y: scroll;">
 				<a href="#" class="cerraroverlay"><i class="fa fa-times-circle fa-2x" aria-hidden="true"></i></a>
 				<form class='validation-form2'  action="api/detallesdesclub" method="post">
 					<h2 style="margin-top: 5px">Detalles de contacto:</h2>
@@ -237,7 +237,7 @@ include('header.php'); ?>
 <div id="overlay_registro">
 	<div class="container">
 		<div class="row">
-			<div class="col-md-12" style="background: #fff; margin-top: 100px; height: 700px; overflow-y: scroll;">
+			<div class="col-md-12" style="background: #fff; margin-top: 100px; height: 500px; overflow-y: scroll;">
 				<a href="#" class="cerraroverlay"><i class="fa fa-times-circle fa-2x" aria-hidden="true"></i></a>
 				<form class='validation-form2'  action="api/detallesdesclub" method="post">
 					<h2 style="margin-top: 5px">Detalles de contacto:</h2>

@@ -184,6 +184,7 @@ include('header.php'); ?>
 						<option value="Promo card">Promo card</option>					
 					</select>
 				</div>
+				<p><input type="checkbox"> Le recordamos que sus datos proporcionados están protegidos y son utilizados únicamente con la finalidad de brindarle un buen servicio, y con fines de estadísticos. Puede consultar el detalle de nuestro aviso de privacidad en la página www.grupomedios.com</p>
 				<button type="submit" class="btn btn-primary">Insertar</button>
 			</form>
 		</div>

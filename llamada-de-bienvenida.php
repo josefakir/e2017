@@ -56,7 +56,7 @@ include('header.php'); ?>
 <div id="overlay_bienvenida">
 	<div class="container">
 		<div class="row">
-			<div class="col-md-12" style="background: #fff; margin-top: 100px; height: 700px; overflow-y: scroll;">
+			<div class="col-md-12" style="background: #fff; margin-top: 100px; height: 500px; overflow-y: scroll;">
 				<a href="#" class="cerraroverlay"><i class="fa fa-times-circle fa-2x" aria-hidden="true"></i></a>
 				<form class='validation-form2'  action="api/llamada_bienvenida" method="post">
 					<h2 style="margin-top: 5px">Detalles de llamada de bienvenida:</h2>
@@ -327,7 +327,7 @@ include('header.php'); ?>
 <div id="overlay_geolocalizacion">
 	<div class="container">
 		<div class="row">
-			<div class="col-md-12" style="background: #fff; margin-top: 100px; height: 700px; overflow-y: scroll;">
+			<div class="col-md-12" style="background: #fff; margin-top: 100px; height: 500px; overflow-y: scroll;">
 				<a href="#" class="cerraroverlay"><i class="fa fa-times-circle fa-2x" aria-hidden="true"></i></a>
 				<form class='validation-form2'  action="api/revisar_geolocalizacion" method="post">
 					<h2 style="margin-top: 5px">Geolocalización:</h2>
