@@ -34,7 +34,7 @@
 		<li class="menu-item profile">
 			<div class="input-group margin-bottom-sm">
 				<span class="input-group-addon"><i class="fa fa-angle-down fa-fw" style="color: #fff"></i></span>
-				<a href="logout.php" class="menu-item-link">Cerrar Sesión</a>
+				<a href="logout.php" class="menu-item-link" id="cerrarsesion">Cerrar Sesión</a>
 			</div>
 			<ul>
 				<li class="submenu-item"><a class="menu-subitem-link" href="../lib/Execute.php?e=User/logout&amp;back=1">Salir</a></li>

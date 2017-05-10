@@ -17,6 +17,15 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 	<script>
+		function success(pos) {
+ 	 		var crd = pos.coords;
+			console.log(crd);
+			$('#latitud').val(crd.latitude);
+			$('#longitud').val(crd.longitude);
+		}
+		if(navigator.geolocation) {
+			posicion = navigator.geolocation.getCurrentPosition(success);
+       	}
 		$(document).ready(function(){
 			$('#select1').change(function(){
 				if($(this).val()=='Sí'){
@@ -301,8 +310,8 @@
 											<div class="item-input">
 												<select name="tipo_foto">
 													<option>Seleccione</option>
-													<option value="No">No</option>
-													<option value="Sí">Sí</option>
+													<option value="Fachada">Fachada</option>
+													<option value="Interior">Interior</option>
 												</select>
 											</div>
 										</div>
@@ -358,6 +367,8 @@
 										</div>
 									</div>
 								</li>
+								<input type="hidden" name="latitud" id="latitud">
+								<input type="hidden" name="longitud" id="longitud">
 								<input type="hidden" name="id_ruta" value="<?php echo $_GET['id'] ?>">
 								<li style="    height: 40px;"><input type="submit" class="button button-round active" style="width: 80%; margin: 10px auto" value="Guardar"></li>
 								</form>

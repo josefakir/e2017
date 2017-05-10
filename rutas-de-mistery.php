@@ -47,7 +47,7 @@ include('header.php'); ?>
 						<td><?php echo $o->sucursal->colonia ?></td>
 						<td><?php echo $o->sucursal->referencia ?></td>
 						<td><?php echo $o->sucursal->telefono ?></td>
-						<td><a href="#" class="btn_detalles_calidad"><i class="fa fa-search-plus fa-fw fa-2x"></i></a></td>
+						<td><a href="#" class="btn_detalles_calidad" rel="<?php echo $o->id ?>"><i class="fa fa-search-plus fa-fw fa-2x"></i></a></td>
 						<?php if($o->mistery == true){ ?>
 						<td><i class="fa fa-check fa-2x verde" aria-hidden="true"></i></td>
 						<?php }else{ ?>
@@ -64,4 +64,39 @@ include('header.php'); ?>
 		<div class="clearfix"></div>
 		<p>&nbsp;</p>
 	</div>
+	<div id="overlay_ruta_calidad">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12" style="background: #fff; margin-top: 100px; height: 500px; overflow-y: scroll;">
+					<a href="#" class="cerraroverlay"><i class="fa fa-times-circle fa-2x" aria-hidden="true"></i></a>
+					<form class='validation-form2'  action="" method="post">
+						<h2 style="margin-top: 5px">Detalles de Ruta:</h2>
+						<p>&nbsp;</p>
+				<table class="tabla2">
+				<thead>
+					<tr>
+						<th>CALIFICACIÓN</th>
+						<th>PROYECTO</th>
+						<th>REFERENCIA</th>
+						<th>EFECTIVO</th>
+						<th>TARJETA</th>
+						<th>PROMO</th>
+						<th>VIGENCIA</th>
+					</tr>
+				</thead>
+				<tbody id="body_detalles_ruta_calidad">
+					
+				</tbody>
+			</table>
+						<div class="form-group">
+							<label for="exampleInputEmail1">Comentarios</label>
+							<input type="text" class="form-control" placeholder="Comentarios" name="comentarios">
+						</div>
+						<button type="submit" class="btn btn-primary">Insertar</button>
+						<p>&nbsp;</p>
+					</form>
+				</div>
+			</div>
+		</div>
+</div>
 <?php include('footer.php') ?>

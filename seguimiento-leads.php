@@ -107,6 +107,19 @@ include('header.php'); ?>
 			<div class="col-md-12" style="background: #fff; margin-top: 100px; height: 500px; overflow-y: scroll;">
 				<a href="#" class="cerraroverlay"><i class="fa fa-times-circle fa-2x" aria-hidden="true"></i></a>
 				<form class='validation-form2'  action="api/insert/actividades" method="post">
+					<h2 style="margin-top: 5px">Estatus:</h2>
+					<div class="form-group">
+						<label for="exampleInputEmail1">Estatus de lead:</label>
+						<select name="status_lead" id="select_status_lead" style="width: 100%" required>
+							<option value="3">Sin contacto</option>
+							<option value="4">Contactado</option>
+							<option value="5">En proceso</option>
+							<option value="6">Interesado</option>
+							<option value="7">No Interesado</option>
+							<option value="8">Afiliado</option>
+							<option value="9">Finalizado</option>
+						</select>
+					</div>
 					<h2 style="margin-top: 5px">Detalles de actividad:</h2>
 					<div class="form-group">
 						<label for="exampleInputEmail1">¿Qué hice?</label>
@@ -121,7 +134,9 @@ include('header.php'); ?>
 						<label for="exampleInputEmail1">Comentarios</label>
 						<input type="text" class="form-control" placeholder="Comentarios" name="comentarios" minlength="1" type="text" required>
 					</div>
+					<div id="esconder_futura">
 					<h2 style="margin-top: 5px">Actividad Futura:</h2>
+					
 					<div class="form-group">
 						<label for="exampleInputEmail1">¿Qué actividad es la siguiente a realizar?</label>
 						<select name="que_hare" id="" style="width: 100%" required>
@@ -143,18 +158,6 @@ include('header.php'); ?>
 						<label for="exampleInputEmail1">Comentarios</label>
 						<input type="text" class="form-control" placeholder="Comentarios" name="comentarios_futura" minlength="1" type="text" required>
 					</div>
-					<h2 style="margin-top: 5px">Estatus:</h2>
-					<div class="form-group">
-						<label for="exampleInputEmail1">Estatus de lead:</label>
-						<select name="status_lead" id="" style="width: 100%" required>
-							<option value="3">Sin contacto</option>
-							<option value="4">Contactado</option>
-							<option value="5">En proceso</option>
-							<option value="6">Interesado</option>
-							<option value="7">No Interesado</option>
-							<option value="8">Afiliado</option>
-							<option value="9">Finalizado</option>
-						</select>
 					</div>
 					<input type="hidden" name="id_lead" id="id_lead">
 					<button type="submit" class="btn btn-primary">Insertar</button>
@@ -223,7 +226,6 @@ include('header.php'); ?>
 						<label for="exampleInputEmail1">Email</label>
 						<input type="email" class="form-control" placeholder="Email" name="email" minlength="1" type="text" required id="c_email">
 					</div>
-					<input type="hidden" name="id_lead" id="id_lead_contacto">
 					<input type="hidden" name="id_marca" id="id_marca">
 					<button type="submit" class="btn btn-primary">Actualizar</button>
 					<p>&nbsp;</p>

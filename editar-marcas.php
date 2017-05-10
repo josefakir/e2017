@@ -36,38 +36,8 @@ include('header.php'); ?>
 				</select>
 				</div>
 				<div class="form-group">
-				<select name="id_categoria_vive" id="" style="width: 100%" >
-						<option value="">Categoría Vive</option>
-						<?php 
-							$ch = curl_init(); 
-							curl_setopt($ch, CURLOPT_URL, URL_API."categoriasvive"); 
-							curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
-							$output = json_decode(curl_exec($ch)); 
-							curl_close($ch); 
-							foreach($output as $o){
-								?>
-						<option value="<?php echo $o->id ?>" <?php if($o->id==$marca->id_categoria_vive){ echo " selected "; } ?>><?php echo $o->nombre ?></option>
-								<?php
-							}
-						?>
-				</select>
-				</div>
-				<div class="form-group">
-				<select name="id_proyecto" id="" style="width: 100%" >
-						<option value="">Proyecto</option>
-						<?php 
-							$ch = curl_init(); 
-							curl_setopt($ch, CURLOPT_URL, URL_API."proyectos"); 
-							curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
-							$output = json_decode(curl_exec($ch)); 
-							curl_close($ch); 
-							foreach($output as $o){
-								?>
-						<option value="<?php echo $o->id ?>" <?php if($o->id==$marca->id_proyecto){ echo " selected "; } ?>><?php echo $o->nombre ?></option>
-								<?php
-							}
-						?>
-				</select>
+				<label for="exampleInputEmail1">Taxonomías</label>
+					<input type="text" class="form-control" placeholder="Taxonomías separadas por coma" name="taxonomias" value="<?php echo $marca->taxonomias ?>">
 				</div>
 				<div class="form-group">
 				<select name="id_tipoDeComida" id="" style="width: 100%" >

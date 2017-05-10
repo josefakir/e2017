@@ -131,6 +131,17 @@ p.error{color: red; text-align: center;}
     left: 0;
     display: none
 }
+
+#overlay_ruta_calidad{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: url(../img/pixel.png);
+    z-index: 1;
+    top: 0;
+    left: 0;
+    display: none;
+}
 a.cerraroverlay {
     position: absolute;
     right: 0;  
@@ -154,6 +165,27 @@ a.cerraroverlay {
 #cargo_atendio{display: none}
 .mitad{width: 50%; float: left;}
 .verde{color: green !important}
+#cargandorutas{display: none}
+#overlay_aprobarlead{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: url(../img/pixel.png);
+    z-index: 1;
+    top: 0;
+    left: 0;
+    display: none;
+}
+#overlay_rechazarlead{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: url(../img/pixel.png);
+    z-index: 1;
+    top: 0;
+    left: 0;
+    display: none;
+}
 /*
 .afiliar_est{display: none}
 .info_plataforma {display: none}

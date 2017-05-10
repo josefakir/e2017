@@ -24,7 +24,7 @@ include('header.php'); ?>
 				</div>
 				<div class="form-group">
 					<label for="exampleInputEmail1">Número de personas</label>
-					<select name="personas">
+					<select name="personas" style="width: 200px">
 						<?php 
 							for($i=1; $i<21; $i++){
 								?>
@@ -43,18 +43,14 @@ include('header.php'); ?>
 					<input type="text" class="form-control" placeholder="Clave" name="clave" required>
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Nombre</label>
-					<input type="text" class="form-control" placeholder="Nombre" name="nombre" required>
-				</div>
-				<div class="form-group">
 					<label for="exampleInputEmail1">Tolerancia</label>
 					<input type="text" class="form-control" placeholder="Tolerancia" name="tolerancia" required>
 				</div>
 				<div class="form-group">
 					<label for="exampleInputEmail1">Se logró la reservación</label>
-					<select name="personas">
-						<option value="true">Sí</option>
-						<option value="false">No</option>
+					<select name="se_logro_reservacion" style="width: 200px">
+						<option value="1">Sí</option>
+						<option value="0">No</option>
 					</select>
 				</div>
 				<button type="submit" class="btn btn-primary">Insertar</button>
@@ -84,7 +80,7 @@ include('header.php'); ?>
 					?>
 					<tr>
 						<td><?php echo $o->id ?></td>
-						<td><?php echo $o->nombre ?></td>
+						<td><?php echo $o->mesa_a_nombre_de ?></td>
 						<td><?php echo $o->fecha ?></td>
 						<td><?php echo $o->hora ?></td>
 						<td><?php echo $o->personas ?></td>

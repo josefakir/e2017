@@ -75,7 +75,7 @@ include('header.php'); ?>
 				</div>
 				<div class="form-group">
 					<label for="exampleInputEmail1">Estado</label>
-					<select name="id_estado" id="" style="width: 100%" >
+					<select name="id_estado" id="select_estado" style="width: 100%" >
 						<option value="">Estado</option>
 						<?php 
 							$ch = curl_init(); 
@@ -93,7 +93,7 @@ include('header.php'); ?>
 				</div>
 				<div class="form-group">
 					<label for="exampleInputEmail1">Zona</label>
-					<select name="id_zona id="" style="width: 100%" >
+					<select name="id_zona" id="select_zona" style="width: 100%" >
 						<option value="">Zona</option>
 						<?php 
 							$ch = curl_init(); 

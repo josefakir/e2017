@@ -4,6 +4,8 @@ require('vendor/autoload.php');
 include('bootstrap.php');
 include('../funciones.php');
 
+use Illuminate\Database\Capsule\Manager as Capsule;
+
 use Establecimientos\Models\Actividad;
 use Establecimientos\Models\Autorizacion;
 use Establecimientos\Models\Categoria;
@@ -504,6 +506,7 @@ $app->post('/insert/marcas', function($request, $response, $args){
 	$_autorizadaLead = $request->getParsedBodyParam('autorizadaLead', '');
 	$_id_categoria = $request->getParsedBodyParam('id_categoria', '');
 	$_id_categoria_vive = $request->getParsedBodyParam('id_categoria_vive', '');
+	$_taxonomias = $request->getParsedBodyParam('taxonomias', '');
 	//$_id_proyecto = $request->getParsedBodyParam('id_proyecto', '');
 	$_id_tipoDeComida = $request->getParsedBodyParam('id_tipoDeComida', '');
 	$marca = new Marca();
@@ -520,7 +523,7 @@ $app->post('/insert/marcas', function($request, $response, $args){
 	$marca->autorizadaLead=$_autorizadaLead;
 	$marca->id_categoria=$_id_categoria;
 	$marca->id_categoria_vive=$_id_categoria_vive;
-	//$marca->id_proyecto=$_id_proyecto;
+	$marca->taxonomias=$_taxonomias;
 	$marca->id_tipoDeComida=$_id_tipoDeComida;
 	$marca->save();
     if ($marca->id) {
@@ -563,7 +566,7 @@ $app->post('/update/marcas', function($request, $response, $args){
 	$_autorizadaLead = $request->getParsedBodyParam('autorizadaLead', '');
 	$_id_categoria = $request->getParsedBodyParam('id_categoria', '');
 	$_id_categoria_vive = $request->getParsedBodyParam('id_categoria_vive', '');
-	$_id_proyecto = $request->getParsedBodyParam('id_proyecto', '');
+	$_taxonomias = $request->getParsedBodyParam('taxonomias', '');
 	$_id_tipoDeComida = $request->getParsedBodyParam('id_tipoDeComida', '');
 	$marca = Marca::find($_id);
 	$marca->nombre = $_nombre;
@@ -583,7 +586,7 @@ $app->post('/update/marcas', function($request, $response, $args){
 	$marca->autorizadaLead=$_autorizadaLead;
 	$marca->id_categoria=$_id_categoria;
 	$marca->id_categoria_vive=$_id_categoria_vive;
-	$marca->id_proyecto=$_id_proyecto;
+	$marca->taxonomias=$_taxonomias;
 	$marca->id_tipoDeComida=$_id_tipoDeComida;
 	$marca->save();
     if ($marca->id) {
@@ -631,7 +634,7 @@ $app->get('/sucursales_inicio_operaciones', function($request, $response, $args)
 	foreach($marcas as $m){
 		//print_r($m);
 		$_sucursal = new Sucursal();
-		$sucursales = $_sucursal::where('geolocalicacion_revisada',false)->get();
+		$sucursales = $_sucursal::where('geolocalicacion_revisada',false)->where('id_marca',$m->id)->get();
 		foreach($sucursales as $s){
 			$_estado = new Estado();
 			$_estado = $_estado::where('id',$s->id_estado)->get();
@@ -652,13 +655,66 @@ $app->get('/sucursales_inicio_operaciones', function($request, $response, $args)
 	
 });
 
-/* LAS SUCURSALES PARA CALIDAD SON LAS QUE YA TIENEN LAS BANDERAS GEOLOCALIZACION_REVISADA Y TUVO_LLAMADA_BIENVENIDA EN TRUE */
-$app->get('/sucursales_para_calidad/{id_estado}/{id_zona}', function($request, $response, $args){
+/* LAS SUCURSALES PARA CALIDAD SON LAS QUE YA TIENEN LAS BANDERAS GEOLOCALIZACION_REVISADA Y TUVO_LLAMADA_BIENVENIDA EN TRUE TAMBIÉN SE MEZCLAN CON ID_PROYECTO */
+$app->get('/sucursales_para_calidad/{id_estado}/{id_zona}/{id_proyecto}/{tipo_ruta}', function($request, $response, $args){
 	$_id_estado = $args['id_estado'];
 	$_id_zona = $args['id_zona'];
-	$_sucursal = new Sucursal();
-	$sucursales = $_sucursal::where('tuvo_llamada_bienvenida',true)->where('geolocalicacion_revisada',true)->where('id_estado',$_id_estado)->where('id_zona',$_id_zona)->get();
-	return $response->withStatus(200)->withJson($sucursales);
+	$_id_proyecto = $args['id_proyecto'];
+	$_tipo_ruta = $args['tipo_ruta'];
+	
+	$sucursales = Capsule::table('marcas')
+            ->join('sucursals', 'marcas.id', '=', 'sucursals.id_marca')
+            ->join('promocions', 'marcas.id', '=', 'promocions.id_marca')
+            ->join('proyectos', 'proyectos.id', '=', 'promocions.id_proyecto')
+            ->select("marcas.id as id_marca",
+				"marcas.nombre  as marca",
+				"sucursals.id  as id_sucursal",
+				"sucursals.nombre as sucursal",
+				"promocions.efectivo", 
+				"promocions.tarjeta", 
+				"promocions.promo", 
+				"promocions.restricciones",
+				"proyectos.id  as id_proyecto",
+				"proyectos.nombre  as proyecto",
+				"sucursals.tuvo_llamada_bienvenida",
+				"sucursals.geolocalicacion_revisada",
+				"sucursals.id_estado",
+				"sucursals.id_zona"
+	)->where('promocions.id_proyecto',$_id_proyecto)->where('sucursals.id_estado',$_id_estado)->where('sucursals.id_zona',$_id_zona)->where('marcas.importancia',$_tipo_ruta)->get();
+    return $response->withStatus(200)->withJson($sucursales);
+});
+
+
+$app->get('/ruta_calidad/{id_ruta}', function($request, $response, $args){
+	$_id_ruta = $args['id_ruta'];
+	$ruta = new Ruta();
+	$ruta = $ruta->find($_id_ruta);
+	$_id_sucursal = $ruta->id_sucursal;
+	$sucursal = new Sucursal();
+	$sucursal = $sucursal->find($_id_sucursal);
+	$_referencia = $sucursal->referencia;
+	$_id_marca = $sucursal->id_marca;
+	$promocion = new Promocion();
+	$payload = [];
+	$promociones = $promocion::where('id_marca',$_id_marca)->get();
+	//echo "<pre>";
+	foreach($promociones as $p){
+		$proyecto = new Proyecto();
+		$proyecto = $proyecto->find($p->id_proyecto);
+		$array = array (
+			'efectivo' => $p->efectivo,
+			'tarjeta' => $p->tarjeta,
+			'promo' => $p->promo,
+			'restricciones' => $p->restricciones,
+			'inicio_actividades' => $p->inicio_actividades,
+			'fin_actividades' => $p->fin_actividades,
+			'referencia' => $_referencia,
+			'proyecto' => $proyecto
+		);
+		array_push($payload, $array);
+	}
+	
+    return $response->withStatus(200)->withJson($payload);
 });
 
 
@@ -987,6 +1043,72 @@ $app->get('/aprobarlead/{id_lead}', function($request, $response, $args){
 	$lead->save();
 	return $response->withStatus(302)->withHeader('Location', '../../leads.php');
 });
+$app->post('/update/aprobarlead', function($request, $response, $args){
+	$_id_marca = $request->getParsedBodyParam('id_marca', '');
+	$_id_categoria = $request->getParsedBodyParam('id_categoria', '');
+	$_importancia = $request->getParsedBodyParam('importancia', '');
+	$_presencia = $request->getParsedBodyParam('presencia', '');
+	$_comentarios = $request->getParsedBodyParam('comentarios', '');
+	$_id_lead = $request->getParsedBodyParam('id_lead', '');
+	$marca = new Marca();
+	$marca = $marca->find($_id_marca);
+	$marca->importancia = $_importancia;
+	$marca->presencia = $_presencia;
+	$marca->comentarios = $_comentarios;
+	$marca->save();
+
+
+	$_lead = new Lead();
+	$lead = $_lead->find($_id_lead);
+	$lead->status = '3';
+	$lead->save();
+
+	return $response->withStatus(302)->withHeader('Location', '../../leads.php');
+})->add(new EstablecimientosAuth());
+
+$app->post('/update/rechazarlead', function($request, $response, $args){
+
+	$_comentarios = $request->getParsedBodyParam('comentarios', '');
+	$_id_lead = $request->getParsedBodyParam('id_lead', '');
+	$_id_marca = $request->getParsedBodyParam('id_marca', '');
+	$_motivo = $request->getParsedBodyParam('motivo', '');
+	$_lead = new Lead();
+	$lead = $_lead->find($_id_lead);
+	$lead->status = '2';
+	$lead->save();
+	$marca = new Marca();
+	$marca = $marca->find($_id_marca);
+	$nombremarca = $marca->nombre;
+	// PARA USUARIO
+		$from = new SendGrid\Email(null, "CRM@desclub.com.mx");
+		$subject = "Lead Rechazado";
+		$to = new SendGrid\Email(null, 'antonio.becerra@grupomedios.com');
+		$nombremarca = new Marca();
+		$nombremarca = $nombremarca->find($_id_marca);
+		$nombremarca = $nombremarca->nombre;
+		$content = new SendGrid\Content("text/html", "
+			<h1>Hola, tu lead ha sido rechazado</h1>
+			<p>La marca es: <strong>$nombremarca</strong> </p>
+			<p>El motivo es: <strong>$_motivo</strong></p>
+			<p>Comentarios: <strong>$_comentarios</strong></p>
+		");
+		$mail = new SendGrid\Mail($from, $subject, $to, $content);
+		$apiKey = ('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');
+		$sg = new \SendGrid($apiKey);
+		$sg->client->mail()->send()->post($mail);
+	return $response->withStatus(302)->withHeader('Location', '../../leads.php');
+})->add(new EstablecimientosAuth());
+
+
+/* 
+$_lead = new Lead();
+	$_id_lead = $args['id_lead'];
+	$lead = $_lead->find($_id_lead);
+	$lead->status = '2';
+	$lead->save();
+	return $response->withStatus(302)->withHeader('Location', '../../leads.php');
+*/
+
 $app->get('/rechazarlead/{id_lead}', function($request, $response, $args){
 	$_lead = new Lead();
 	$_id_lead = $args['id_lead'];
@@ -995,6 +1117,23 @@ $app->get('/rechazarlead/{id_lead}', function($request, $response, $args){
 	$lead->save();
 	return $response->withStatus(302)->withHeader('Location', '../../leads.php');
 });
+
+/* STATUS DE LOS LEADS:
+
+	1) pendiente
+	2) rechazado
+	3) aprobado sin contacto
+	4) contactado
+	5) en proceso
+	6) Sí le interesa
+	7) Afiliado
+	8) Finalizado
+	9) No interesado
+	10) Contacto completo
+ 	11) Registro completo
+ */
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Actividades sobre lead /////////////////////////////////////////////////////////////////////////////////////////
@@ -1037,23 +1176,14 @@ $app->post('/insert/actividades', function($request, $response, $args){
 	$_SESSION['que_hare'] = $_que_hare;
 	$_SESSION['comentarios_futura'] = $comentarios_futura;
 	$_SESSION['fecha_futura'] = $_fecha_futura." ".str_replace(" ","",$_hora_futura.":00");
-/*
-	if ($actividad->id) {
-        return $response->withStatus(302)->withHeader('Location', '../../seguimiento-leads.php');
-    } else {
-        return $response->withStatus(400);
-    }
-*/
+
 
     /* GOOGLE API */
     $client = new Google_Client();
 	$client->setAuthConfigFile('client_secret.json');  //file downloaded earlier
  	$client->addScope("https://www.googleapis.com/auth/calendar");
  	$auth_url = $client->createAuthUrl();
- 	//return $response->withStatus(302)->withHeader('Location: ' . filter_var($auth_url, FILTER_SANITIZE_URL));
- 	//echo '<a href="'.filter_var($auth_url, FILTER_SANITIZE_URL).'">Continuar</a>';
  	echo '<script>window.location.href = "'.filter_var($auth_url, FILTER_SANITIZE_URL).'";</script>';
- 	//header('Location: ' . filter_var($auth_url, FILTER_SANITIZE_URL)); 
 
 })->add(new EstablecimientosAuth());
 
@@ -1493,6 +1623,51 @@ $app->post('/insert/llamadas', function($request, $response, $args){
 	$llamada->donde_viste = $_donde_viste;
 	$llamada->status = $_status;
 	$llamada->save();
+	/* ENVÍOS DE CORREO, AFILIACIÓN GERENTE DE CALIDAD, QUEJAS, A USUARIO QUE SE QUEJA */
+	if($_tipo=='Queja Establecimiento'){
+		// PARA USUARIO
+		$from = new SendGrid\Email(null, "CRM@desclub.com.mx");
+		$subject = "Seguimiento de queja sobre descuento en establecimiento";
+		$to = new SendGrid\Email(null, $_email);
+		$nombremarca = new Marca();
+		$nombremarca = $nombremarca->find($_id_marca);
+		$nombremarca = $nombremarca->nombre;
+		$content = new SendGrid\Content("text/html", "
+			<h1>Hola, hemos recibido tu queja y le daremos seguimiento</h1>
+			<p>La marca es: $nombremarca </p>
+			<p>La sucursal es: $_sucursal</p>
+			<p>El folio de tu queja es el: $llamada->id</p>
+			<p>Nombre: $_nombre $_paterno $materno</p>
+			<p>Tipo de tarjeta / Seguro: $_tipo_tarjeta_seguro</p>
+			<p>Queja: $_comentarios</p>
+		");
+		$mail = new SendGrid\Mail($from, $subject, $to, $content);
+		$apiKey = ('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');
+		$sg = new \SendGrid($apiKey);
+		$sg->client->mail()->send()->post($mail);	
+	}
+
+	if($_tipo=='Afiliar establecimiento'){
+		//para Gerente de calidad
+		// PARA USUARIO
+		$from = new SendGrid\Email(null, "CRM@desclub.com.mx");
+		$subject = "Seguimiento de llamada para afiliar establecimiento";
+		$to = new SendGrid\Email(null, "antonio.becerra@grupomedios.com");
+		$content = new SendGrid\Content("text/html", "
+			<h1>Hola, hubo un contacto para afiliarse a desclub</h1>
+			<p>El folio de la llamada es el: $llamada->id</p>
+			<p>Nombre: $_nombre $_paterno $materno</p>
+			<p>Marca: $_marca</p>
+			<p>Sucursal: $_sucursal</p>
+		");
+		$mail = new SendGrid\Mail($from, $subject, $to, $content);
+		$apiKey = ('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');
+		$sg = new \SendGrid($apiKey);
+		$sg->client->mail()->send()->post($mail);	
+	}
+
+
+
 	return $response->withStatus(302)->withHeader('Location', '../../call-center.php');
 })->add(new EstablecimientosAuth());
 
@@ -1687,6 +1862,8 @@ $app->post('/insert/etapa1', function($request, $response, $args){
 		$_conoce_programa = false;
 	}
 	$_cual_programa = $request->getParsedBodyParam('cual_programa', '');
+	$_latitud= $request->getParsedBodyParam('latitud', '');
+	$_longitud= $request->getParsedBodyParam('longitud', '');
 	$etapa1 = new Etapauno();
 	$etapa1->id_ruta = $_id_ruta;
 	$etapa1->pasaje = $_pasaje;
@@ -1698,6 +1875,8 @@ $app->post('/insert/etapa1', function($request, $response, $args){
 	$etapa1->cual_calc_otras = $_cual_calc_otras;
 	$etapa1->conoce_programa = $_conoce_programa;
 	$etapa1->cual_programa = serialize($_cual_programa);
+	$etapa1->latitud = $_latitud;
+	$etapa1->longitud = $_longitud;
 	$etapa1->save();
 
 	$ruta = new Ruta();
@@ -1781,6 +1960,8 @@ $app->post('/insert/etapa2', function($request, $response, $args){
 	$_c3_tel = $request->getParsedBodyParam('c3_tel','');
 	$_c3_correo = $request->getParsedBodyParam('c3_correo','');
 	$_c3_forma_contacto = $request->getParsedBodyParam('c3_forma_contacto','');
+	$_latitud= $request->getParsedBodyParam('latitud', '');
+	$_longitud= $request->getParsedBodyParam('longitud', '');
 
 	$etapa2 = new Etapados();
 	$etapa2->id_ruta = $_id_ruta;
@@ -1826,6 +2007,9 @@ $app->post('/insert/etapa2', function($request, $response, $args){
 	$etapa2->c3_correo = $_c3_correo;
 	$etapa2->c3_forma_contacto = $_c3_forma_contacto;
 
+	$etapa2->latitud = $_latitud;
+	$etapa2->longitud = $_longitud;
+	
 	$etapa2->save();
 
 	$ruta = new Ruta();
@@ -1854,6 +2038,8 @@ $app->post('/insert/etapa3', function($request, $response, $args){
 	$_id_ruta = $request->getParsedBodyParam('id_ruta','');
 	$_tipo_foto = $request->getParsedBodyParam('tipo_foto','');
 	$_descripcion = $request->getParsedBodyParam('descripcion','');
+	$_latitud= $request->getParsedBodyParam('latitud', '');
+	$_longitud= $request->getParsedBodyParam('longitud', '');
 	$_foto = $imagepath;
 
 	$etapa3 = new Etapatres();
@@ -1861,6 +2047,8 @@ $app->post('/insert/etapa3', function($request, $response, $args){
 	$etapa3->tipo_foto = $_tipo_foto;
 	$etapa3->descripcion = $_descripcion;
 	$etapa3->foto = $_foto;
+	$etapa3->latitud = $_latitud;
+	$etapa3->longitud = $_longitud;
 	
 	$etapa3->save();
 
@@ -2024,7 +2212,6 @@ $app->post('/insert/reservaciones', function($request, $response, $args){
 	$_personas = $request->getParsedBodyParam('personas','');
 	$_area = $request->getParsedBodyParam('area','');
 	$_clave = $request->getParsedBodyParam('clave','');
-	$_nombre = $request->getParsedBodyParam('nombre','');
 	$_tolerancia = $request->getParsedBodyParam('tolerancia','');
 	$_se_logro_reservacion = $request->getParsedBodyParam('se_logro_reservacion','');
 
@@ -2036,7 +2223,6 @@ $app->post('/insert/reservaciones', function($request, $response, $args){
 	$reservacion->personas = $_personas;
 	$reservacion->area = $_area;
 	$reservacion->clave = $_clave;
-	$reservacion->nombre = $_nombre;
 	$reservacion->tolerancia = $_tolerancia;
 	$reservacion->se_logro_reservacion = $_se_logro_reservacion;
 

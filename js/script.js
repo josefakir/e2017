@@ -1,11 +1,13 @@
 $(document).ready(function(){
-	var URL_API = "http://localhost/est/api/";
+	//var URL_API = "http://localhost/est/api/";
 	var URL_API = "http://b0ld.net/b0ld.net/bluegeni_dondeir/api/";
 
 
 	$('.menu-item-link').click(function(e){
-		e.preventDefault();
-		$(this).parent().next('.submenu').slideToggle();
+		if($(this).attr('id')!="cerrarsesion"){
+			e.preventDefault();
+			$(this).parent().next('.submenu').slideToggle();
+		}
 	});
 
 	abierto = 0;
@@ -68,6 +70,9 @@ $(document).ready(function(){
 	 	$('#overlay_bienvenida').fadeOut('fast');
 	 	$('#overlay_geolocalizacion').fadeOut('fast');
 	 	$('#overlay_detalles_llamada_nueva').fadeOut('fast');
+	 	$('#overlay_ruta_calidad').fadeOut('fast');
+	 	$('#overlay_aprobarlead').fadeOut('fast');
+	 	$('#overlay_rechazarlead').fadeOut('fast');
 
 	 });
 	 $( ".datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
@@ -246,6 +251,14 @@ $(document).ready(function(){
 	 	}
 	 	campos = $(':input:visible');
 	 });
+	 $('#id_proyecto').change(function(){
+	 	if($(this).val()==8){
+	 		$('#tipo_tarjeta_seguro').parent().css('display','block');
+	 	}else{
+	 		$('#tipo_tarjeta_seguro').parent().css('display','none');
+	 	}
+
+	 });
 	 $('.actividad_llamada').click(function(e){
 	 	e.preventDefault();
 	 	$('#a_id_llamada').val($(this).attr('rel'));
@@ -302,15 +315,82 @@ $(document).ready(function(){
 	 });
 	 $('#select_zona').change(function(){
 	 	$.ajax({
-	 		url : URL_API+'sucursales_para_calidad/'+$('#select_estado').val()+'/'+$(this).val(),
+	 		beforeSend : function(){
+	 			$('#cargandorutas').show();
+	 			$('#my-select').html('');
+				$('#my-select').multiSelect('refresh');
+				$('#mensajerutas').html('');
+	 		},
+	 		url : URL_API+'sucursales_para_calidad/'+$('#select_estado').val()+'/'+$(this).val()+'/'+$('#id_proyecto').val()+'/'+$('#select_tipo_ruta').val(),
+	 		success : function(data){
+	 			output = '';
+	 			if(data.length==0){
+	 				output += 'No encontramos sucursales';
+	 				$('#mensajerutas').html(output);
+	 				$('#cargandorutas').hide();
+	 			}else{
+	 				$.each( data, function( key, value ) {
+	 					output += '<option value="'+value.id_sucursal+'">'+value.sucursal+'</option>';
+		 			});
+		 			$('#my-select').html(output);
+		 			$('#my-select').multiSelect('refresh');
+		 			$('#cargandorutas').hide();
+	 			}
+	 		},error: function (error) {
+                  alert('Seleccione estado, zona, tipo de ruta y proyecto para buscar la sucursal');
+            }
+	 	})
+	 });
+	 $('.btn_detalles_calidad').click(function(e){
+	 	e.preventDefault();
+	 	var id_ruta = $(this).attr('rel');
+	 	//body_detalles_ruta_calidad
+	 	$.ajax({
+	 		url : URL_API+'ruta_calidad/'+id_ruta,
 	 		success : function(data){
 	 			output = '';
 	 			$.each( data, function( key, value ) {
-	 				output += '<option value="'+value.id+'">'+value.nombre+'</option>';
-	 			});
-	 			$('#my-select').html(output);
-	 			$('#my-select').multiSelect('refresh');
+					output += '<tr><td></td><td>'+value.proyecto.nombre+'</td><td>'+value.referencia+'</td><td>'+value.efectivo+'</td><td>'+value.tarjeta+'</td><td>'+value.promo+'</td><td>'+value.inicio_actividades+'-'+value.fin_actividades+'</td></tr>';
+		 		});
+		 		$('#body_detalles_ruta_calidad').html(output);
+		 		$('#overlay_ruta_calidad').fadeIn('fast');
 	 		}
 	 	})
-	 })
+	 });
+	 $('#select_id_categoria').change(function(){
+	 	if( $(this).find('option:selected').text() == "RESTAURANTES"){
+	 		$('#esconder_tipo_de_comida').show();
+	 	}else{
+	 		$('#esconder_tipo_de_comida').hide();
+	 	}
+	 });
+	 $('#select_status_lead').change(function(){
+	 	if($(this).val()=='9'){
+	 		$('#esconder_futura').hide();
+	 	}else{
+	 		$('#esconder_futura').show();
+	 	}
+	 });
+	 $('.btn_aprobar_lead').click(function(e){
+	 	e.preventDefault();
+	 	$('#id_marca').val($(this).attr('rel'));
+	 	$('#id_lead').val($(this).attr('rel-lead'));
+	 	$('#overlay_aprobarlead').fadeIn('fast');
+	 	$('#select_categoria_aprobar').val($(this).attr('rel-categoria'));
+	 	$('#select_categoria_aprobar').trigger('change.select2');
+
+	 	$('#select_importancia_aprobar').val($(this).attr('rel-importancia'));
+	 	$('#select_importancia_aprobar').trigger('change.select2');
+
+	 	$('#select_presencia_aprobar').val($(this).attr('rel-presencia'));
+	 	$('#select_presencia_aprobar').trigger('change.select2');
+
+	 	$('#input_comentarios_aprobar').val($(this).attr('rel-comentarios'));
+	 });
+	 $('.btn_rechazar_lead').click(function(e){
+	 	e.preventDefault();
+	 	$('#id_marca_r').val($(this).attr('rel'));
+	 	$('#id_lead_r').val($(this).attr('rel-lead'));
+	 	$('#overlay_rechazarlead').fadeIn('fast');
+	 });
 });

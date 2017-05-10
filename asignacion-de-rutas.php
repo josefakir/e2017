@@ -9,17 +9,17 @@ include('header.php'); ?>
 		<div class="formulario" style="display: block; width: 50%">
 				<div class="form-group">
 					<label>Tipo de ruta</label>
-					<select name="tipo_ruta" id="" style="width: 100%" required>
-						<option value="">Seleccione</option>
-						<option value="Sucursales nuevas">Sucursales nuevas</option>
-						<option value="Renovación">Renovación</option>
-						<option value="Supervisión">Supervisión</option>
-						<option value="Nunca Visitadas">Nunca Visitadas</option>
+					<select name="tipo_ruta" id="select_tipo_ruta" style="width: 100%" required>
+						<option value="">Seleccione</option>						
+						<option value="A">A</option>						
+						<option value="AA">AA</option>						
+						<option value="AAA">AAA</option>						
+						<option value="VIP">VIP</option>
 					</select>
 				</div>
 				<div class="form-group">
 					<label>Proyecto</label>
-					<select name="id_proyecto" id="" style="width: 100%" >
+					<select name="id_proyecto" id="id_proyecto" style="width: 100%" >
 						<option value="">Seleccione</option>
 						<?php 
 							$ch = curl_init(); 
@@ -96,7 +96,10 @@ include('header.php'); ?>
 				<!--<button type="submit" class="btn btn-primary">Insertar</button>-->
 		</div>
 		<div class="registros" style="width: 48%; float: left; margin-left: 2%">
+
 			<h2>Haga click en la sucursal para asignarla: </h2>
+			<div id="cargandorutas"><img src="img/spinner.gif" alt=""> Cargando<br><br></div>
+			<div id="mensajerutas"></div>
 			 <select multiple="multiple" id="my-select" name="sucursales[]" class="multiselect">
 		      
 		    </select>

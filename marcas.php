@@ -11,8 +11,10 @@ include('header.php'); ?>
 					<input type="text" class="form-control" placeholder="Nombre" name="nombre" minlength="2"  required>
 				</div>
 				<div class="form-group">
-				<select name="id_categoria" id="" style="width: 100%" >
-						<option value="">Categoría</option>
+				<label for="exampleInputEmail1">Categoría</label>
+				<select name="id_categoria" id="select_id_categoria" style="width: 100%" >
+				
+						<option value="">Seleccione</option>
 						<?php 
 							$ch = curl_init(); 
 							curl_setopt($ch, CURLOPT_URL, URL_API."categorias"); 
@@ -28,8 +30,9 @@ include('header.php'); ?>
 				</select>
 				</div>
 				<div class="form-group">
+				<label for="exampleInputEmail1">Categoría VIVE</label>
 				<select name="id_categoria_vive" id="" style="width: 100%" >
-						<option value="">Categoría Vive</option>
+						<option value="">Seleccione</option>
 						<?php 
 							$ch = curl_init(); 
 							curl_setopt($ch, CURLOPT_URL, URL_API."categoriasvive"); 
@@ -62,8 +65,13 @@ include('header.php'); ?>
 				</select>
 				</div>-->
 				<div class="form-group">
+				<label for="exampleInputEmail1">Taxonomías</label>
+					<input type="text" class="form-control" placeholder="Taxonomías separadas por coma" name="taxonomias">
+				</div>
+				<div class="form-group" id="esconder_tipo_de_comida">
+				<label for="exampleInputEmail1">Tipo de comida</label>
 				<select name="id_tipoDeComida" id="" style="width: 100%" >
-						<option value="">Tipo de comida</option>
+					<option value="">Seleccione</option>
 						<?php 
 							$ch = curl_init(); 
 							curl_setopt($ch, CURLOPT_URL, URL_API."tiposdecomida"); 

@@ -9,7 +9,8 @@ include('header.php'); ?>
 				<h2>Folio: <span id="folio"><img src="img/spinner.gif" alt=""></span></h2>
 				<div class="form-group">
 				<label for="exampleInputEmail1">Proyecto</label>
-				<select name="id_proyecto" id="" style="width: 100%" >
+				<select name="id_proyecto" id="id_proyecto" style="width: 100%" >
+					<option value="">Seleccione</option>
 						<?php 
 							$ch = curl_init(); 
 							curl_setopt($ch, CURLOPT_URL, URL_API."proyectos"); 
@@ -48,7 +49,7 @@ include('header.php'); ?>
 				</div>
 				<div class="form-group info_plataforma queja_est">
 					<label for="exampleInputEmail1">Tipo de tarjeta / Seguro</label>
-					<select name="tipo_tarjeta_seguro" id="tipo_" style="width: 100%" >
+					<select name="tipo_tarjeta_seguro" id="tipo_tarjeta_seguro" style="width: 100%" >
 						<option value="">Seleccione</option>
 						<option value='Auto - Seguro'>Auto - Seguro</option>
 						<option value='Azul'>Azul</option>
