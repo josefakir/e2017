@@ -7,23 +7,23 @@ include('header.php'); ?>
 		<div class="formulario">
 			<form class='validation-form'  action="api/insert/reservaciones" method="post" enctype="multipart/form-data">
 				<div class="form-group">
-					<label for="exampleInputEmail1">Restaurante</label>
+					<label>Restaurante</label>
 					<input type="text" class="form-control" placeholder="Restaurante" name="restaurante" required>
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Mesa a nombre de</label>
+					<label>Mesa a nombre de</label>
 					<input type="text" class="form-control" placeholder="Mesa a nombre de" name="mesa_a_nombre_de" required>
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Fecha</label>
+					<label>Fecha</label>
 					<input type="text" class="form-control datepicker" placeholder="Fecha" name="fecha" required>
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Hora</label>
+					<label>Hora</label>
 					<input type="text" class="form-control" placeholder="Hora" name="hora" required>
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Número de personas</label>
+					<label>Número de personas</label>
 					<select name="personas" style="width: 200px">
 						<?php 
 							for($i=1; $i<21; $i++){
@@ -35,19 +35,23 @@ include('header.php'); ?>
 					</select>
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Área</label>
+					<label>Área</label>
 					<input type="text" class="form-control" placeholder="Área" name="area" required>
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Clave</label>
+					<label>Clave</label>
 					<input type="text" class="form-control" placeholder="Clave" name="clave" required>
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Tolerancia</label>
+					<label>Nombre de quien hizo la reservación en el restaurante</label>
+					<input type="text" class="form-control" placeholder="Nombre de quien hizo la reservación en el restaurante" name="quien_reservo" required>
+				</div>
+				<div class="form-group">
+					<label>Tolerancia</label>
 					<input type="text" class="form-control" placeholder="Tolerancia" name="tolerancia" required>
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Se logró la reservación</label>
+					<label>Se logró la reservación</label>
 					<select name="se_logro_reservacion" style="width: 200px">
 						<option value="1">Sí</option>
 						<option value="0">No</option>

@@ -71,6 +71,8 @@ include('header.php'); ?>
 							<option value="Número incorrecto">Número incorrecto</option>
 							<option value="Descompuesto / Sin servicio">Descompuesto / Sin servicio</option>
 							<option value="No tiene teléfono">No tiene teléfono</option>
+							<option value="Teléfono no proporcionado por el comercio">Teléfono no proporcionado por el comercio</option>
+							<option value="Corporativo no permite llamada">Corporativo no permite llamada</option>
 						</select>
 					</div>
 					<div class="form-group" id="conoce_vb">
@@ -302,7 +304,7 @@ include('header.php'); ?>
 
 					<div class="form-group" id="nombre_atendio">
 						<label for="">Nombre de la persona que atendió</label>
-						<input type="text" class="form-control" placeholder="Nombre" name="nombre_atendio" minlength="2" type="text" required>
+						<input type="text" class="form-control" placeholder="Nombre" name="nombre_atendio">
 					</div>
 					<div class="form-group" id="cargo_atendio">
 						<label for="">Cargo de persona que atendió</label>
@@ -314,6 +316,10 @@ include('header.php'); ?>
 							<option value="Administración">Administración</option>
 							<option value="Otro">Otro</option>
 						</select>
+					</div>
+					<div class="form-group">
+						<label for="">Descripción</label>
+						<textarea name="descripcion_llamada_b" id="" cols="30" rows="10"></textarea>
 					</div>
 				<input type="hidden" name="id_sucursal" id="id_sucursal">
 				<button type="submit" class="btn btn-primary">Actualizar</button>
@@ -334,7 +340,7 @@ include('header.php'); ?>
 					<h3>Marca: <span id="nombre_marca"></span></h3>
 					<h4>Sucursal: <span id="nombre_sucursal"></span></h4>
 					<div class="form-group">
-					<label for="exampleInputEmail1">Zona</label>
+					<label>Zona</label>
 					<select name="id_zona" style="width: 100%" id="c_id_zona" >
 						<option value="">Zona</option>
 						<?php 
@@ -352,16 +358,16 @@ include('header.php'); ?>
 					</select>
 					</div>
 					<div class="form-group">
-					<label for="exampleInputEmail1">Latitud</label>
-					<input type="text" class="form-control" placeholder="Latitud" name="latitud" minlength="2" type="text" required id="c_latitud">
+					<label>Latitud</label>
+					<input type="text" class="form-control" placeholder="Latitud" name="latitud" id="c_latitud">
 					</div>
 					<div class="form-group">
-					<label for="exampleInputEmail1">Longitud</label>
-					<input type="text" class="form-control" placeholder="Longitud" name="longitud" minlength="2" type="text" required id="c_longitud">
+					<label>Longitud</label>
+					<input type="text" class="form-control" placeholder="Longitud" name="longitud" id="c_longitud">
 					</div>
 					<div class="form-group">
-					<label for="exampleInputEmail1">Referencia</label>
-					<input type="text" class="form-control" placeholder="Referencia" name="referencia" minlength="2" type="text" required id="c_referencia">
+					<label>Referencia</label>
+					<input type="text" class="form-control" placeholder="Referencia" name="referencia" id="c_referencia">
 					</div>
 				<input type="hidden" name="id_sucursal" id="id_sucursal_geo">
 				<button type="submit" class="btn btn-primary">Actualizar</button>

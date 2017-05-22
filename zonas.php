@@ -7,7 +7,7 @@ include('header.php'); ?>
 		<div class="formulario">
 			<form class='validation-form'  action="api/insert/zonas" method="post" enctype="multipart/form-data">
 				<div class="form-group">
-					<label for="exampleInputEmail1">Estado</label>
+					<label>Estado</label>
 					<select name="id_estado" id="" style="width: 100%" >
 						<?php 
 							$ch = curl_init(); 
@@ -24,8 +24,8 @@ include('header.php'); ?>
 					</select>
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Nombre</label>
-					<input type="text" class="form-control" placeholder="Nombre" name="nombre" minlength="2" type="text" required>
+					<label>Nombre</label>
+					<input type="text" class="form-control" placeholder="Nombre" name="nombre">
 				</div>
 				<button type="submit" class="btn btn-primary">Insertar</button>
 			</form>

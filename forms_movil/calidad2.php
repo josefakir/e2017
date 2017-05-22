@@ -16,6 +16,7 @@ include("../auth.php");
 	<link rel="stylesheet" href="css/my-app.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+	<script src="../js/jquery.validate.min.js"></script>
 	<script>
 		function success(pos) {
  	 		var crd = pos.coords;
@@ -27,6 +28,7 @@ include("../auth.php");
 			posicion = navigator.geolocation.getCurrentPosition(success);
        	}
 		$(document).ready(function(){
+			$('.validation-form').validate({});
 			$('#select1').change(function(){
 				if($(this).val()=="Sí"){
 					$('.abre_s1_no').addClass('disabled');
@@ -86,6 +88,15 @@ include("../auth.php");
 	</script>
 </head>
 <body>
+<?php 
+	$ch = curl_init(); 
+	curl_setopt($ch, CURLOPT_URL, URL_API."no_afiliacion_ruta_sucursal/".$_GET['id']); 
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+	$output = json_decode(curl_exec($ch)); 
+	curl_close($ch); 
+	$no_afiliacion = $output->no_afiliacion;
+	$banco_adquiriente = $output->banco_adquiriente;
+?>
 	<div class="statusbar-overlay"></div>
 	<div class="panel-overlay"></div>
 	<div class="views">
@@ -106,7 +117,7 @@ include("../auth.php");
 					<div class="page-content">
 						<div class="list-block">
 							<ul>
-								<form action="../api/insert/etapa2" method="post">
+								<form action="../api/insert/etapa2" method="post" class="validation-form">
 									<li>
 										<label class="item-content">¿El gerente o encargado que atiende conoce el programa?</label>
 										<div class="item-content">
@@ -127,6 +138,12 @@ include("../auth.php");
 											<div class="item-media">Por qué?</div>
 											<div class="item-inner">
 												<div class="item-input">
+													<select name="porque_no_conoce">
+														<option>Seleccione</option>
+														<option value="Cambiaron de administración y desconocen el convenio">Cambiaron de administración y desconocen el convenio</option>
+														<option value="Corporativo no ha enviado información">Corporativo no ha enviado información</option>
+														<option value="El dueño o gerente no autorizó el descuento">El dueño o gerente no autorizó el descuento</option>
+													</select>
 													<input type="text" placeholder="" name="porque_no_conoce" >
 												</div>
 											</div>
@@ -479,8 +496,6 @@ include("../auth.php");
 										<select name="proyectos_capacitaste[]" multiple>
 											<option value="honda">Desclub</option>
 											<option value="lexus">Vida Bancomer</option>
-											<option value="mazda">Otra</option>
-											<option value="nissan">Otra 2</option>
 										</select>
 										<div class="item-content">
 											<div class="item-inner">
@@ -496,17 +511,17 @@ include("../auth.php");
 												<div class="item-input">
 													<select id="select5" name="banco_adquiriente">
 														<option>Seleccione</option>
-														<option value="Banamex">Banamex</option>
-														<option value="Banco del Bajío">Banco del bajío</option>
-														<option value="Banorte">Banorte</option>
-														<option value="BBVA">BBVA</option>
-														<option value="HSBC">HSBC</option>
-														<option value="Inbursa">Inbursa</option>
-														<option value="IXE">IXE</option>
-														<option value="Mifel">Mifel</option>
-														<option value="Multiva">Multiva</option>
-														<option value="Santander">Santander</option>
-														<option value="Scotiabank">Scotiabank</option>
+														<option value="Banamex" <?php if($banco_adquiriente=='Banamex'){ echo ' selected '; } ?>>Banamex</option>
+														<option value="Banco del Bajío"  <?php if($banco_adquiriente=='Banco del Bajío'){ echo ' selected '; } ?>>Banco del bajío</option>
+														<option value="Banorte"  <?php if($banco_adquiriente=='Banorte'){ echo ' selected '; } ?>>Banorte</option>
+														<option value="BBVA"  <?php if($banco_adquiriente=='BBVA'){ echo ' selected '; } ?>>BBVA</option>
+														<option value="HSBC"  <?php if($banco_adquiriente=='HSBC'){ echo ' selected '; } ?>>HSBC</option>
+														<option value="Inbursa"  <?php if($banco_adquiriente=='Inbursa'){ echo ' selected '; } ?>>Inbursa</option>
+														<option value="IXE"  <?php if($banco_adquiriente=='IXE'){ echo ' selected '; } ?>>IXE</option>
+														<option value="Mifel"  <?php if($banco_adquiriente=='Mifel'){ echo ' selected '; } ?>>Mifel</option>
+														<option value="Multiva"  <?php if($banco_adquiriente=='Multiva'){ echo ' selected '; } ?>>Multiva</option>
+														<option value="Santander"  <?php if($banco_adquiriente=='Santander'){ echo ' selected '; } ?>>Santander</option>
+														<option value="Scotiabank"  <?php if($banco_adquiriente=='Scotiabank'){ echo ' selected '; } ?>>Scotiabank</option>
 													</select>
 												</div>
 											</div>
@@ -532,7 +547,7 @@ include("../auth.php");
 											<div class="item-media">Número de afiliación</div>
 											<div class="item-inner">
 												<div class="item-input">
-													<input type="text" placeholder="Número de afiliacion" name="no_afiliacion">
+													<input type="text" placeholder="Número de afiliacion" name="no_afiliacion" value="<?php echo $no_afiliacion ?>">
 												</div>
 											</div>
 										</div>
@@ -553,7 +568,7 @@ include("../auth.php");
 																	<div class="item-media">Nombre</div>
 																	<div class="item-inner">
 																		<div class="item-input">
-																			<input type="text" placeholder="Nombre"  name="c1_nombre">
+																			<input type="text" placeholder="Nombre"  name="c1_nombre" required>
 																		</div>
 																	</div>
 																</div>
@@ -564,7 +579,7 @@ include("../auth.php");
 																	<div class="item-media"><i class="fa fa-building" aria-hidden="true"></i></div>
 																	<div class="item-inner">
 																		<div class="item-input">
-																			<select name="c1_puesto">
+																			<select name="c1_puesto" required>
 																				<option>Seleccione</option>
 																				<option value="No">Gerente - Propietario -Director</option>
 																				<option value="Sí">Encargado - Administrador - Supervisor - Capitán de meseros</option>
@@ -581,7 +596,7 @@ include("../auth.php");
 																	<div class="item-media">Teléfono</div>
 																	<div class="item-inner">
 																		<div class="item-input">
-																			<input type="text" placeholder="Teléfono" name="c1_tel">
+																			<input type="text" placeholder="Teléfono" name="c1_tel" required>
 																		</div>
 																	</div>
 																</div>
@@ -591,7 +606,7 @@ include("../auth.php");
 																	<div class="item-media">Correo electrónico</div>
 																	<div class="item-inner">
 																		<div class="item-input">
-																			<input type="text" placeholder="Correo electrónico" name="c1_correo">
+																			<input type="text" placeholder="Correo electrónico" name="c1_correo" required>
 																		</div>
 																	</div>
 																</div>
@@ -602,7 +617,7 @@ include("../auth.php");
 																	<div class="item-media"><i class="fa fa-building" aria-hidden="true"></i></div>
 																	<div class="item-inner">
 																		<div class="item-input">
-																			<select name="c1_forma_contacto">
+																			<select name="c1_forma_contacto" required>
 																				<option>Seleccione</option>
 																				<option value="">SMS</option>
 																				<option value="">EMAIL</option>
@@ -629,7 +644,7 @@ include("../auth.php");
 																	<div class="item-media">Nombre</div>
 																	<div class="item-inner">
 																		<div class="item-input">
-																			<input type="text" placeholder="Nombre"  name="c2_nombre">
+																			<input type="text" placeholder="Nombre"  name="c2_nombre" required>
 																		</div>
 																	</div>
 																</div>
@@ -640,7 +655,7 @@ include("../auth.php");
 																	<div class="item-media"><i class="fa fa-building" aria-hidden="true"></i></div>
 																	<div class="item-inner">
 																		<div class="item-input">
-																			<select name="c2_puesto">
+																			<select name="c2_puesto" required>
 																				<option>Seleccione</option>
 																				<option value="No">Gerente - Propietario -Director</option>
 																				<option value="Sí">Encargado - Administrador - Supervisor - Capitán de meseros</option>
@@ -657,7 +672,7 @@ include("../auth.php");
 																	<div class="item-media">Teléfono</div>
 																	<div class="item-inner">
 																		<div class="item-input">
-																			<input type="text" placeholder="Teléfono" name="c2_tel">
+																			<input type="text" placeholder="Teléfono" name="c2_tel" required>
 																		</div>
 																	</div>
 																</div>
@@ -667,7 +682,7 @@ include("../auth.php");
 																	<div class="item-media">Correo electrónico</div>
 																	<div class="item-inner">
 																		<div class="item-input">
-																			<input type="text" placeholder="Correo electrónico" name="c2_correo">
+																			<input type="text" placeholder="Correo electrónico" name="c2_correo" required>
 																		</div>
 																	</div>
 																</div>
@@ -678,7 +693,7 @@ include("../auth.php");
 																	<div class="item-media"><i class="fa fa-building" aria-hidden="true"></i></div>
 																	<div class="item-inner">
 																		<div class="item-input">
-																			<select name="c2_forma_contacto">
+																			<select name="c2_forma_contacto" required>
 																				<option>Seleccione</option>
 																				<option value="">SMS</option>
 																				<option value="">EMAIL</option>

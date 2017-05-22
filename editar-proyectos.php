@@ -14,8 +14,8 @@ include('header.php'); ?>
 		?>
 			<form class='validation-form'  action="api/update/proyectos" method="post" enctype="multipart/form-data">
 				<div class="form-group">
-					<label for="exampleInputEmail1">Nombre</label>
-					<input type="text" class="form-control" placeholder="Nombre" name="nombre" value="<?php echo $output->nombre ?>"  minlength="2" type="text" required>
+					<label>Nombre</label>
+					<input type="text" class="form-control" placeholder="Nombre" name="nombre" value="<?php echo $output->nombre ?>" >
 					<input type="hidden" class="form-control" placeholder="Nombre" name="id" value="<?php echo $_GET['id'] ?>">
 				</div>
 				<button type="submit" class="btn btn-primary">Actualizar</button>

@@ -4,3 +4,4 @@ i{ color: rgba(0, 158, 223, 1)}
 .back.link{color: #fff; text-decoration: none}
 .disabled{color: #e2e0e0}
 .back.link .icon.icon-back{color: #fff;}
+label.error{color: red}

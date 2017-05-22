@@ -1,7 +1,8 @@
-$(document).ready(function(){
-	//var URL_API = "http://localhost/est/api/";
-	var URL_API = "http://b0ld.net/b0ld.net/bluegeni_dondeir/api/";
 
+$(document).ready(function(){
+	var URL_API = "http://localhost/est/api/";
+	//var URL_API = "http://b0ld.net/b0ld.net/bluegeni_dondeir/api/";
+	
 
 	$('.menu-item-link').click(function(e){
 		if($(this).attr('id')!="cerrarsesion"){
@@ -77,6 +78,7 @@ $(document).ready(function(){
 	 });
 	 $( ".datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
 	 $('.timepicker').wickedpicker({
+	 	now: "00:00",
 	 	title: 'Seleccione la hora (formato 24hrs)', 
 	 	twentyFour: true
 	 });
@@ -253,7 +255,10 @@ $(document).ready(function(){
 	 });
 	 $('#id_proyecto').change(function(){
 	 	if($(this).val()==8){
-	 		$('#tipo_tarjeta_seguro').parent().css('display','block');
+	 		//esconder_llamada_no_valida
+	 		if($('#id_tipo_llamada_1').val()=='Llamada Válida'){
+	 			$('#tipo_tarjeta_seguro').parent().css('display','block');
+	 		}
 	 	}else{
 	 		$('#tipo_tarjeta_seguro').parent().css('display','none');
 	 	}
@@ -344,13 +349,30 @@ $(document).ready(function(){
 	 $('.btn_detalles_calidad').click(function(e){
 	 	e.preventDefault();
 	 	var id_ruta = $(this).attr('rel');
+	 	$('#detalles_ruta_calidad_id_ruta').val(id_ruta);
 	 	//body_detalles_ruta_calidad
 	 	$.ajax({
 	 		url : URL_API+'ruta_calidad/'+id_ruta,
 	 		success : function(data){
+	 			if(data[0].acrilicos==1){
+	 				$('.js-switch').trigger('click');
+	 			}
+	 			if(data[0].calcomanias==1){
+	 				$('.js-switch2').trigger('click');
+	 			}
+	 			if(data[0].comdesclub==1){
+	 				$('.js-switch3').trigger('click');
+	 			}
+	 			if(data[0].combbva==1){
+	 				$('.js-switch4').trigger('click');
+	 			}
+	 			if(data[0].reloj==1){
+	 				$('.js-switch5').trigger('click');
+	 			}
+	 			$('input[name="comentarios"]').val(data[0].comentarios_ruta)
 	 			output = '';
 	 			$.each( data, function( key, value ) {
-					output += '<tr><td></td><td>'+value.proyecto.nombre+'</td><td>'+value.referencia+'</td><td>'+value.efectivo+'</td><td>'+value.tarjeta+'</td><td>'+value.promo+'</td><td>'+value.inicio_actividades+'-'+value.fin_actividades+'</td></tr>';
+					output += '<tr><td>'+value.detalles_desclub[0].contacto+'</td><td>'+value.no_afiliacion+'</td><td>'+value.proyecto.nombre+'</td><td>'+value.referencia+'</td><td>'+value.efectivo+'</td><td>'+value.tarjeta+'</td><td>'+value.promo+'</td><td>'+value.inicio_actividades+'-'+value.fin_actividades+'</td></tr>';
 		 		});
 		 		$('#body_detalles_ruta_calidad').html(output);
 		 		$('#overlay_ruta_calidad').fadeIn('fast');
@@ -358,6 +380,7 @@ $(document).ready(function(){
 	 	})
 	 });
 	 $('#select_id_categoria').change(function(){
+	 	//alert($(this).find('option:selected').text());
 	 	if( $(this).find('option:selected').text() == "RESTAURANTES"){
 	 		$('#esconder_tipo_de_comida').show();
 	 	}else{
@@ -393,4 +416,129 @@ $(document).ready(function(){
 	 	$('#id_lead_r').val($(this).attr('rel-lead'));
 	 	$('#overlay_rechazarlead').fadeIn('fast');
 	 });
+
+
+	/* AUTORRELLENADO COLONIAS SEPOMEX */
+	$("#input_cp").on("blur",  function() {
+		var cp = $(this).val();
+		var n = cp.length;
+		if(n!=5){
+			alert('El CP debe constar de 5 dígitos');
+			//$(this).focus();
+		}else{
+			$.ajax({
+				url : URL_API + 'detalles_cp/'+$(this).val(),
+				beforeSend : function(){
+					$('.loading').show();
+				},
+				success : function(data){
+					data = data[0];
+					$('#etiqueta_estado').html(data.estado);
+					$('#etiqueta_municipio').html(data.municipio);
+					$('#etiqueta_colonia').html(data.asentamiento);
+					$('#input_id_estado').val(data.idEstado);
+					$('#input_id_municipio').val(data.idMunicipio);
+					$('#input_id_colonia').val(data.id);
+					$('#select_estado').val(data.idEstado);
+					$('#select_estado').trigger('change.select2');
+					$.ajax({
+				 		url : URL_API + 'zonas_estado/'+data.idEstado,
+				 		success : function(data){
+				 			output = '<option value="">Seleccione</option>';
+				 			$.each( data, function( key, value ) {
+				 				output += '<option value="'+value.id+'">'+value.nombre+'</option>';
+				 			});
+				 			$('#select_zona').html(output);
+				 			$('#select_zona').trigger('change.select2');
+				 		}
+				 	})
+					$('.loading').hide();
+					$('.esconder_cp').fadeIn('fast');
+					$('.loading').hide();
+				}
+			});
+		}	
+	});
+	if($('#contenido').hasClass('editar-sucursales')){
+		$.ajax({
+			url : URL_API + 'detalles_cp/'+$('#input_cp').val(),
+			beforeSend : function(){
+				$('.loading').show();
+			},
+			success : function(data){
+				data = data[0];
+				$('#etiqueta_estado').html(data.estado);
+				$('#etiqueta_municipio').html(data.municipio);
+				$('#etiqueta_colonia').html(data.asentamiento);
+				$('#input_id_estado').val(data.idEstado);
+				$('#input_id_municipio').val(data.idMunicipio);
+				$('#input_id_colonia').val(data.id);
+				$('#select_estado').val(data.idEstado);
+				$('#select_estado').trigger('change.select2');
+				$.ajax({
+			 		url : URL_API + 'zonas_estado/'+data.idEstado,
+			 		success : function(data){
+			 			output = '<option value="">Seleccione</option>';
+			 			$.each( data, function( key, value ) {
+			 				output += '<option value="'+value.id+'">'+value.nombre+'</option>';
+			 			});
+			 			$('#select_zona').html(output);
+			 			$('#select_zona').val($('#select_zona').attr('rel'));
+				$('#select_zona').trigger('change.select2');
+			 		}
+			 	})
+				$('.loading').hide();
+				$('.esconder_cp').fadeIn('fast');
+				$('.loading').hide();
+
+			}
+		});
+	}
+	/*  slider horarios */
+	$('.horario').jRange({
+	    from: 0,
+	    to: 24,
+	    step: 0.5,
+	    format: '%s',
+	    width: 400,
+	    snap: true,
+	    isRange : true,
+	    theme  :"theme-blue"
+	});
+
+
+	$('#apap_select_proyecto').change(function(){
+		if($(this).val()==8){
+			//alert('bancarios')
+		}
+	});
+
+	$('#id_tipo_llamada_1').change(function(){
+		if($(this).val()=='Llamada Válida'){
+			$('.esconder_llamada_no_valida').show();
+		}else{
+			$('.esconder_llamada_no_valida').hide();
+		}
+	});
+	$('#a_acuerdo').change(function(){
+		if($(this).val()=='3'){
+			$('.mostrar_beneficio').show();
+			$('.a_quien_aplica').show();
+			$('.a_quien_aplica select').attr('required','required');
+		}else{
+			$('.mostrar_beneficio').hide();
+			$('.a_quien_aplica select').attr('required','');
+		}
+		if($(this).val()=='4'){
+			$('.mostrar_reembolso').show();
+			$('.a_quien_aplica').show();
+			$('.a_quien_aplica select').attr('required','required');
+		}else{
+			$('.mostrar_reembolso').hide();
+			$('.a_quien_aplica select').attr('required','');
+		}
+		if($(this).val()!='4' && $(this).val()!='3'){
+			$('.a_quien_aplica').hide();
+		}
+	});
 });

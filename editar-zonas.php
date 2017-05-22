@@ -33,8 +33,8 @@ include('header.php'); ?>
 					</select>
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Nombre</label>
-					<input type="text" class="form-control" placeholder="Nombre" name="nombre" value="<?php echo $nombre ?>"  minlength="2" type="text" required>
+					<label>Nombre</label>
+					<input type="text" class="form-control" placeholder="Nombre" name="nombre" value="<?php echo $nombre ?>" >
 					<input type="hidden" class="form-control" placeholder="Nombre" name="id" value="<?php echo $_GET['id'] ?>">
 				</div>
 				<button type="submit" class="btn btn-primary">Actualizar</button>

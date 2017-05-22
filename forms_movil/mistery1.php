@@ -16,6 +16,7 @@
 	<link rel="stylesheet" href="css/my-app.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+	<script src="../js/jquery.validate.min.js"></script>
 	<script>
 		function success(pos) {
  	 		var crd = pos.coords;
@@ -26,7 +27,18 @@
 		if(navigator.geolocation) {
 			posicion = navigator.geolocation.getCurrentPosition(success);
        	}
+       	jQuery.validator.addMethod("notEqual", function(value, element, param) {
+		 return this.optional(element) || value != $(param).val();
+		}, "This has to be different...");
 		$(document).ready(function(){
+			$('.validation-form').validate({
+			});
+			$('.validation-form').submit(function(e) {
+			    if($('#foto1').val()==$('#foto2').val()){
+			    	e.preventDefault();
+			    	alert('La foto 1 y 2 no deben ser la misma');
+			    }
+			});
 			$('#select1').change(function(){
 				if($(this).val()=='Sí'){
 					$('.abre_s1').removeClass('disabled');
@@ -79,7 +91,7 @@
 					<div class="page-content">
 						<div class="list-block">
 							<ul>
-								<form action="../api/insert/mistery1" method="post" enctype="multipart/form-data">
+								<form action="../api/insert/mistery1" method="post" enctype="multipart/form-data" class="validation-form">
 								<li>
 									<div class="item-content">
 										<div class="item-media"><i class="fa fa-money" aria-hidden="true"></i></div>
@@ -108,8 +120,6 @@
 									<select name="tarjetas_presentadas[]" multiple>
 										<option value="DescluB">DescluB</option>
 										<option value="Tarjeta Virtual">Tarjeta Virtual</option>
-										<option value="Cupón">Cupón</option>
-										<option value="Tarjeta Vida Bancomer">Tarjeta Vida Bancomer</option>
 									</select>
 									<div class="item-content">
 										<div class="item-inner">
@@ -138,8 +148,6 @@
 									<select multiple name="cual_calc_desclub[]">
 										<option value="DescluB">DescluB</option>
 										<option value="Tarjeta Virtual">Tarjeta Virtual</option>
-										<option value="Cupón">Cupón</option>
-										<option value="Tarjeta Vida Bancomer">Tarjeta Vida Bancomer</option>
 									</select>
 									<div class="item-content">
 										<div class="item-inner">
@@ -332,7 +340,7 @@
 										<div class="item-media">Foto: </div>
 										<div class="item-inner">
 											<div class="item-input">
-												<input type="file" name="foto1">
+												<input type="file" name="foto1" required id="foto1">
 											</div>
 										</div>
 									</div>
@@ -342,7 +350,7 @@
 										<div class="item-media">Foto: </div>
 										<div class="item-inner">
 											<div class="item-input">
-												<input type="file" name="foto2">
+												<input type="file" name="foto2" required id="foto2">
 											</div>
 										</div>
 									</div>

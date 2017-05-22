@@ -7,9 +7,9 @@ include('header.php'); ?>
 		<div class="formulario">
 			<form class='validation-form'  action="api/insert/leads" method="post" enctype="multipart/form-data">
 				<div class="form-group">
-				<label for="exampleInputEmail1">Empresa</label>
+				<label>Marca</label>
 				<select name="id_marca" id="" style="width: 100%" required>
-						<option value="">Empresa</option>
+						<option value="">Seleccione</option>
 						<?php 
 							$ch = curl_init(); 
 							curl_setopt($ch, CURLOPT_URL, URL_API."marcasaprobadas"); 
@@ -26,12 +26,12 @@ include('header.php'); ?>
 				<p style="margin-top: 5px">¿No encuentras la empresa? Solicita su autorización <a href="autorizaciones.php">Aquí</a></p>
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Nombre</label>
-					<input type="text" class="form-control" placeholder="Nombre" name="nombre" minlength="1" type="text" required>
+					<label>Nombre</label>
+					<input type="text" class="form-control" placeholder="Nombre" name="nombre" minlength="1">
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Número de sucursales</label>
-					<input type="number" class="form-control" placeholder="Número de sucursales" name="numero_de_sucursales" minlength="1" type="text" required>
+					<label>Número de sucursales</label>
+					<input type="number" class="form-control" placeholder="Número de sucursales" name="numero_de_sucursales" minlength="1">
 				</div>
 				<input type="hidden" name="id_usuario" value="<?php echo $_SESSION['id'] ?>">
 				<button type="submit" class="btn btn-primary">Insertar</button>
@@ -99,7 +99,7 @@ include('header.php'); ?>
 					<form class='validation-form2'  action="api/update/aprobarlead" method="post">
 					<h2 style="margin-top: 5px">Aprobar Lead:</h2>
 						<div class="form-group">
-						<label for="exampleInputEmail1">Categoría</label>
+						<label>Categoría</label>
 						<select name="id_categoria" style="width: 100%" id="select_categoria_aprobar">
 						
 								<option value="">Seleccione</option>
@@ -118,7 +118,7 @@ include('header.php'); ?>
 						</select>
 						</div>
 						<div class="form-group">
-						<label for="exampleInputEmail1">Importancia</label>
+						<label>Importancia</label>
 						<select name="importancia" style="width: 100%" id="select_importancia_aprobar">
 							<option value="">Seleccione</option>						
 							<option value="A">A</option>						
@@ -128,7 +128,7 @@ include('header.php'); ?>
 						</select>
 						</div>
 						<div class="form-group">
-						<label for="exampleInputEmail1">Presencia</label>
+						<label>Presencia</label>
 						<select name="presencia" style="width: 100%" id="select_presencia_aprobar">
 							<option value="">Seleccione</option>						
 							<option value="Local">Local</option>						
@@ -137,7 +137,7 @@ include('header.php'); ?>
 						</select>
 						</div>
 						<div class="form-group">
-						<label for="exampleInputEmail1">Comentarios</label>
+						<label>Comentarios</label>
 							<input type="text" class="form-control" placeholder="Comentarios" name="comentarios" id="input_comentarios_aprobar">
 						</div>
 						<input type="hidden" id="id_marca" name="id_marca">
@@ -157,7 +157,7 @@ include('header.php'); ?>
 					<form class='validation-form2'  action="api/update/rechazarlead" method="post">
 					<h2 style="margin-top: 5px">Rechazar Lead:</h2>
 					<div class="form-group">
-						<label for="exampleInputEmail1">Motivo</label>
+						<label>Motivo</label>
 						<select name="motivo" style="width: 100%" id="">
 							<option value="">Seleccione</option>						
 							<option value="Asignado a otro ejecutivo">Asignado a otro ejecutivo</option>						
@@ -166,7 +166,7 @@ include('header.php'); ?>
 						</select>
 						</div>
 						<div class="form-group">
-						<label for="exampleInputEmail1">Comentarios</label>
+						<label>Comentarios</label>
 							<input type="text" class="form-control" placeholder="Comentarios" name="comentarios" id="input_comentarios_aprobar">
 						</div>
 						<input type="hidden" id="id_marca_r" name="id_marca">

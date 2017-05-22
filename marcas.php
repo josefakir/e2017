@@ -7,12 +7,12 @@ include('header.php'); ?>
 		<div class="formulario">
 			<form class='validation-form'  action="api/insert/marcas" method="post" enctype="multipart/form-data">
 				<div class="form-group">
-					<label for="exampleInputEmail1">Nombre</label>
-					<input type="text" class="form-control" placeholder="Nombre" name="nombre" minlength="2"  required>
+					<label>Nombre</label>
+					<input type="text" class="form-control" placeholder="Nombre" name="nombre" required>
 				</div>
 				<div class="form-group">
-				<label for="exampleInputEmail1">Categoría</label>
-				<select name="id_categoria" id="select_id_categoria" style="width: 100%" >
+				<label>Categoría</label>
+				<select name="id_categoria" id="select_id_categoria" style="width: 100%" required>
 				
 						<option value="">Seleccione</option>
 						<?php 
@@ -30,8 +30,8 @@ include('header.php'); ?>
 				</select>
 				</div>
 				<div class="form-group">
-				<label for="exampleInputEmail1">Categoría VIVE</label>
-				<select name="id_categoria_vive" id="" style="width: 100%" >
+				<label>Categoría VIVE</label>
+				<select name="id_categoria_vive" id="" style="width: 100%" required>
 						<option value="">Seleccione</option>
 						<?php 
 							$ch = curl_init(); 
@@ -47,29 +47,12 @@ include('header.php'); ?>
 						?>
 				</select>
 				</div>
-				<!--<div class="form-group">
-				<select name="id_proyecto" id="" style="width: 100%" >
-						<option value="">Proyecto</option>
-						<?php 
-							$ch = curl_init(); 
-							curl_setopt($ch, CURLOPT_URL, URL_API."proyectos"); 
-							curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
-							$output = json_decode(curl_exec($ch)); 
-							curl_close($ch); 
-							foreach($output as $o){
-								?>
-						<option value="<?php echo $o->id ?>"><?php echo $o->nombre ?></option>
-								<?php
-							}
-						?>
-				</select>
-				</div>-->
 				<div class="form-group">
-				<label for="exampleInputEmail1">Taxonomías</label>
+				<label>Taxonomías</label>
 					<input type="text" class="form-control" placeholder="Taxonomías separadas por coma" name="taxonomias">
 				</div>
 				<div class="form-group" id="esconder_tipo_de_comida">
-				<label for="exampleInputEmail1">Tipo de comida</label>
+				<label>Tipo de comida</label>
 				<select name="id_tipoDeComida" id="" style="width: 100%" >
 					<option value="">Seleccione</option>
 						<?php 
@@ -86,40 +69,40 @@ include('header.php'); ?>
 						?>
 				</select>
 				</div>
-				<div class="form-group">
-					<label for="exampleInputEmail1">Web</label>
-					<input type="text" class="form-control" placeholder="Web" name="web" minlength="2" required>
+				<div class="form-group" required>
+					<label>Web</label>
+					<input type="text" class="form-control" placeholder="Web" name="web" required>
+				</div>
+				<div class="form-group" required>
+					<label>Reseña</label>
+					<textarea class="form-control" placeholder="Reseña" name="resena" trequired></textarea>
+				</div>
+				<div class="form-group" required>
+					<label>Extracto</label>
+					<input type="text" class="form-control" placeholder="Extracto" name="extracto" required>
+				</div>
+				<div class="form-group" required>
+					<label>Imagen</label>
+					<input type="file" class="form-control" placeholder="imagen" name="imagen"  required>
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Reseña</label>
-					<textarea class="form-control" placeholder="Reseña" name="resena" minlength="2" trequired></textarea>
+					<label>Autor</label>
+					<input type="text" class="form-control" placeholder="autor" name="autor">
+				</div>
+				<div class="form-group" required>
+					<label>friendlyUrl</label>
+					<input type="text" class="form-control" placeholder="friendlyUrl" name="friendlyUrl"  required>
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Extracto</label>
-					<input type="text" class="form-control" placeholder="Extracto" name="extracto" minlength="2" required>
+					<label>¿Qué lo hace especial?</label>
+					<input type="text" class="form-control" placeholder="especial" name="especial">
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Imagen</label>
-					<input type="file" class="form-control" placeholder="imagen" name="imagen" minlength="2"  required>
+					<label>Url vimeo</label>
+					<input type="text" class="form-control" placeholder="vimeo" name="vimeo">
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Autor</label>
-					<input type="text" class="form-control" placeholder="autor" name="autor" minlength="2" required>
-				</div>
-				<div class="form-group">
-					<label for="exampleInputEmail1">friendlyUrl</label>
-					<input type="text" class="form-control" placeholder="friendlyUrl" name="friendlyUrl" minlength="2"  required>
-				</div>
-				<div class="form-group">
-					<label for="exampleInputEmail1">¿Qué lo hace especial?</label>
-					<input type="text" class="form-control" placeholder="especial" name="especial" minlength="2"required>
-				</div>
-				<div class="form-group">
-					<label for="exampleInputEmail1">Url vimeo</label>
-					<input type="text" class="form-control" placeholder="vimeo" name="vimeo" minlength="2" required>
-				</div>
-				<div class="form-group">
-					<label for="exampleInputEmail1">Logo Desclub</label>
+					<label>Logo Desclub</label>
 					<input type="file" class="form-control" placeholder="logoDesclub" name="logoDesclub">
 				</div>
 				<input type="hidden" name="autorizadaLead" value="false">

@@ -8,9 +8,9 @@ include('header.php');
 		<div class="formulario">
 			<form class='validation-form'  action="api/insert/autorizacion" method="post" enctype="multipart/form-data">
 				<div class="form-group">
-				<label for="exampleInputEmail1">Empresa</label>
+				<label>Marca</label>
 				<select name="id_marca" id="" style="width: 100%" >
-						<option value="">Empresa</option>
+						<option value="">Seleccione</option>
 						<?php 
 							$ch = curl_init(); 
 							curl_setopt($ch, CURLOPT_URL, URL_API."marcassinaprobar"); 

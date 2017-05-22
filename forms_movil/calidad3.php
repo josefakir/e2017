@@ -16,6 +16,12 @@
 	<link rel="stylesheet" href="css/my-app.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+	<script src="../js/jquery.validate.min.js"></script>
+	<script>
+		$(document).ready(function(){
+			$('.validation-form').validate({});
+		})
+	</script>
 	<script>
 		function success(pos) {
  	 		var crd = pos.coords;
@@ -52,7 +58,7 @@
 					<div class="page-content">
 						<div class="list-block">
 							<ul>
-								<form action="../api/insert/etapa3" method="post" enctype="multipart/form-data">
+								<form action="../api/insert/etapa3" method="post" enctype="multipart/form-data" class="validation-form">
 								<li><h5 class="item-content"> Testigo Fotográfico:</h5></li>
 								<li>
 									<label class="item-content">Tipo de foto:</label>
@@ -60,8 +66,8 @@
 										<div class="item-media"><i class="fa fa-building" aria-hidden="true"></i></div>
 										<div class="item-inner">
 											<div class="item-input">
-												<select name="status_establecimiento" id="select1">
-													<option>Seleccione</option>
+												<select  name="status_establecimiento" id="select1" required>
+													<option value="">Seleccione</option>
 													<option value="Fachada">Fachada</option>
 													<option value="Interior">Interior</option>
 												</select>
@@ -74,7 +80,7 @@
 										<div class="item-media">Descripción</div>
 										<div class="item-inner">
 											<div class="item-input">
-												<input type="text" placeholder="" name="descripcion" >
+												<input type="text" placeholder="" name="descripcion" required>
 											</div>
 										</div>
 									</div>
@@ -84,7 +90,7 @@
 										<div class="item-media">Foto</div>
 										<div class="item-inner">
 											<div class="item-input">
-												<input type="file" placeholder="" name="imagen" >
+												<input type="file" placeholder="" name="imagen" required>
 											</div>
 										</div>
 									</div>

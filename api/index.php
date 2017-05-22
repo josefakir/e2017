@@ -10,6 +10,7 @@ use Establecimientos\Models\Actividad;
 use Establecimientos\Models\Autorizacion;
 use Establecimientos\Models\Categoria;
 use Establecimientos\Models\Categoriavive;
+use Establecimientos\Models\Codigo;
 use Establecimientos\Models\Detalledesclub;
 use Establecimientos\Models\Estado;
 use Establecimientos\Models\Etapauno;
@@ -661,7 +662,7 @@ $app->get('/sucursales_para_calidad/{id_estado}/{id_zona}/{id_proyecto}/{tipo_ru
 	$_id_zona = $args['id_zona'];
 	$_id_proyecto = $args['id_proyecto'];
 	$_tipo_ruta = $args['tipo_ruta'];
-	
+	$fecha = date('Y-m-d',strtotime('+30 day')); 
 	$sucursales = Capsule::table('marcas')
             ->join('sucursals', 'marcas.id', '=', 'sucursals.id_marca')
             ->join('promocions', 'marcas.id', '=', 'promocions.id_marca')
@@ -674,13 +675,15 @@ $app->get('/sucursales_para_calidad/{id_estado}/{id_zona}/{id_proyecto}/{tipo_ru
 				"promocions.tarjeta", 
 				"promocions.promo", 
 				"promocions.restricciones",
+				"promocions.inicio_actividades",
+				"promocions.fin_actividades",
 				"proyectos.id  as id_proyecto",
 				"proyectos.nombre  as proyecto",
 				"sucursals.tuvo_llamada_bienvenida",
 				"sucursals.geolocalicacion_revisada",
 				"sucursals.id_estado",
 				"sucursals.id_zona"
-	)->where('promocions.id_proyecto',$_id_proyecto)->where('sucursals.id_estado',$_id_estado)->where('sucursals.id_zona',$_id_zona)->where('marcas.importancia',$_tipo_ruta)->get();
+	)->where('promocions.id_proyecto',$_id_proyecto)->where('sucursals.id_estado',$_id_estado)->where('sucursals.id_zona',$_id_zona)->where('marcas.importancia',$_tipo_ruta)->where('promocions.fin_actividades','>',$fecha   )->get();
     return $response->withStatus(200)->withJson($sucursales);
 });
 
@@ -689,11 +692,21 @@ $app->get('/ruta_calidad/{id_ruta}', function($request, $response, $args){
 	$_id_ruta = $args['id_ruta'];
 	$ruta = new Ruta();
 	$ruta = $ruta->find($_id_ruta);
+	$_acrilicos = $ruta->acrilicos;
+	$_calcomanias = $ruta->calcomanias;
+	$_comdesclub = $ruta->comdesclub;
+	$_combbva = $ruta->combbva;
+	$_reloj = $ruta->reloj;
+	$_comentarios_ruta = $ruta->comentarios;
 	$_id_sucursal = $ruta->id_sucursal;
 	$sucursal = new Sucursal();
 	$sucursal = $sucursal->find($_id_sucursal);
+	$_numero_afiliacion = $sucursal->no_afiliacion;
 	$_referencia = $sucursal->referencia;
 	$_id_marca = $sucursal->id_marca;
+	$_detallesdesclub = new Detalledesclub();
+	$_detallesdesclub = $_detallesdesclub::where('id_marca',$_id_marca)->get();
+	//print_r($_detallesdesclub);
 	$promocion = new Promocion();
 	$payload = [];
 	$promociones = $promocion::where('id_marca',$_id_marca)->get();
@@ -702,6 +715,13 @@ $app->get('/ruta_calidad/{id_ruta}', function($request, $response, $args){
 		$proyecto = new Proyecto();
 		$proyecto = $proyecto->find($p->id_proyecto);
 		$array = array (
+			'acrilicos'=> $_acrilicos,
+			'calcomanias'=> $_calcomanias,
+			'comdesclub'=> $_comdesclub,
+			'combbva'=> $_combbva,
+			'acrilicos'=> $_acrilicos,
+			'reloj'=> $_reloj,
+			'comentarios_ruta'=> $_comentarios_ruta,
 			'efectivo' => $p->efectivo,
 			'tarjeta' => $p->tarjeta,
 			'promo' => $p->promo,
@@ -709,7 +729,9 @@ $app->get('/ruta_calidad/{id_ruta}', function($request, $response, $args){
 			'inicio_actividades' => $p->inicio_actividades,
 			'fin_actividades' => $p->fin_actividades,
 			'referencia' => $_referencia,
-			'proyecto' => $proyecto
+			'proyecto' => $proyecto,
+			'detalles_desclub' => $_detallesdesclub,
+			'no_afiliacion' => $_numero_afiliacion
 		);
 		array_push($payload, $array);
 	}
@@ -743,48 +765,49 @@ $app->get('/sucursales_pormarca/{id}', function($request, $response, $args){
 
 $filter = new FileFilter2();
 $app->post('/insert/sucursales', function($request, $response, $args){
-	$imagepath = '';
-	$files = $request->getUploadedFiles();
-	$newfile = $files['fachada'];
-	if($newfile->getError() === UPLOAD_ERR_OK){
-		$uploadFilename = $newfile->getClientFilename();
-		$newfile->moveTo("assets/images/".$uploadFilename);
-		$imagepath = "assets/images/".$uploadFilename;
-	}
 	$_id_marca = $request->getParsedBodyParam('id_marca', '');
 	$_nombre = $request->getParsedBodyParam('nombre', '');
 	$_telefono = $request->getParsedBodyParam('telefono', '');
+	$_t1_tipo = $request->getParsedBodyParam('t1_tipo', '');
+	$_telefono2 = $request->getParsedBodyParam('telefono2', '');
+	$_t2_tipo = $request->getParsedBodyParam('t2_tipo', '');
 	$_latitud = $request->getParsedBodyParam('latitud', '');
 	$_longitud = $request->getParsedBodyParam('longitud', '');
 	$_referencia = $request->getParsedBodyParam('referencia', '');
 	$_calle = $request->getParsedBodyParam('calle', '');
-	$_colonia = $request->getParsedBodyParam('colonia', '');
 	$_no_ext = $request->getParsedBodyParam('no_ext', '');
 	$_no_int = $request->getParsedBodyParam('no_int', '');
 	$_horarios = $request->getParsedBodyParam('horarios', '');
-	$_fachada = $request->getParsedBodyParam('fachada', '');
 	$_id_estado = $request->getParsedBodyParam('id_estado', '');
+	$_id_municipio = $request->getParsedBodyParam('id_estado', '');
+	$_id_colonia = $request->getParsedBodyParam('id_colonia', '');
 	$_id_zona = $request->getParsedBodyParam('id_zona', '');
 	$_restorando = $request->getParsedBodyParam('restorando', '');
 	$_restaurantes = $request->getParsedBodyParam('restaurantes', '');
+	$_banco_adquiriente = $request->getParsedBodyParam('banco_adquiriente', '');
+	$_no_afiliacion = $request->getParsedBodyParam('no_afiliacion', '');
 	
 	$sucursal = new Sucursal();
 	$sucursal->id_marca = $_id_marca;
 	$sucursal->nombre = $_nombre;
 	$sucursal->telefono = $_telefono;
+	$sucursal->t1_tipo = $_t1_tipo;
+	$sucursal->telefono2 = $_telefono2;
+	$sucursal->t2_tipo = $_t2_tipo;
 	$sucursal->latitud = $_latitud;
 	$sucursal->longitud = $_longitud;
 	$sucursal->referencia = $_referencia;
 	$sucursal->calle = $_calle;
-	$sucursal->colonia = $_colonia;
 	$sucursal->no_ext = $_no_ext;
 	$sucursal->no_int = $_no_int;
 	$sucursal->horarios = $_horarios;
-	$sucursal->fachada = $imagepath;
 	$sucursal->id_estado = $_id_estado;
+	$sucursal->id_municipio = $_id_municipio;
+	$sucursal->id_colonia = $_id_colonia;
 	$sucursal->id_zona = $_id_zona;
 	$sucursal->restorando = $_restorando;
-	$sucursal->restaurantes = $_restaurantes;
+	$sucursal->banco_adquiriente = $_banco_adquiriente;
+	$sucursal->no_afiliacion = $_no_afiliacion;
 	
 	$sucursal->save();
 
@@ -793,7 +816,7 @@ $app->post('/insert/sucursales', function($request, $response, $args){
     } else {
         return $response->withStatus(400);
     }
-})->add(new EstablecimientosAuth())->add($filter);
+})->add(new EstablecimientosAuth());
 
 $app->get('/delete/sucursales/{id}', function($request, $response, $args){
 	$_id = $args['id'];
@@ -809,51 +832,58 @@ $app->get('/delete/sucursales/{id}', function($request, $response, $args){
 
 $app->post('/update/sucursales', function($request, $response, $args){
 
-	$imagepath = '';
-	$files = $request->getUploadedFiles();
-	$newfile = $files['fachada'];
-	if($newfile->getError() === UPLOAD_ERR_OK){
-		$uploadFilename = $newfile->getClientFilename();
-		$newfile->moveTo("assets/images/".$uploadFilename);
-		$imagepath = "assets/images/".$uploadFilename;
-	}
+
 	$_id = $request->getParsedBodyParam('id', '');
 	$_id_marca = $request->getParsedBodyParam('id_marca', '');
 	$_nombre = $request->getParsedBodyParam('nombre', '');
 	$_telefono = $request->getParsedBodyParam('telefono', '');
+	$_t1_tipo = $request->getParsedBodyParam('t1_tipo', '');
+	$_telefono2 = $request->getParsedBodyParam('telefono2', '');
+	$_t2_tipo = $request->getParsedBodyParam('t2_tipo', '');
 	$_latitud = $request->getParsedBodyParam('latitud', '');
 	$_longitud = $request->getParsedBodyParam('longitud', '');
+	$_referencia = $request->getParsedBodyParam('referencia', '');
 	$_calle = $request->getParsedBodyParam('calle', '');
-	$_colonia = $request->getParsedBodyParam('colonia', '');
 	$_no_ext = $request->getParsedBodyParam('no_ext', '');
 	$_no_int = $request->getParsedBodyParam('no_int', '');
 	$_horarios = $request->getParsedBodyParam('horarios', '');
-	$_fachada = $request->getParsedBodyParam('fachada', '');
 	$_id_estado = $request->getParsedBodyParam('id_estado', '');
+	$_id_municipio = $request->getParsedBodyParam('id_estado', '');
+	$_id_colonia = $request->getParsedBodyParam('id_colonia', '');
 	$_id_zona = $request->getParsedBodyParam('id_zona', '');
+	$_cp = $request->getParsedBodyParam('cp', '');
 	$_restorando = $request->getParsedBodyParam('restorando', '');
 	$_restaurantes = $request->getParsedBodyParam('restaurantes', '');
-	$sucursal = Sucursal::find($_id);
-	$sucursal->id_marca = $_id_marca;
+	$_banco_adquiriente = $request->getParsedBodyParam('banco_adquiriente', '');
+	$_no_afiliacion = $request->getParsedBodyParam('no_afiliacion', '');
+
+	$sucursal = new Sucursal();
+	$sucursal = $sucursal->find($_id);
+
 	$sucursal->nombre = $_nombre;
 	$sucursal->telefono = $_telefono;
+	$sucursal->t1_tipo = $_t1_tipo;
+	$sucursal->telefono2 = $_telefono2;
+	$sucursal->t2_tipo = $_t2_tipo;
 	$sucursal->latitud = $_latitud;
 	$sucursal->longitud = $_longitud;
+	$sucursal->referencia = $_referencia;
 	$sucursal->calle = $_calle;
-	$sucursal->colonia = $_colonia;
 	$sucursal->no_ext = $_no_ext;
 	$sucursal->no_int = $_no_int;
 	$sucursal->horarios = $_horarios;
-	if(!empty($imagepath)){
-	$sucursal->fachada = $imagepath;
-	}
 	$sucursal->id_estado = $_id_estado;
+	$sucursal->id_municipio = $_id_municipio;
+	$sucursal->id_colonia = $_id_colonia;
 	$sucursal->id_zona = $_id_zona;
+	$sucursal->cp = $_cp;
+	$sucursal->id_marca = $_id_marca;
+
 	$sucursal->restorando = $_restorando;
 	$sucursal->restaurantes = $_restaurantes;
-	
+	$sucursal->banco_adquiriente = $_banco_adquiriente;
+	$sucursal->no_afiliacion = $_no_afiliacion;
 	$sucursal->save();
-
     if ($sucursal->id) {
         return $response->withStatus(302)->withHeader('Location', '../../editar-sucursales.php?id='.$sucursal->id);
     } else {
@@ -1093,7 +1123,7 @@ $app->post('/update/rechazarlead', function($request, $response, $args){
 			<p>Comentarios: <strong>$_comentarios</strong></p>
 		");
 		$mail = new SendGrid\Mail($from, $subject, $to, $content);
-		$apiKey = ('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');
+		$apiKey = ('');
 		$sg = new \SendGrid($apiKey);
 		$sg->client->mail()->send()->post($mail);
 	return $response->withStatus(302)->withHeader('Location', '../../leads.php');
@@ -1234,6 +1264,7 @@ $app->get('/detallesdesclub/{id_marca}', function($request, $response, $args){
 });
 
 $app->post('/detallesdesclub', function($request, $response, $args){
+	print_r($_POST);
 	$_id_lead = $request->getParsedBodyParam('id_lead', '');
 	$_id_marca = $request->getParsedBodyParam('id_marca', '');
 	$_razon_social = $request->getParsedBodyParam('razon_social', '');
@@ -1261,6 +1292,7 @@ $app->post('/detallesdesclub', function($request, $response, $args){
 
 	$_detallesdesclub = new Detalledesclub();
 	$detalles = $_detallesdesclub::where('id_marca', $_id_marca )->where('id_lead', $_id_lead)->get();
+	print_r($detalles);
 	$detalles[0]->razon_social = $_razon_social;
 	$detalles[0]->RFC = $_rfc;
 	$detalles[0]->contacto = $_contacto;
@@ -1480,7 +1512,7 @@ $app->post('/llamada_bienvenida', function($request, $response, $args){
 	$_tarjetas_desclub = $request->getParsedBodyParam('tarjetas_desclub', '');
 	$_nombre_atendio = $request->getParsedBodyParam('nombre_atendio', '');
 	$_cargo_atendio = $request->getParsedBodyParam('cargo_atendio', '');
-
+	$_descripcion_llamada_b = $request->getParsedBodyParam('descripcion_llamada_b', '');
 
 	$sucursal = new Sucursal();
 	$sucursal = $sucursal->find($_id_sucursal);
@@ -1500,6 +1532,7 @@ $app->post('/llamada_bienvenida', function($request, $response, $args){
 	$sucursal->nombre_atendio = $_nombre_atendio;
 	$sucursal->cargo_atendio = $_cargo_atendio;
 	$sucursal->tuvo_llamada_bienvenida = true;
+	$sucursal->descripcion_llamada_b = $_descripcion_llamada_b;
 	$sucursal->save();
 
     if ($sucursal->id) {
@@ -1570,6 +1603,7 @@ $app->get('/siguienteFolio', function($request, $response, $args){
 
 $app->post('/insert/llamadas', function($request, $response, $args){
 	$_id_proyecto = $request->getParsedBodyParam('id_proyecto', '');
+	$_tipo_llamada_1 = $request->getParsedBodyParam('tipo_llamada_1', '');
 	$_tipo = $request->getParsedBodyParam('tipo', '');
 	$_nombre = $request->getParsedBodyParam('nombre', '');
 	$_paterno = $request->getParsedBodyParam('paterno', '');
@@ -1600,6 +1634,7 @@ $app->post('/insert/llamadas', function($request, $response, $args){
 	$llamada = new Llamada();
 	$llamada->id_proyecto = $_id_proyecto;
 	$llamada->tipo = $_tipo;
+	$llamada->tipo_de_llamada = $_tipo_llamada_1;
 	$llamada->nombre = $_nombre;
 	$llamada->paterno = $_paterno;
 	$llamada->materno = $_materno;
@@ -1642,7 +1677,7 @@ $app->post('/insert/llamadas', function($request, $response, $args){
 			<p>Queja: $_comentarios</p>
 		");
 		$mail = new SendGrid\Mail($from, $subject, $to, $content);
-		$apiKey = ('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');
+		$apiKey = ('');
 		$sg = new \SendGrid($apiKey);
 		$sg->client->mail()->send()->post($mail);	
 	}
@@ -1661,7 +1696,7 @@ $app->post('/insert/llamadas', function($request, $response, $args){
 			<p>Sucursal: $_sucursal</p>
 		");
 		$mail = new SendGrid\Mail($from, $subject, $to, $content);
-		$apiKey = ('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');
+		$apiKey = ('');
 		$sg = new \SendGrid($apiKey);
 		$sg->client->mail()->send()->post($mail);	
 	}
@@ -1681,12 +1716,18 @@ $app->post('/insert/seguimiento', function($request, $response, $args){
 
 	$_id_llamada = $request->getParsedBodyParam('a_id_llamada', '');
 	$_id_usuario = $request->getParsedBodyParam('a_id_usuario', '');
+	$_a_que_beneficio = $request->getParsedBodyParam('a_que_beneficio', '');
+	$_a_monto = $request->getParsedBodyParam('a_monto', ''); 
+	$_a_quien_aplica = $request->getParsedBodyParam('a_quien_aplica', ''); 
 	$_comentarios = $request->getParsedBodyParam('a_comentarios', '');
 	$_status = $request->getParsedBodyParam('a_status', '');
 	$_acuerdo = $request->getParsedBodyParam('a_acuerdo', '');
 	$seguimiento = new Seguimiento();
 	$seguimiento->id_llamada = $_id_llamada;
 	$seguimiento->id_usuario = $_id_usuario;
+	$seguimiento->a_que_beneficio = $_a_que_beneficio;
+	$seguimiento->a_monto = $_a_monto;
+	$seguimiento->a_quien_aplica = $_a_quien_aplica;
 	$seguimiento->comentarios = $_comentarios;
 	$seguimiento->status = $_status;
 	$seguimiento->acuerdo = $_acuerdo;
@@ -1776,6 +1817,23 @@ $app->get('/rutas_calidad/{id_usuario}', function($request, $response, $args){
 });
 
 
+
+$app->get('/no_afiliacion_ruta_sucursal/{id_ruta}', function($request, $response, $args){
+	$_id_ruta = $args['id_ruta'];
+	$ruta = new Ruta();
+	$ruta = $ruta->find($_id_ruta);
+	$sucursal = new Sucursal();
+	$sucursal = $sucursal->find($ruta->id_sucursal);
+	$payload = array(
+		'id_ruta' => $ruta->id,
+		'id_sucursal' => $sucursal->id,
+		'no_afiliacion' => $sucursal->no_afiliacion,
+		'banco_adquiriente' => $sucursal->banco_adquiriente
+	);
+	return $response->withStatus(200)->withJson($payload);
+});
+
+
 $app->get('/rutas_mistery/{id_usuario}', function($request, $response, $args){
 	$_id_usuario = $args['id_usuario'];
 	$_rutas = new Ruta();
@@ -1829,6 +1887,33 @@ $app->post('/insert/ruta', function($request, $response, $args){
 		$ruta->save();
 	}
 	return $response->withStatus(302)->withHeader('Location', '../../asignacion-de-rutas.php');
+})->add(new EstablecimientosAuth());
+
+
+$app->post('/update/rutas', function($request, $response, $args){
+	$_id_ruta = $request->getParsedBodyParam('id_ruta', '');
+	$_comentarios = $request->getParsedBodyParam('comentarios', '');
+	$_acrilicos = $request->getParsedBodyParam('acrilicos', '');
+	if($_acrilicos=='on'){$_acrilicos=1;}else{$_acrilicos=0;}
+	$_comdesclub = $request->getParsedBodyParam('comdesclub', '');
+	if($_comdesclub=='on'){$_comdesclub=1;}else{$_comdesclub=0;}
+	$_calcomanias = $request->getParsedBodyParam('calcomanias', '');
+	if($_calcomanias=='on'){$_calcomanias=1;}else{$_calcomanias=0;}
+	$_combbva = $request->getParsedBodyParam('combbva', '');
+	if($_combbva=='on'){$_combbva=1;}else{$_combbva=0;}
+	$_reloj = $request->getParsedBodyParam('reloj', '');
+	if($_reloj=='on'){$_reloj=1;}else{$_reloj=0;}
+	$ruta = new Ruta();
+	$ruta = $ruta->find($_id_ruta);
+	$ruta->comentarios = $_comentarios;
+	$ruta->acrilicos = $_acrilicos;
+	$ruta->calcomanias = $_calcomanias;
+	$ruta->comdesclub = $_comdesclub;
+	$ruta->combbva = $_combbva;
+	$ruta->reloj = $_reloj;
+
+	$ruta->save();
+	return $response->withStatus(302)->withHeader('Location', '../../rutas-de-calidad.php');
 })->add(new EstablecimientosAuth());
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2212,6 +2297,7 @@ $app->post('/insert/reservaciones', function($request, $response, $args){
 	$_personas = $request->getParsedBodyParam('personas','');
 	$_area = $request->getParsedBodyParam('area','');
 	$_clave = $request->getParsedBodyParam('clave','');
+	$_quien_reservo = $request->getParsedBodyParam('quien_reservo','');
 	$_tolerancia = $request->getParsedBodyParam('tolerancia','');
 	$_se_logro_reservacion = $request->getParsedBodyParam('se_logro_reservacion','');
 
@@ -2223,6 +2309,7 @@ $app->post('/insert/reservaciones', function($request, $response, $args){
 	$reservacion->personas = $_personas;
 	$reservacion->area = $_area;
 	$reservacion->clave = $_clave;
+	$reservacion->quien_reservo = $_quien_reservo;
 	$reservacion->tolerancia = $_tolerancia;
 	$reservacion->se_logro_reservacion = $_se_logro_reservacion;
 
@@ -2231,6 +2318,13 @@ $app->post('/insert/reservaciones', function($request, $response, $args){
 	return $response->withStatus(302)->withHeader('Location', '../../reservaciones.php');
 })->add(new EstablecimientosAuth());
 
+
+$app->get('/detalles_cp/{cp}', function($request, $response, $args){
+	$_cp = $args['cp'];
+	$detalles = new Codigo();
+	$detalles = $detalles->where('cp', $_cp )->get();
+	return $response->withStatus(200)->withJson($detalles);
+});
 
 $app->run();
 

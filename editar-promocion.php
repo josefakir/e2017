@@ -32,32 +32,32 @@ include('header.php'); ?>
 				</select>
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Efectivo</label>
-					<input type="text" class="form-control" placeholder="Efectivo" name="efectivo" minlength="2" required value="<?php echo $p->efectivo ?>">
+					<label>Efectivo</label>
+					<input type="text" class="form-control" placeholder="Efectivo" name="efectivo" required value="<?php echo $p->efectivo ?>">
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Tarjeta</label>
-					<input type="text" class="form-control" placeholder="Tarjeta" name="tarjeta" minlength="2" required value="<?php echo $p->tarjeta ?>">
+					<label>Tarjeta</label>
+					<input type="text" class="form-control" placeholder="Tarjeta" name="tarjeta" required value="<?php echo $p->tarjeta ?>">
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Promo</label>
-					<input type="text" class="form-control" placeholder="Promo" name="promo" minlength="2" required value="<?php echo $p->promo ?>">
+					<label>Promo</label>
+					<input type="text" class="form-control" placeholder="Promo" name="promo" required value="<?php echo $p->promo ?>">
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Detalle Promo</label>
-					<input type="text" class="form-control" placeholder="Detalle Promo" name="detalle_promo" minlength="2" required value="<?php echo $p->detalle_promocion ?>">
+					<label>Detalle Promo</label>
+					<input type="text" class="form-control" placeholder="Detalle Promo" name="detalle_promo" required value="<?php echo $p->detalle_promocion ?>">
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Restricciones</label>
-					<input type="text" class="form-control" placeholder="Restricciones" name="restricciones" minlength="2" required value="<?php echo $p->restricciones ?>">
+					<label>Restricciones</label>
+					<input type="text" class="form-control" placeholder="Restricciones" name="restricciones" required value="<?php echo $p->restricciones ?>">
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Fecha de Inicio</label>
-					<input type="text" class="form-control datepicker" placeholder="Fecha de inicio" name="fecha_inicio" minlength="2" required value="<?php echo $p->inicio_actividades ?>">
+					<label>Fecha de Inicio</label>
+					<input type="text" class="form-control datepicker" placeholder="Fecha de inicio" name="fecha_inicio" required value="<?php echo $p->inicio_actividades ?>">
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Fecha de fin</label>
-					<input type="text" class="form-control datepicker" placeholder="Fecha de fin" name="fecha_fin" minlength="2" required value="<?php echo $p->fin_actividades ?>">
+					<label>Fecha de fin</label>
+					<input type="text" class="form-control datepicker" placeholder="Fecha de fin" name="fecha_fin" required value="<?php echo $p->fin_actividades ?>">
 				</div>
 				<input type="hidden" name="id_marca" value="<?php echo $_GET['id_marca'] ?>">
 				<input type="hidden" name="id_lead" value="<?php echo $_GET['id_lead'] ?>">

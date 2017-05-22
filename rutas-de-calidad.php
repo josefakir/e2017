@@ -6,8 +6,8 @@ include('header.php'); ?>
 		<div class="formulario">
 			<form class='validation-form'  action="api/insert/categorias" method="post" enctype="multipart/form-data">
 				<div class="form-group">
-					<label for="exampleInputEmail1">Nombre</label>
-					<input type="text" class="form-control" placeholder="Nombre" name="nombre" minlength="2" type="text" required>
+					<label>Nombre</label>
+					<input type="text" class="form-control" placeholder="Nombre" name="nombre">
 				</div>
 				<button type="submit" class="btn btn-primary">Insertar</button>
 			</form>
@@ -80,14 +80,27 @@ include('header.php'); ?>
 		<div class="container">
 			<div class="row">
 				<div class="col-md-12" style="background: #fff; margin-top: 100px; height: 500px; overflow-y: scroll;">
+				
 					<a href="#" class="cerraroverlay"><i class="fa fa-times-circle fa-2x" aria-hidden="true"></i></a>
-					<form class='validation-form2'  action="" method="post">
+					<form class='validation-form2'  action="api/update/rutas" method="post">
+						<h5>Material que pueden entregar:</h5>
+				<table>
+					<tr>
+						<td><label for="" style="margin-right: 10px">Acrílicos</label><input type="checkbox" class="js-switch" name="acrilicos"></td>
+						<td><label for="" style="margin-right: 10px; margin-left: 20px">Calcomanías</label><input type="checkbox" class="js-switch2" name="calcomanias"></td>
+						<td><label for="" style="margin-right: 10px; margin-left: 20px">Com. Desclub</label><input type="checkbox" class="js-switch3" name="comdesclub"></td>
+						<td><label for="" style="margin-right: 10px; margin-left: 20px">Com. BBVA</label><input type="checkbox" class="js-switch4" name="combbva"></td>
+						<td><label for="" style="margin-right: 10px; margin-left: 20px">Reloj</label><input type="checkbox" class="js-switch5" name="reloj"></td>
+				
+					</tr>
+				</table>
 						<h2 style="margin-top: 5px">Detalles de Ruta:</h2>
 						<p>&nbsp;</p>
 				<table class="tabla2">
 				<thead>
 					<tr>
-						<th>CALIFICACIÓN</th>
+						<th>CONTACTO</th>
+						<th># AFILIACIÓN</th>
 						<th>PROYECTO</th>
 						<th>REFERENCIA</th>
 						<th>EFECTIVO</th>
@@ -101,9 +114,10 @@ include('header.php'); ?>
 				</tbody>
 			</table>
 						<div class="form-group">
-							<label for="exampleInputEmail1">Comentarios</label>
+							<label>Comentarios</label>
 							<input type="text" class="form-control" placeholder="Comentarios" name="comentarios">
 						</div>
+						<input type="hidden" id="detalles_ruta_calidad_id_ruta" name="id_ruta">
 						<button type="submit" class="btn btn-primary">Insertar</button>
 						<p>&nbsp;</p>
 					</form>
@@ -111,4 +125,18 @@ include('header.php'); ?>
 			</div>
 		</div>
 </div>
+<script>
+	$(document).ready(function(){
+		var elem = document.querySelector('.js-switch');
+	var elem2 = document.querySelector('.js-switch2');
+	var elem3 = document.querySelector('.js-switch3');
+	var elem4 = document.querySelector('.js-switch4');
+	var elem5 = document.querySelector('.js-switch5');
+	var init = new Switchery(elem);
+	var init = new Switchery(elem2);
+	var init = new Switchery(elem3);
+	var init = new Switchery(elem4);
+	var init = new Switchery(elem5);
+	});
+</script>
 <?php include('footer.php') ?>

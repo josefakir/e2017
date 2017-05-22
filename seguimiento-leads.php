@@ -7,7 +7,7 @@ include('header.php'); ?>
 		<div class="formulario">
 			<form class='validation-form'  action="api/insert/leads" method="post" enctype="multipart/form-data">
 				<div class="form-group">
-				<label for="exampleInputEmail1">Empresa</label>
+				<label>Empresa</label>
 				<select name="id_marca" id="" style="width: 100%" required>
 						<option value="">Empresa</option>
 						<?php 
@@ -26,12 +26,12 @@ include('header.php'); ?>
 				<p style="margin-top: 5px">¿No encuentras la empresa? Solicita su autorización <a href="autorizaciones.php">Aquí</a></p>
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Nombre</label>
-					<input type="text" class="form-control" placeholder="Nombre" name="nombre" minlength="1" type="text" required>
+					<label>Nombre</label>
+					<input type="text" class="form-control" placeholder="Nombre" name="nombre" minlength="1">
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Número de sucursales</label>
-					<input type="number" class="form-control" placeholder="Número de sucursales" name="numero_de_sucursales" minlength="1" type="text" required>
+					<label>Número de sucursales</label>
+					<input type="number" class="form-control" placeholder="Número de sucursales" name="numero_de_sucursales" minlength="1">
 				</div>
 				<input type="hidden" name="id_usuario" value="<?php echo $_SESSION['id'] ?>">
 				<button type="submit" class="btn btn-primary">Insertar</button>
@@ -109,7 +109,7 @@ include('header.php'); ?>
 				<form class='validation-form2'  action="api/insert/actividades" method="post">
 					<h2 style="margin-top: 5px">Estatus:</h2>
 					<div class="form-group">
-						<label for="exampleInputEmail1">Estatus de lead:</label>
+						<label>Estatus de lead:</label>
 						<select name="status_lead" id="select_status_lead" style="width: 100%" required>
 							<option value="3">Sin contacto</option>
 							<option value="4">Contactado</option>
@@ -122,7 +122,7 @@ include('header.php'); ?>
 					</div>
 					<h2 style="margin-top: 5px">Detalles de actividad:</h2>
 					<div class="form-group">
-						<label for="exampleInputEmail1">¿Qué hice?</label>
+						<label>¿Qué hice?</label>
 						<select name="que_hice" id="" style="width: 100%" required>
 							<option value="Alta de establecimiento">Alta de establecimiento</option>
 							<option value="Llamada telefónica">Llamada telefónica</option>
@@ -131,14 +131,14 @@ include('header.php'); ?>
 						</select>
 					</div>
 					<div class="form-group">
-						<label for="exampleInputEmail1">Comentarios</label>
-						<input type="text" class="form-control" placeholder="Comentarios" name="comentarios" minlength="1" type="text" required>
+						<label>Comentarios</label>
+						<input type="text" class="form-control" placeholder="Comentarios" name="comentarios" minlength="1">
 					</div>
 					<div id="esconder_futura">
 					<h2 style="margin-top: 5px">Actividad Futura:</h2>
 					
 					<div class="form-group">
-						<label for="exampleInputEmail1">¿Qué actividad es la siguiente a realizar?</label>
+						<label>¿Qué actividad es la siguiente a realizar?</label>
 						<select name="que_hare" id="" style="width: 100%" required>
 							<option value="Alta de establecimiento">Alta de establecimiento</option>
 							<option value="Llamada telefónica">Llamada telefónica</option>
@@ -148,15 +148,15 @@ include('header.php'); ?>
 					</div>
 					<div class="form-group">
 						<label for="">Fecha de próxima actividad</label>
-						<input type="text" class="form-control datepicker" placeholder="Fecha" name="fecha_futura" minlength="1" type="text" required>
+						<input type="text" class="form-control datepicker" placeholder="Fecha" name="fecha_futura" minlength="1">
 					</div>
 					<div class="form-group">
 						<label for="">Hora de próxima actividad</label>
-						<input type="text" class="form-control timepicker" placeholder="Hora" name="hora_futura" minlength="1" type="text" required>
+						<input type="text" class="form-control timepicker" placeholder="Hora" name="hora_futura" minlength="1">
 					</div>
 					<div class="form-group">
-						<label for="exampleInputEmail1">Comentarios</label>
-						<input type="text" class="form-control" placeholder="Comentarios" name="comentarios_futura" minlength="1" type="text" required>
+						<label>Comentarios</label>
+						<input type="text" class="form-control" placeholder="Comentarios" name="comentarios_futura" minlength="1">
 					</div>
 					</div>
 					<input type="hidden" name="id_lead" id="id_lead">
@@ -199,34 +199,35 @@ include('header.php'); ?>
 				<form class='validation-form2'  action="api/detallesdesclub" method="post">
 					<h2 style="margin-top: 5px">Detalles de contacto:</h2>
 					<div class="form-group">
-						<label for="exampleInputEmail1">Razón Social</label>
-						<input type="text" class="form-control" placeholder="Razón social" name="razon_social" minlength="1" type="text" required id="c_razonsocial">
+						<label>Razón Social</label>
+						<input type="text" class="form-control" placeholder="Razón social" name="razon_social" minlength="1" id="c_razonsocial">
 					</div>
 					<div class="form-group">
-						<label for="exampleInputEmail1">RFC</label>
-						<input type="text" class="form-control" placeholder="RFC" name="rfc" minlength="1" type="text" required id="c_rfc">
+						<label>RFC</label>
+						<input type="text" class="form-control" placeholder="RFC" name="rfc" minlength="1" id="c_rfc">
 					</div>
 					<div class="form-group">
-						<label for="exampleInputEmail1">Contacto</label>
-						<input type="text" class="form-control" placeholder="Contacto" name="contacto" minlength="1" type="text" required id="c_contacto">
+						<label>Contacto</label>
+						<input type="text" class="form-control" placeholder="Contacto" name="contacto" minlength="1" id="c_contacto">
 					</div>
 					<div class="form-group">
-						<label for="exampleInputEmail1">Puesto</label>
-						<input type="text" class="form-control" placeholder="Puesto" name="puesto" minlength="1" type="text" required id="c_puesto">
+						<label>Puesto</label>
+						<input type="text" class="form-control" placeholder="Puesto" name="puesto" minlength="1" id="c_puesto">
 					</div>
 					<div class="form-group">
-						<label for="exampleInputEmail1">Teléfono 1</label>
-						<input type="text" class="form-control" placeholder="Teléfono 1" name="tel1" minlength="1" type="text" required id="c_tel1">
+						<label>Teléfono 1</label>
+						<input type="text" class="form-control" placeholder="Teléfono 1" name="tel1" minlength="1" id="c_tel1">
 					</div>
 					<div class="form-group">
-						<label for="exampleInputEmail1">Teléfono 2</label>
-						<input type="text" class="form-control" placeholder="Teléfono 2" name="tel2" minlength="1" type="text" required id="c_tel2">
+						<label>Teléfono 2</label>
+						<input type="text" class="form-control" placeholder="Teléfono 2" name="tel2" minlength="1" id="c_tel2">
 					</div>
 					<div class="form-group">
-						<label for="exampleInputEmail1">Email</label>
-						<input type="email" class="form-control" placeholder="Email" name="email" minlength="1" type="text" required id="c_email">
+						<label>Email</label>
+						<input type="email" class="form-control" placeholder="Email" name="email" minlength="1" id="c_email">
 					</div>
 					<input type="hidden" name="id_marca" id="id_marca">
+					<input type="hidden" name="id_lead" id="id_lead_contacto">
 					<button type="submit" class="btn btn-primary">Actualizar</button>
 					<p>&nbsp;</p>
 				</form>
@@ -244,27 +245,27 @@ include('header.php'); ?>
 				<form class='validation-form2'  action="api/detallesdesclub" method="post">
 					<h2 style="margin-top: 5px">Detalles de contacto:</h2>
 					<div class="form-group">
-						<label for="exampleInputEmail1">Razón Social</label>
-						<input type="text" class="form-control" placeholder="Razón social" name="razon_social" minlength="1" type="text" required id="r_razonsocial">
+						<label>Razón Social</label>
+						<input type="text" class="form-control" placeholder="Razón social" name="razon_social" minlength="1" id="r_razonsocial">
 					</div>
 					<div class="form-group">
-						<label for="exampleInputEmail1">RFC</label>
-						<input type="text" class="form-control" placeholder="RFC" name="rfc" minlength="1" type="text" required id="r_rfc">
+						<label>RFC</label>
+						<input type="text" class="form-control" placeholder="RFC" name="rfc" minlength="1" id="r_rfc">
 					</div>
 					<div class="form-group">
-						<label for="exampleInputEmail1">Contacto</label>
-						<input type="text" class="form-control" placeholder="Contacto" name="contacto" minlength="1" type="text" required id="r_contacto">
+						<label>Contacto</label>
+						<input type="text" class="form-control" placeholder="Contacto" name="contacto" minlength="1" id="r_contacto">
 					</div>
 					<div class="form-group">
-						<label for="exampleInputEmail1">Puesto</label>
-						<input type="text" class="form-control" placeholder="Puesto" name="puesto" minlength="1" type="text" required id="r_puesto">
+						<label>Puesto</label>
+						<input type="text" class="form-control" placeholder="Puesto" name="puesto" minlength="1" id="r_puesto">
 					</div>
 					<div class="form-group">
-						<label for="exampleInputEmail1">Teléfono 1</label>
-						<input type="text" class="form-control" placeholder="Teléfono 1" name="tel1" minlength="1" type="text" required id="r_tel1">
+						<label>Teléfono 1</label>
+						<input type="text" class="form-control" placeholder="Teléfono 1" name="tel1" minlength="1" id="r_tel1">
 					</div>
 					<div class="form-group">
-						<label for="exampleInputEmail1">¿Es celular?</label>
+						<label>¿Es celular?</label>
 						<select name="es_celular_1" id="" style="width: 100%" required id="r_escelular_tel1">
 							<option value="">Seleccione</option>
 							<option value="0">No</option>
@@ -272,11 +273,11 @@ include('header.php'); ?>
 						</select>
 					</div>
 					<div class="form-group">
-						<label for="exampleInputEmail1">Teléfono 2</label>
-						<input type="text" class="form-control" placeholder="Teléfono 2" name="tel2" minlength="1" type="text" required id="r_tel2">
+						<label>Teléfono 2</label>
+						<input type="text" class="form-control" placeholder="Teléfono 2" name="tel2" minlength="1" id="r_tel2">
 					</div>
 					<div class="form-group">
-						<label for="exampleInputEmail1">¿Es celular?</label>
+						<label>¿Es celular?</label>
 						<select name="es_celular_2" id="" style="width: 100%" required id="r_escelular_tel2">
 							<option value="">Seleccione</option>
 							<option value="0">No</option>
@@ -284,35 +285,35 @@ include('header.php'); ?>
 						</select>
 					</div>
 					<div class="form-group">
-						<label for="exampleInputEmail1">Email</label>
-						<input type="email" class="form-control" placeholder="Email" name="email" minlength="1" type="text" required id="r_email">
+						<label>Email</label>
+						<input type="email" class="form-control" placeholder="Email" name="email" minlength="1" id="r_email">
 					</div>
 					<div class="form-group">
-						<label for="exampleInputEmail1">Calle</label>
-						<input type="text" class="form-control" placeholder="Calle" name="calle" minlength="1" type="text" required id="r_calle">
+						<label>Calle</label>
+						<input type="text" class="form-control" placeholder="Calle" name="calle" minlength="1" id="r_calle">
 					</div>
 					<div class="form-group">
-						<label for="exampleInputEmail1">No Exterior</label>
-						<input type="text" class="form-control" placeholder="No Exterior" name="no_exterior" minlength="1" type="text" required id="r_no_ext">
+						<label>No Exterior</label>
+						<input type="text" class="form-control" placeholder="No Exterior" name="no_exterior" minlength="1" id="r_no_ext">
 					</div>
 					<div class="form-group">
-						<label for="exampleInputEmail1">No Interior</label>
-						<input type="text" class="form-control" placeholder="No Interior" name="no_interior" minlength="1" type="text" required id="r_no_int">
+						<label>No Interior</label>
+						<input type="text" class="form-control" placeholder="No Interior" name="no_interior" minlength="1" id="r_no_int">
 					</div>
 					<div class="form-group">
-						<label for="exampleInputEmail1">Referencia</label>
-						<input type="text" class="form-control" placeholder="Referencia" name="referencia" minlength="1" type="text" required id="r_referencia">
+						<label>Referencia</label>
+						<input type="text" class="form-control" placeholder="Referencia" name="referencia" minlength="1" id="r_referencia">
 					</div>
 					<div class="form-group">
-						<label for="exampleInputEmail1">Latitud</label>
-						<input type="text" class="form-control" placeholder="Latitud" name="latitud" minlength="1" type="text" required id="r_latitud">
+						<label>Latitud</label>
+						<input type="text" class="form-control" placeholder="Latitud" name="latitud" minlength="1" id="r_latitud">
 					</div>
 					<div class="form-group">
-						<label for="exampleInputEmail1">Longitud</label>
-						<input type="text" class="form-control" placeholder="Longitud" name="longitud" minlength="1" type="text" required id="r_longitud">
+						<label>Longitud</label>
+						<input type="text" class="form-control" placeholder="Longitud" name="longitud" minlength="1" id="r_longitud">
 					</div>
 					<div class="form-group">
-						<label for="exampleInputEmail1">¿Tiene actividad de calidad?</label>
+						<label>¿Tiene actividad de calidad?</label>
 						<select name="tiene_actividad_calidad" id="" style="width: 100%" required id="r_tieneactividad">
 							<option value="">Seleccione</option>
 							<option value="0">No</option>
@@ -320,7 +321,7 @@ include('header.php'); ?>
 						</select>
 					</div>
 					<div class="form-group">
-						<label for="exampleInputEmail1">Actividad de claidad</label>
+						<label>Actividad de claidad</label>
 						<select name="actividad_de_calidad" id="" style="width: 100%" required id="r_actividad" multiple="multiple">
 						<!--
 							<option value="">Seleccione</option>
@@ -345,8 +346,8 @@ include('header.php'); ?>
 						</select>
 					</div>
 					<div class="form-group">
-						<label for="exampleInputEmail1">Comentarios</label>
-						<input type="text" class="form-control" placeholder="Comentarios" name="comentarios" minlength="1" type="text" required id="r_comentarios">
+						<label>Comentarios</label>
+						<input type="text" class="form-control" placeholder="Comentarios" name="comentarios" minlength="1" id="r_comentarios">
 					</div>
 					<input type="hidden" name="id_lead" id="id_lead_registro">
 					<input type="hidden" name="id_marca" id="id_marca_registro">

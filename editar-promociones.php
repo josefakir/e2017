@@ -15,7 +15,7 @@ include('header.php'); ?>
 		<h2>Marca: <?php echo $output->nombre ?> </h2>
 			<form class='validation-form'  action="api/insert/promocion" method="post" enctype="multipart/form-data">
 				<div class="form-group">
-				<select name="id_proyecto" id="" style="width: 100%" >
+				<select name="id_proyecto" id="apap_select_proyecto" style="width: 100%" required>
 						<option value="">Proyecto</option>
 						<?php 
 							$ch = curl_init(); 
@@ -31,33 +31,33 @@ include('header.php'); ?>
 						?>
 				</select>
 				</div>
-				<div class="form-group">
-					<label for="exampleInputEmail1">Efectivo</label>
-					<input type="text" class="form-control" placeholder="Efectivo" name="efectivo" minlength="2" required>
+				<div class="form-group" id="esconder_efectivo">
+					<label>Efectivo</label>
+					<input type="text" class="form-control" placeholder="Efectivo" name="efectivo" maxlength="2">
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Tarjeta</label>
-					<input type="text" class="form-control" placeholder="Tarjeta" name="tarjeta" minlength="2" required>
+					<label>Tarjeta</label>
+					<input type="text" class="form-control" placeholder="Tarjeta" name="tarjeta" maxlength="2">
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Promo</label>
-					<input type="text" class="form-control" placeholder="Promo" name="promo" minlength="2" required>
+					<label>Promo</label>
+					<input type="text" class="form-control" placeholder="Promo" name="promo" required maxlength="4">
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Detalle Promo</label>
-					<input type="text" class="form-control" placeholder="Detalle Promo" name="detalle_promo" minlength="2" required>
+					<label>Detalle Promo</label>
+					<input type="text" class="form-control" placeholder="Detalle Promo" name="detalle_promo" required maxlength="200">
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Restricciones</label>
-					<input type="text" class="form-control" placeholder="Restricciones" name="restricciones" minlength="2" required>
+					<label>Restricciones</label>
+					<input type="text" class="form-control" placeholder="Restricciones" name="restricciones" required maxlength="200">
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Fecha de Inicio</label>
-					<input type="text" class="form-control datepicker" placeholder="Fecha de inicio" name="fecha_inicio" minlength="2" required>
+					<label>Fecha de Inicio</label>
+					<input type="text" class="form-control datepicker" placeholder="Fecha de inicio" name="fecha_inicio" required>
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Fecha de fin</label>
-					<input type="text" class="form-control datepicker" placeholder="Fecha de fin" name="fecha_fin" minlength="2" required>
+					<label>Fecha de fin</label>
+					<input type="text" class="form-control datepicker" placeholder="Fecha de fin" name="fecha_fin" required>
 				</div>
 				<input type="hidden" name="id_marca" value="<?php echo $_GET['id'] ?>">
 				<input type="hidden" name="id_lead" value="<?php echo $_GET['id_lead'] ?>">

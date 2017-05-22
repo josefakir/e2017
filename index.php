@@ -20,11 +20,11 @@
 	<form method="post" class="form-signin" action="api/login" id="form">
         <div class="input-group margin-bottom-sm">
             <span class="input-group-addon"><i class="fa fa-user fa-fw fa-2x"></i></span>
-            <input class="input-text form-control" name="usr" type="text" placeholder="Usuario"  minlength="2" type="text" required>
+            <input class="input-text form-control" name="usr" type="text" placeholder="Usuario" >
         </div>
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-lock fa-fw fa-2x"></i></span>
-            <input class="input-text form-control" name="psw" type="password" placeholder="Contaseña"  minlength="2" type="text" required>
+            <input class="input-text form-control" name="psw" type="password" placeholder="Contaseña" >
         </div>
 		<button class="btn btn-lg btn-primary btn-block login-btn" type="submit">Entrar</button>
 		<p class="tac mensaje"><?php echo base64_decode(htmlentities($_GET['m'])) ?></p>

@@ -1,6 +1,11 @@
 <?php 
 include("auth.php");
 include('header.php'); ?>
+<style>
+	.dataTables_filter {
+display: none; 
+}
+</style>
 	<div id="contenido">
 		<h1 class="title-general" id="marca"><i class="fa fa-building fa-fw"></i> Call Center</h1>
 		<div class="add-new-record" id="btn_nueva_llamada">Insertar nuevo registro<i class="fa fa-plus fa-fw"></i></div>
@@ -8,7 +13,17 @@ include('header.php'); ?>
 			<form class='validation-form'  action="api/insert/llamadas" method="post" enctype="multipart/form-data">
 				<h2>Folio: <span id="folio"><img src="img/spinner.gif" alt=""></span></h2>
 				<div class="form-group">
-				<label for="exampleInputEmail1">Proyecto</label>
+				<label>Tipo de llamada</label>
+				<select name="tipo_llamada_1" id="id_tipo_llamada_1" style="width: 100%" >
+					<option value="">Seleccione</option>
+					<option value="Llamada Válida">Llamada Válida</option>
+					<option value="Número equivocado">Número equivocado</option>
+					<option value="Línea Bancomer">Línea Bancomer</option>
+					<option value="Sin Respuesta">Sin Respuesta</option>
+				</select>
+				</div>
+				<div class="form-group">
+				<label>Proyecto</label>
 				<select name="id_proyecto" id="id_proyecto" style="width: 100%" >
 					<option value="">Seleccione</option>
 						<?php 
@@ -25,30 +40,8 @@ include('header.php'); ?>
 						?>
 				</select>
 				</div>
-				<div class="form-group">
-				<label for="exampleInputEmail1">Tipo de llamada</label>
-				<select name="tipo" id="tipo_llamada" style="width: 100%" >
-					<option value="">Seleccione</option>
-					<option value="Afiliar establecimiento">Afiliar establecimiento</option>
-					<option value="Información Plataforma">Información Plataforma</option>
-					<option value="Queja Establecimiento">Queja Establecimiento</option>
-				</select>
-				</div>
-				<h3>Datos de contacto:</h3>
-				<div class="form-group afiliar_est info_plataforma queja_est">
-					<label for="exampleInputEmail1">Nombre</label>
-					<input type="text" class="form-control" placeholder="Nombre" name="nombre" type="text">
-				</div>
-				<div class="form-group afiliar_est info_plataforma queja_est">
-					<label for="exampleInputEmail1">A. Paterno</label>
-					<input type="text" class="form-control" placeholder="A. Paterno" name="paterno" type="text">
-				</div>
-				<div class="form-group afiliar_est info_plataforma queja_est">
-					<label for="exampleInputEmail1">A. Materno</label>
-					<input type="text" class="form-control" placeholder="A. Materno" name="materno" type="text">
-				</div>
-				<div class="form-group info_plataforma queja_est">
-					<label for="exampleInputEmail1">Tipo de tarjeta / Seguro</label>
+				<div class="form-group info_plataforma queja_est esconder_llamada_no_valida">
+					<label>Tipo de tarjeta / Seguro</label>
 					<select name="tipo_tarjeta_seguro" id="tipo_tarjeta_seguro" style="width: 100%" >
 						<option value="">Seleccione</option>
 						<option value='Auto - Seguro'>Auto - Seguro</option>
@@ -73,29 +66,51 @@ include('header.php'); ?>
 						<option value='Winner Card'>Winner Card</option>
 					</select>
 				</div>
-				<h3 class="afiliar_est info_plataforma">Dirección:</h3>
-				<div class="form-group afiliar_est info_plataforma">
-					<label for="exampleInputEmail1">Calle</label>
+				<div class="form-group esconder_llamada_no_valida">
+				<label>¿Qué quieren hacer?</label>
+				<select name="tipo" id="tipo_llamada" style="width: 100%" >
+					<option value="">Seleccione</option>
+					<option value="Afiliar establecimiento">Afiliar establecimiento</option>
+					<option value="Información Plataforma">Información Plataforma</option>
+					<option value="Queja Establecimiento">Queja Establecimiento</option>
+				</select>
+				</div>
+				<h3>Datos de contacto:</h3>
+				<div class="form-group afiliar_est info_plataforma queja_est esconder_llamada_no_valida">
+					<label>Nombre</label>
+					<input type="text" class="form-control" placeholder="Nombre" name="nombre" type="text">
+				</div>
+				<div class="form-group afiliar_est info_plataforma queja_est esconder_llamada_no_valida">
+					<label>A. Paterno</label>
+					<input type="text" class="form-control" placeholder="A. Paterno" name="paterno" type="text">
+				</div>
+				<div class="form-group afiliar_est info_plataforma queja_est esconder_llamada_no_valida">
+					<label>A. Materno</label>
+					<input type="text" class="form-control" placeholder="A. Materno" name="materno" type="text">
+				</div>
+				<h3 class="afiliar_est info_plataforma esconder_llamada_no_valida">Dirección:</h3>
+				<div class="form-group afiliar_est info_plataforma esconder_llamada_no_valida">
+					<label>Calle</label>
 					<input type="text" class="form-control" placeholder="Calle" name="calle" type="text">
 				</div>
-				<div class="form-group afiliar_est info_plataforma">
-					<label for="exampleInputEmail1">Número exterior</label>
+				<div class="form-group afiliar_est info_plataforma esconder_llamada_no_valida">
+					<label>Número exterior</label>
 					<input type="text" class="form-control" placeholder="Número exterior" name="no_ext" type="text">
 				</div>
-				<div class="form-group afiliar_est info_plataforma">
-					<label for="exampleInputEmail1">Número interior</label>
+				<div class="form-group afiliar_est info_plataforma esconder_llamada_no_valida">
+					<label>Número interior</label>
 					<input type="text" class="form-control" placeholder="Número interior" name="no_int" type="text">
 				</div>
-				<div class="form-group afiliar_est info_plataforma">
-					<label for="exampleInputEmail1">Código postal</label>
+				<div class="form-group afiliar_est info_plataforma esconder_llamada_no_valida">
+					<label>Código postal</label>
 					<input type="text" class="form-control" placeholder="Código postal" name="cp" type="text">
 				</div>
-				<div class="form-group afiliar_est info_plataforma">
-					<label for="exampleInputEmail1">Referencia</label>
+				<div class="form-group afiliar_est info_plataforma esconder_llamada_no_valida">
+					<label>Referencia</label>
 					<input type="text" class="form-control" placeholder="Referencia" name="referencia" type="text">
 				</div>
-				<div class="form-group afiliar_est info_plataforma queja_est">
-					<label for="exampleInputEmail1">Tipo de telefono</label>
+				<div class="form-group afiliar_est info_plataforma queja_est esconder_llamada_no_valida">
+					<label>Tipo de telefono</label>
 					<select name="tipo_tel_1" id="tipo_tel_1" style="width: 10%" >
 						<option value="">Seleccione</option>
 						<option value="Normal">Normal</option>
@@ -105,8 +120,8 @@ include('header.php'); ?>
 					</select>
 					<input type="text" class="form-control" placeholder="Telefono 1" name="tel_1" type="text">
 				</div>
-				<div class="form-group afiliar_est info_plataforma queja_est">
-					<label for="exampleInputEmail1">Tipo de telefono</label>
+				<div class="form-group afiliar_est info_plataforma queja_est esconder_llamada_no_valida">
+					<label>Tipo de telefono</label>
 					<select name="tipo_tel_2" id="tipo_tel_2" style="width: 10%" >
 						<option value="">Seleccione</option>
 						<option value="Normal">Normal</option>
@@ -116,20 +131,20 @@ include('header.php'); ?>
 					</select>
 					<input type="text" class="form-control" placeholder="Telefono 2" name="tel_2" type="text">
 				</div>
-				<div class="form-group afiliar_est info_plataforma queja_est">
-					<label for="exampleInputEmail1">Email</label>
+				<div class="form-group afiliar_est info_plataforma queja_est esconder_llamada_no_valida">
+					<label>Email</label>
 					<input type="text" class="form-control" placeholder="Email" name="email" type="text">
 				</div>
-				<div class="form-group afiliar_est info_plataforma">
-					<label for="exampleInputEmail1">Marca</label>
+				<div class="form-group afiliar_est info_plataforma esconder_llamada_no_valida">
+					<label>Marca</label>
 					<input type="text" class="form-control" placeholder="Marca" name="marca" type="text">
 				</div>
-				<div class="form-group afiliar_est info_plataforma queja_est">
-					<label for="exampleInputEmail1">Sucursal</label>
+				<div class="form-group afiliar_est info_plataforma queja_est esconder_llamada_no_valida">
+					<label>Sucursal</label>
 					<input type="text" class="form-control" placeholder="Sucursal" name="sucursal" type="text">
 				</div>
-				<div class="form-group queja_est">
-					<label for="exampleInputEmail1">Marca</label>
+				<div class="form-group queja_est esconder_llamada_no_valida">
+					<label>Marca</label>
 					<select name="id_marca" id="" style="width: 100%" >
 						<option value="">Seleccione</option>
 						<?php 
@@ -146,8 +161,8 @@ include('header.php'); ?>
 						?>
 				</select>
 				</div>
-				<div class="form-group afiliar_est info_plataforma">
-					<label for="exampleInputEmail1">Giro</label>
+				<div class="form-group afiliar_est info_plataforma esconder_llamada_no_valida">
+					<label>Giro</label>
 					<select name="id_categoria" id="" style="width: 100%" >
 						<option value="">Seleccione</option>
 						<?php 
@@ -164,16 +179,16 @@ include('header.php'); ?>
 						?>
 				</select>
 				</div>
-				<div class="form-group queja_est">
-					<label for="exampleInputEmail1">Fecha de visita</label>
+				<div class="form-group queja_est esconder_llamada_no_valida">
+					<label>Fecha de visita</label>
 					<input type="text" class="form-control datepicker" placeholder="Fecha de visita" name="fecha_visita" type="text">
 				</div>
-				<div class="form-group afiliar_est info_plataforma queja_est">
-					<label for="exampleInputEmail1">Comentarios</label>
+				<div class="form-group afiliar_est info_plataforma queja_est esconder_llamada_no_valida">
+					<label>Comentarios</label>
 					<textarea name="comentarios" id="" cols="30" rows="10"></textarea>
 				</div>
-				<div class="form-group afiliar_est info_plataforma queja_est">
-					<label for="exampleInputEmail1">¿Cónde vieron la promoción?</label>
+				<div class="form-group afiliar_est info_plataforma queja_est esconder_llamada_no_valida">
+					<label>¿Dónde vieron la promoción?</label>
 					<select name="donde_viste" id="" style="width: 100%" >
 						<option value="">Seleccione</option>
 						<option value="App">App</option>			
@@ -185,7 +200,7 @@ include('header.php'); ?>
 						<option value="Promo card">Promo card</option>					
 					</select>
 				</div>
-				<p><input type="checkbox"> Le recordamos que sus datos proporcionados están protegidos y son utilizados únicamente con la finalidad de brindarle un buen servicio, y con fines de estadísticos. Puede consultar el detalle de nuestro aviso de privacidad en la página www.grupomedios.com</p>
+				<p><input type="checkbox"> ¿Acepta el aviso de privacidad? - Le recordamos que sus datos proporcionados están protegidos y son utilizados únicamente con la finalidad de brindarle un buen servicio, y con fines de estadísticos. Puede consultar el detalle de nuestro aviso de privacidad en la página www.grupomedios.com</p>
 				<button type="submit" class="btn btn-primary">Insertar</button>
 			</form>
 		</div>
@@ -282,7 +297,7 @@ include('header.php'); ?>
 					<h4>Nueva actividad:</h4>
 					<form action="api/insert/seguimiento" method="post" class="validation-form2">
 						<div class="form-group">
-							<label for="exampleInputEmail1">Status:</label>
+							<label>Status:</label>
 							<select name="a_status" style="width: 100%" required>
 								<option value="">Seleccione</option>
 								<option value="1">Seguimiento</option>
@@ -291,8 +306,8 @@ include('header.php'); ?>
 							</select>
 						</div>
 						<div class="form-group">
-							<label for="exampleInputEmail1">Acuerdo:</label>
-							<select name="a_acuerdo" style="width: 100%" required>
+							<label>Acuerdo:</label>
+							<select name="a_acuerdo" style="width: 100%" required id="a_acuerdo">
 								<option value="">Seleccione</option>
 								<option value="1">No acepta reembolso</option>
 								<option value="2">No Aplica</option>
@@ -301,9 +316,25 @@ include('header.php'); ?>
 								<option value="5">Se proporcionó información</option>
 							</select>
 						</div>
+						<div class="form-group mostrar_beneficio">
+							<label>¿Qué beneficio?:</label>
+							<input type="text" class="form-control" placeholder="¿Qué beneficio?" name="a_que_beneficio">
+						</div>
+						<div class="form-group mostrar_reembolso">
+							<label>Monto del reembolso:</label>
+							<input type="number" step="0.01" class="form-control" placeholder="Monto del reembolso" name="a_monto">
+						</div>
+						<div class="form-group a_quien_aplica">
+							<label>Quien lo aplica:</label>
+							<select name="a_quien_aplica" style="width: 100%">
+								<option value="">Seleccione</option>
+								<option value="Desclub">Desclub</option>
+								<option value="Establecimiento">Establecimiento</option>
+							</select>
+						</div>
 						<div class="form-group">
 							<label>Comentarios</label>
-							<input type="text" class="form-control" placeholder="Comentario" name="a_comentarios" type="text" required>
+							<textarea name="a_comentarios" id="" cols="30" rows="10" class="form-control" placeholder="Comentario"></textarea>
 						</div>
 						<input type="hidden" id="a_id_llamada" name="a_id_llamada">
 						<input type="hidden" id="a_id_usuario" name="a_id_usuario"  value="<?php echo $_SESSION['id'] ?>">

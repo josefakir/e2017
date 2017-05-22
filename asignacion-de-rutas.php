@@ -44,11 +44,11 @@ include('header.php'); ?>
 					</select>
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Fecha de inicio</label>
+					<label>Fecha de inicio</label>
 					<input type="text" class="form-control datepicker" placeholder="Fecha de inicio" name="fecha_inicio">
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Fecha de fin</label>
+					<label>Fecha de fin</label>
 					<input type="text" class="form-control datepicker" placeholder="Fecha de fin" name="fecha_fin">
 				</div>
 				<div class="form-group">
@@ -70,7 +70,7 @@ include('header.php'); ?>
 					</select>
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Estado</label>
+					<label>Estado</label>
 					<select name="id_estado" id="select_estado" style="width: 100%" >
 						<option value="">Seleccione</option>
 						<?php 
@@ -88,7 +88,7 @@ include('header.php'); ?>
 					</select>
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Zona</label>
+					<label>Zona</label>
 					<select name="id_zona" id="select_zona" style="width: 100%" >			
 						<option value="">Seleccione</option>			
 					</select>

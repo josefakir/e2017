@@ -186,14 +186,27 @@ a.cerraroverlay {
     left: 0;
     display: none;
 }
+.esconder_cp{display: none}
+.loading{display: none}
 /*
 .afiliar_est{display: none}
 .info_plataforma {display: none}
 .queja_est{display: none}
 */
 
+.slider-container{
+    float: left;
+    margin-left: 31px;
+    margin-top: 8px;
+    margin-bottom: 10px
+}
 
-
-
-
+.cont-horario {
+    display: block;
+    width: 100%;
+    height: 50px;
+}
+.mostrar_beneficio{display: none}
+.mostrar_reembolso{display: none}
+.a_quien_aplica{display: none}
 

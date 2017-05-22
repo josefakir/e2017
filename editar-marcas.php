@@ -15,8 +15,8 @@ include('header.php'); ?>
 			?>
 			<form class='validation-form'  action="api/update/marcas" method="post" enctype="multipart/form-data">
 				<div class="form-group">
-					<label for="exampleInputEmail1">Nombre</label>
-					<input type="text" class="form-control" placeholder="Nombre" name="nombre" minlength="2"  required value="<?php echo $marca->nombre ?>">
+					<label>Nombre</label>
+					<input type="text" class="form-control" placeholder="Nombre" name="nombre"  required value="<?php echo $marca->nombre ?>">
 				</div>
 				<div class="form-group">
 				<select name="id_categoria" id="" style="width: 100%" >
@@ -36,7 +36,7 @@ include('header.php'); ?>
 				</select>
 				</div>
 				<div class="form-group">
-				<label for="exampleInputEmail1">Taxonomías</label>
+				<label>Taxonomías</label>
 					<input type="text" class="form-control" placeholder="Taxonomías separadas por coma" name="taxonomias" value="<?php echo $marca->taxonomias ?>">
 				</div>
 				<div class="form-group">
@@ -57,40 +57,40 @@ include('header.php'); ?>
 				</select>
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Web</label>
-					<input type="text" class="form-control" placeholder="Web" name="web" minlength="2" required value="<?php echo $marca->web ?>">
+					<label>Web</label>
+					<input type="text" class="form-control" placeholder="Web" name="web" required value="<?php echo $marca->web ?>">
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Reseña</label>
-					<textarea class="form-control" placeholder="Reseña" name="resena" minlength="2" required><?php echo $marca->resena ?></textarea>
+					<label>Reseña</label>
+					<textarea class="form-control" placeholder="Reseña" name="resena" required><?php echo $marca->resena ?></textarea>
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Extracto</label>
-					<input type="text" class="form-control" placeholder="Extracto" name="extracto" minlength="2" required value="<?php echo $marca->extracto ?>">
+					<label>Extracto</label>
+					<input type="text" class="form-control" placeholder="Extracto" name="extracto" required value="<?php echo $marca->extracto ?>">
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Imagen</label>
+					<label>Imagen</label>
 					<input type="file" class="form-control" placeholder="imagen" name="imagen">
 				</div>
 				<img style="width: 100px" src="api/<?php echo $marca->imagen ?>" alt="">
 				<div class="form-group">
-					<label for="exampleInputEmail1">Autor</label>
-					<input type="text" class="form-control" placeholder="autor" name="autor" minlength="2" required value="<?php echo $marca->autor ?>">
+					<label>Autor</label>
+					<input type="text" class="form-control" placeholder="autor" name="autor" required value="<?php echo $marca->autor ?>">
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">friendlyUrl</label>
-					<input type="text" class="form-control" placeholder="friendlyUrl" name="friendlyUrl" minlength="2"  required value="<?php echo $marca->friendlyUrl ?>">
+					<label>friendlyUrl</label>
+					<input type="text" class="form-control" placeholder="friendlyUrl" name="friendlyUrl"  required value="<?php echo $marca->friendlyUrl ?>">
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">¿Qué lo hace especial?</label>
-					<input type="text" class="form-control" placeholder="especial" name="especial" minlength="2" required value="<?php echo $marca->especial ?>">
+					<label>¿Qué lo hace especial?</label>
+					<input type="text" class="form-control" placeholder="especial" name="especial" required value="<?php echo $marca->especial ?>">
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Url vimeo</label>
-					<input type="text" class="form-control" placeholder="vimeo" name="vimeo" minlength="2" required value="<?php echo $marca->vimeo ?>">
+					<label>Url vimeo</label>
+					<input type="text" class="form-control" placeholder="vimeo" name="vimeo" required value="<?php echo $marca->vimeo ?>">
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">Logo Desclub</label>
+					<label>Logo Desclub</label>
 					<input type="file" class="form-control" placeholder="logoDesclub" name="logoDesclub">
 				</div>
 				<img style="width: 100px; margin-bottom: 20px" src="api/<?php echo $marca->logoDesclub ?>" alt="">
